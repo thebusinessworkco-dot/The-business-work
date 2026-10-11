@@ -1,0 +1,89 @@
+"use client";
+
+import { ArrowRight, CheckCircle2, ShieldCheck } from "lucide-react";
+import { useContactModal } from "./ContactModal";
+
+const rows = [
+  { sys: "SYSTEM 01 // ENQUIRIES", name: "WhatsApp & Website Enquiries", result: "Answered & Captured", strong: true },
+  { sys: "SYSTEM 02 // OPERATIONS", name: "Forms, Sheets & Business Tools", result: "Synced Automatically", strong: false },
+  { sys: "SYSTEM 03 // SALES", name: "Lead Follow-ups & CRM Pipeline", result: "Scheduled Follow-ups", strong: true },
+];
+
+export default function Hero() {
+  const { openModal } = useContactModal();
+  return (
+    <section aria-labelledby="hero-title" className="mx-auto w-full max-w-7xl px-6 pb-20 pt-14 md:pb-28 md:pt-20 lg:px-12">
+      <div className="mb-12 flex flex-col justify-between gap-4 border-b border-border-sand pb-6 sm:flex-row sm:items-center">
+        <div className="inline-flex items-center gap-2.5">
+          <span className="h-2 w-2 rounded-[2px] bg-accent-ochre" />
+          <span className="font-headline text-[11px] font-semibold uppercase tracking-[0.22em] text-ink-muted">AI Automation &amp; Digital Systems</span>
+        </div>
+        <div className="font-headline text-[11px] uppercase tracking-wider text-ink-muted">Custom-built · Based in India</div>
+      </div>
+
+      <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-14">
+        <div className="space-y-8 lg:col-span-7">
+          <h1 id="hero-title" className="text-balance font-headline text-4xl font-medium leading-[1.08] tracking-tight text-ink sm:text-5xl lg:text-[62px]">
+            We Make Business Simpler.
+          </h1>
+          <p className="max-w-[620px] font-body text-base leading-relaxed text-ink-muted sm:text-lg">
+            We help businesses save time, reduce repetitive work, and grow with smart automation and digital solutions.
+          </p>
+          <p className="max-w-[620px] font-body text-sm leading-relaxed text-ink-muted">
+            Tell us how your business works. We&apos;ll help you identify what can be automated and build a solution around your needs.
+          </p>
+          <div className="flex flex-wrap items-center gap-4 pt-2">
+            <button
+              onClick={() => openModal()}
+              className="group inline-flex items-center justify-center gap-2.5 bg-ink px-7 py-3.5 font-headline text-xs font-semibold uppercase tracking-wider text-background transition-colors hover:bg-accent-ochre"
+            >
+              <span>Discuss Your Project</span>
+              <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
+            </button>
+            <a
+              href="#services"
+              className="inline-flex items-center justify-center rounded-full border border-border-taupe bg-surface-card px-7 py-3.5 font-headline text-xs font-medium uppercase tracking-wider text-ink transition-all hover:border-ink hover:bg-[#EFEAE0]"
+            >
+              Explore Services
+            </a>
+          </div>
+          <div className="flex flex-wrap items-center gap-6 border-t border-border-sand pt-6 font-headline text-[12px] uppercase tracking-wider text-ink-muted">
+            <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-accent-ochre" />Built around your workflow</span>
+            <span className="hidden text-border-taupe sm:inline">•</span>
+            <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-ink" />Human handoff built in</span>
+          </div>
+        </div>
+
+        <div className="lg:col-span-5">
+          <div className="relative overflow-hidden rounded-lg border border-border-sand bg-surface-card p-7 shadow-[0_4px_24px_-8px_rgba(24,23,22,0.06)] sm:p-8">
+            <div className="mb-6 flex items-center justify-between border-b border-border-sand pb-5">
+              <div className="flex items-center gap-2.5">
+                <div className="h-2 w-2 bg-ink" />
+                <span className="font-headline text-xs font-semibold uppercase tracking-[0.16em] text-ink">Connected Business Flow</span>
+              </div>
+              <span className="rounded border border-border-sand bg-surface-muted px-2 py-0.5 font-headline text-[10px] uppercase tracking-wider text-ink-muted">Illustrative</span>
+            </div>
+            <div className="space-y-4">
+              {rows.map((r) => (
+                <div key={r.sys} className="rounded border border-border-sand/80 bg-background p-4 transition-colors hover:border-border-taupe">
+                  <div className="mb-2 font-headline text-[11px] uppercase tracking-wider text-ink-faint">{r.sys}</div>
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="font-headline text-sm font-medium text-ink">{r.name}</div>
+                    <span aria-hidden className="font-mono text-border-taupe">➔</span>
+                    <div className={`rounded border border-border-sand bg-surface-card px-2.5 py-1 font-body text-xs font-semibold ${r.strong ? "text-accent-ochre" : "text-ink"}`}>
+                      {r.result}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-6 flex flex-wrap items-center justify-between gap-2 border-t border-border-sand pt-4 font-headline text-[11px] uppercase tracking-wider text-ink-muted">
+              <span className="flex items-center gap-1.5"><CheckCircle2 size={14} className="text-accent-ochre" />Less Repetitive Work</span>
+              <span className="flex items-center gap-1.5"><ShieldCheck size={14} className="text-ink" />Human-in-the-Loop</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

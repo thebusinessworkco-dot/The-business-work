@@ -1,0 +1,322 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { ArrowRight, ChevronRight, CheckCircle2, AlertCircle } from "lucide-react";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import JsonLd from "@/components/JsonLd";
+import DiscussProjectButton from "@/components/DiscussProjectButton";
+import { services } from "@/content/services";
+import { getServiceJsonLd } from "@/lib/jsonld";
+import { site, getCleanSiteUrl } from "@/lib/site";
+
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+  return services.map((s) => ({ slug: s.id }));
+}
+
+export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
+  const service = services.find((s) => s.id === params.slug);
+  if (!service) return {};
+
+  const siteUrl = getCleanSiteUrl();
+  const canonicalUrl = `${siteUrl}/services/${service.id}`;
+
+  return {
+    title: service.title,
+    description: service.summary,
+    alternates: {
+      canonical: `/services/${service.id}`,
+    },
+    openGraph: {
+      title: `${service.title} | ${site.name}`,
+      description: service.summary,
+      url: canonicalUrl,
+      type: "website",
+      images: [
+        {
+          url: `${siteUrl}/opengraph-image`,
+          width: 1200,
+          height: 630,
+          alt: `${service.title} — ${site.name}`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${service.title} | ${site.name}`,
+      description: service.summary,
+      images: [`${siteUrl}/opengraph-image`],
+    },
+  };
+}
+
+export default function ServicePage({ params }: { params: { slug: string } }) {
+  const service = services.find((s) => s.id === params.slug);
+  if (!service) notFound();
+
+  const otherServices = services.filter((s) => s.id !== service.id);
+  const jsonLd = getServiceJsonLd(service);
+
+  return (
+    <>
+      <JsonLd data={jsonLd} />
+      <Header />
+
+      <main id="main" className="w-full pt-28 md:pt-32">
+        {/* Breadcrumb Navigation */}
+        <div className="mx-auto max-w-7xl px-6 lg:px-12">
+          <nav aria-label="Breadcrumb" className="mb-8 border-b border-border-sand pb-4">
+            <ol className="flex flex-wrap items-center gap-2 font-headline text-xs uppercase tracking-wider text-ink-muted">
+              <li>
+                <Link href="/" className="transition-colors hover:text-ink">
+                  Home
+                </Link>
+              </li>
+              <li aria-hidden="true" className="text-border-taupe">
+                <ChevronRight size={14} />
+              </li>
+              <li>
+                <Link href="/#services" className="transition-colors hover:text-ink">
+                  Services
+                </Link>
+              </li>
+              <li aria-hidden="true" className="text-border-taupe">
+                <ChevronRight size={14} />
+              </li>
+              <li className="font-semibold text-ink" aria-current="page">
+                {service.title}
+              </li>
+            </ol>
+          </nav>
+        </div>
+
+        {/* Hero Section */}
+        <section className="mx-auto max-w-7xl px-6 pb-16 lg:px-12">
+          <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-12">
+            <div className="space-y-6 lg:col-span-8">
+              <div className="inline-flex items-center gap-2.5 rounded border border-border-sand bg-surface-card px-3 py-1 font-headline text-xs font-semibold uppercase tracking-wider text-accent-ochre">
+                <span>{service.index} // 04</span>
+                <span className="text-border-taupe">·</span>
+                <span>{service.tag}</span>
+              </div>
+              <h1 className="font-headline text-4xl font-medium tracking-tight text-ink sm:text-5xl lg:text-6xl">
+                {service.title}
+              </h1>
+              <p className="max-w-2xl font-body text-base leading-relaxed text-ink-muted sm:text-lg">
+                {service.intro}
+              </p>
+              <div className="pt-2">
+                <DiscussProjectButton serviceTitle={service.title} />
+              </div>
+            </div>
+
+            <div className="space-y-4 rounded-lg border border-border-sand bg-surface-card p-6 lg:col-span-4">
+              <div className="font-headline text-xs font-semibold uppercase tracking-wider text-accent-ochre">
+                Problem It Solves
+              </div>
+              <p className="font-body text-sm leading-relaxed text-ink">
+                {service.solves}
+              </p>
+              <div className="border-t border-border-sand pt-4 font-headline text-xs uppercase tracking-wider text-ink-faint">
+                Custom-built around your existing setup
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Capabilities Section */}
+        <section className="w-full border-t border-border-sand bg-surface-muted/60 py-20">
+          <div className="mx-auto max-w-7xl px-6 lg:px-12">
+            <div className="mb-12">
+              <div className="mb-2 font-headline text-xs font-semibold uppercase tracking-[0.2em] text-accent-ochre">
+                What We Deliver
+              </div>
+              <h2 className="font-headline text-3xl font-medium tracking-tight text-ink">
+                Core Capabilities
+              </h2>
+            </div>
+            <ul className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {service.capabilities.map((c) => (
+                <li
+                  key={c}
+                  className="flex items-start gap-3 rounded border border-border-sand bg-surface-card p-6"
+                >
+                  <CheckCircle2 size={18} className="mt-0.5 shrink-0 text-accent-ochre" aria-hidden="true" />
+                  <span className="font-body text-sm font-medium text-ink">{c}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        {/* Use Cases Section */}
+        <section className="mx-auto max-w-7xl px-6 py-20 lg:px-12">
+          <div className="mb-12">
+            <div className="mb-2 font-headline text-xs font-semibold uppercase tracking-[0.2em] text-accent-ochre">
+              Real Scenarios
+            </div>
+            <h2 className="font-headline text-3xl font-medium tracking-tight text-ink">
+              Typical Use Cases
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            {service.useCases.map((uc, i) => (
+              <div
+                key={uc}
+                className="rounded-lg border border-border-sand bg-surface-card p-7 transition-colors hover:border-border-taupe"
+              >
+                <div className="mb-3 font-headline text-xs font-semibold uppercase tracking-wider text-ink-muted">
+                  Use Case {String(i + 1).padStart(2, "0")}
+                </div>
+                <h3 className="font-body text-base font-normal leading-relaxed text-ink">
+                  {uc}
+                </h3>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* How It Works Section */}
+        <section className="w-full border-t border-border-sand bg-surface-muted/60 py-20">
+          <div className="mx-auto max-w-7xl px-6 lg:px-12">
+            <div className="mb-12">
+              <div className="mb-2 font-headline text-xs font-semibold uppercase tracking-[0.2em] text-accent-ochre">
+                Implementation Steps
+              </div>
+              <h2 className="font-headline text-3xl font-medium tracking-tight text-ink">
+                How It Works
+              </h2>
+            </div>
+            <ol className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+              {service.howItWorks.map((step, i) => (
+                <li
+                  key={step}
+                  className="flex flex-col justify-between rounded border border-border-sand bg-surface-card p-6"
+                >
+                  <div className="mb-4 font-headline text-xs font-semibold uppercase tracking-wider text-accent-ochre">
+                    Step {String(i + 1).padStart(2, "0")}
+                  </div>
+                  <h3 className="font-body text-sm leading-relaxed text-ink">
+                    {step}
+                  </h3>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </section>
+
+        {/* Limits & What To Know */}
+        <section className="mx-auto max-w-7xl px-6 py-20 lg:px-12">
+          <div className="rounded-lg border border-border-sand bg-surface-card p-8 sm:p-10">
+            <div className="mb-6 flex items-center gap-3">
+              <AlertCircle size={20} className="text-accent-ochre" aria-hidden="true" />
+              <h2 className="font-headline text-2xl font-medium tracking-tight text-ink">
+                What You Should Know &amp; Honest Limits
+              </h2>
+            </div>
+            <ul className="space-y-4">
+              {service.limits.map((limit) => (
+                <li key={limit} className="flex items-start gap-3">
+                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent-ochre" />
+                  <span className="font-body text-sm leading-relaxed text-ink-muted">
+                    {limit}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        {/* FAQ Section */}
+        <section className="w-full border-t border-border-sand bg-surface-muted/60 py-20">
+          <div className="mx-auto max-w-4xl px-6">
+            <div className="mb-12 text-center">
+              <div className="mb-2 font-headline text-xs font-semibold uppercase tracking-[0.2em] text-accent-ochre">
+                Questions &amp; Answers
+              </div>
+              <h2 className="font-headline text-3xl font-medium tracking-tight text-ink">
+                Frequently Asked Questions
+              </h2>
+            </div>
+            <div className="space-y-4">
+              {service.faq.map((f) => (
+                <details
+                  key={f.question}
+                  className="group rounded border border-border-sand bg-surface-card p-6 transition-colors hover:border-border-taupe"
+                >
+                  <summary className="flex cursor-pointer list-none items-center justify-between font-headline text-base font-medium text-ink">
+                    <span>{f.question}</span>
+                    <span className="ml-4 font-mono text-ink-muted transition-transform group-open:rotate-45">
+                      +
+                    </span>
+                  </summary>
+                  <p className="mt-4 font-body text-sm leading-relaxed text-ink-muted">
+                    {f.answer}
+                  </p>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* CTA Banner */}
+        <section className="mx-auto max-w-7xl px-6 py-20 lg:px-12">
+          <div className="flex flex-col items-start justify-between gap-8 rounded-lg border border-border-sand bg-surface-card p-8 sm:flex-row sm:items-center sm:p-12">
+            <div className="max-w-xl space-y-2">
+              <h2 className="font-headline text-2xl font-medium tracking-tight text-ink sm:text-3xl">
+                Ready to automate your {service.title.toLowerCase()}?
+              </h2>
+              <p className="font-body text-sm leading-relaxed text-ink-muted">
+                Tell us about your daily bottlenecks. We will recommend the simplest suitable approach with a written scope and cost estimate.
+              </p>
+            </div>
+            <DiscussProjectButton serviceTitle={service.title} />
+          </div>
+        </section>
+
+        {/* Other Services Section */}
+        <section className="w-full border-t border-border-sand bg-surface-muted/60 py-20">
+          <div className="mx-auto max-w-7xl px-6 lg:px-12">
+            <div className="mb-12">
+              <div className="mb-2 font-headline text-xs font-semibold uppercase tracking-[0.2em] text-accent-ochre">
+                Explore More
+              </div>
+              <h2 className="font-headline text-3xl font-medium tracking-tight text-ink">
+                Other Services
+              </h2>
+            </div>
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+              {otherServices.map((other) => (
+                <Link
+                  key={other.id}
+                  href={`/services/${other.id}`}
+                  className="group flex flex-col justify-between rounded-lg border border-border-sand bg-surface-card p-7 transition-all hover:border-ink hover:bg-[#EFEAE0]"
+                >
+                  <div>
+                    <div className="mb-3 font-headline text-xs uppercase tracking-wider text-accent-ochre">
+                      {other.tag}
+                    </div>
+                    <h3 className="mb-3 font-headline text-xl font-medium text-ink transition-colors group-hover:text-accent-ochre">
+                      {other.title}
+                    </h3>
+                    <p className="font-body text-sm leading-relaxed text-ink-muted">
+                      {other.summary}
+                    </p>
+                  </div>
+                  <div className="mt-6 flex items-center gap-2 font-headline text-xs uppercase tracking-wider text-ink">
+                    <span>Learn More</span>
+                    <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <Footer />
+    </>
+  );
+}

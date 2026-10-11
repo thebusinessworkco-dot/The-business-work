@@ -1,0 +1,11 @@
+node_modules
+.next
+out
+.env
+.env.local
+next-env.d.ts
+*.tsbuildinfo
+qa/*
+!qa/README.md
+test-results/
+playwright-report/
