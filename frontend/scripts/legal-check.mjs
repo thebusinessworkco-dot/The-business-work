@@ -1,9 +1,13 @@
-// scripts/legal-check.mjs
+// frontend/scripts/legal-check.mjs
 // Scans legal content files for [[TO CONFIRM: ...]] placeholders.
 // Exits non-zero if any placeholders remain.
 
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const frontendDir = path.resolve(__dirname, "..");
 
 const files = [
   "src/content/legal/privacy.ts",
@@ -14,9 +18,9 @@ const placeholderRegex = /\[\[TO CONFIRM:\s*([^\]]+)\]\]/g;
 const findings = [];
 
 for (const relPath of files) {
-  const fullPath = path.resolve(process.cwd(), relPath);
+  const fullPath = path.resolve(frontendDir, relPath);
   if (!fs.existsSync(fullPath)) {
-    console.error(`File not found: ${relPath}`);
+    console.error(`File not found: ${fullPath}`);
     continue;
   }
   const content = fs.readFileSync(fullPath, "utf-8");
@@ -43,7 +47,7 @@ if (findings.length === 0) {
 } else {
   console.log(`Found ${findings.length} unresolved placeholder(s) across legal documents:\n`);
   findings.forEach((f, i) => {
-    console.log(`${i + 1}. [${f.file}:${f.line}]`);
+    console.log(`${i + 1}. [frontend/${f.file}:${f.line}]`);
     console.log(`   ${f.placeholder}\n`);
   });
   console.log(`Note: These placeholders keep /privacy and /terms in 'DRAFT' status (noindex, sitemap excluded).`);

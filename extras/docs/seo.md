@@ -21,12 +21,12 @@ To prevent staging, preview, and test deployments from being indexed prematurely
 
 ## 2. Placeholder Guard
 
-In `src/lib/site.ts`, business contact information begins as placeholders (`hello@example.com`, `+91 00000 00000`, `localhost`, etc.).
+In `frontend/src/lib/site.ts`, business contact information begins as placeholders (`hello@example.com`, `+91 00000 00000`, `localhost`, etc.).
 
 To protect domain authority and prevent search engines from scraping demo values:
 * The `isPlaceholder()` helper inspects contact values before any JSON-LD schema or metadata is built.
 * If an email contains `example.com`, or a phone consists of demo digits/zeros, it is **strictly omitted** from the `Organization` schema.
-* Once the owner updates `src/lib/site.ts` with real registered details, the schemas automatically include them on the next build.
+* Once the owner updates `frontend/src/lib/site.ts` with real registered details, the schemas automatically include them on the next build.
 
 ---
 
@@ -47,7 +47,7 @@ Structured data is generated dynamically and escaped to prevent script injection
 
 ## 4. How to Add a New Service
 
-1. Open `src/content/services.ts`.
+1. Open `frontend/src/content/services.ts`.
 2. Add a new object to the `services` array conforming to the `Service` type:
    - Provide `id`, `index`, `title`, `tag`, `summary`, `solves`, `capabilities` (max 6), `depends`, `intro`, `useCases`, `howItWorks`, `limits`, and `faq`.
 3. Because `generateStaticParams()` dynamically reads from `services`, Next.js will automatically build:
@@ -73,8 +73,8 @@ Structured data is generated dynamically and escaped to prevent script injection
 Follow this checklist before opening the site to search engines:
 
 1. [ ] **Real Domain**: Set `NEXT_PUBLIC_SITE_URL` to your live domain (e.g. `https://thebusinesswork.com`) without trailing slash.
-2. [ ] **Update Details**: Replace placeholders in `src/lib/site.ts` with real email, phone, WhatsApp number, and office location.
-3. [ ] **Finalize Legal Text**: Replace placeholder text at `/privacy` and `/terms`. Once complete, add both URLs to `src/app/sitemap.ts`.
+2. [ ] **Update Details**: Replace placeholders in `frontend/src/lib/site.ts` with real email, phone, WhatsApp number, and office location.
+3. [ ] **Finalize Legal Text**: Replace placeholder text at `/privacy` and `/terms`. Once complete, add both URLs to `frontend/src/app/sitemap.ts`.
 4. [ ] **Enable Indexing**: Set `NEXT_PUBLIC_ALLOW_INDEXING=true` in your production environment variables.
 5. [ ] **Rebuild & Deploy**: Trigger a production deployment.
 6. [ ] **Verify Robots & Sitemap**:

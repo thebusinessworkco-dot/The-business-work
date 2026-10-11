@@ -26,7 +26,7 @@ This option requires no third-party automation tools or paid subscriptions. Goog
 
 ### Step 2: Add the Apps Script Code
 1. In your Google Sheet, click **Extensions** > **Apps Script**.
-2. Replace all existing code in `Code.gs` with the following script:
+2. Replace all existing code in `Code.gs` with the following script (also available directly in [lead-capture.gs](../automation/google-apps-script/lead-capture.gs)):
 
 ```javascript
 /**

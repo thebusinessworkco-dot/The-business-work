@@ -21,6 +21,7 @@ export default defineConfig({
   webServer: {
     command: "npx next start -p 3005",
     port: 3005,
+    cwd: __dirname,
     reuseExistingServer: true,
     timeout: 120_000,
   },

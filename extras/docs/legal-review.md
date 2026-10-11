@@ -12,11 +12,11 @@ Run the following command at any time to audit remaining placeholders:
 npm run legal:check
 ```
 
-This script scans `src/content/legal/privacy.ts` and `src/content/legal/terms.ts` for unresolved `[[TO CONFIRM: ...]]` tags and exits non-zero if any remain.
+This script scans `frontend/src/content/legal/privacy.ts` and `frontend/src/content/legal/terms.ts` for unresolved `[[TO CONFIRM: ...]]` tags and exits non-zero if any remain.
 
 ### Current Placeholders to Resolve
 
-#### In `src/content/legal/privacy.ts`
+#### In `frontend/src/content/legal/privacy.ts`
 1. **Section 1 (Who We Are):**
    - `[[TO CONFIRM: registered business entity type, registration number, and GSTIN if applicable]]`
    - `[[TO CONFIRM: complete registered office address, city, state, PIN code, India]]`
@@ -40,7 +40,7 @@ This script scans `src/content/legal/privacy.ts` and `src/content/legal/terms.ts
    - `[[TO CONFIRM: Grievance Officer Postal Address, India]]`
    - `[[TO CONFIRM: statutory grievance resolution timeline, e.g. within 30 days]]`
 
-#### In `src/content/legal/terms.ts`
+#### In `frontend/src/content/legal/terms.ts`
 1. **Section 10 (Limitation of Liability):**
    - `[[TO CONFIRM: lawyer to set liability cap and exclusions, e.g. total aggregate liability limited to INR 1,000 or actual fees paid in the preceding three months]]`
 2. **Section 12 (Governing Law & Jurisdiction):**
@@ -65,5 +65,5 @@ This script scans `src/content/legal/privacy.ts` and `src/content/legal/terms.ts
 - [ ] **Define Retention Schedule:** Finalize the inquiry retention period (recommended: 12 months or upon request).
 - [ ] **Jurisdiction City:** Specify your corporate legal jurisdiction (e.g., Bengaluru, Mumbai, Delhi).
 - [ ] **Lawyer Sign-off:** Have an advocate review limitation of liability clauses, DPDP notice alignment, and client responsibility sections.
-- [ ] **Resolve Placeholders:** Replace all `[[TO CONFIRM: ...]]` strings in `src/content/legal/privacy.ts` and `src/content/legal/terms.ts`.
+- [ ] **Resolve Placeholders:** Replace all `[[TO CONFIRM: ...]]` strings in `frontend/src/content/legal/privacy.ts` and `frontend/src/content/legal/terms.ts`.
 - [ ] **Verify `npm run legal:check`:** Confirm the audit command passes with 0 remaining placeholders.
