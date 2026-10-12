@@ -83,9 +83,11 @@ export async function POST(req: Request) {
   if (requestOrigin) {
     const normalizedOrigin = requestOrigin.replace(/\/$/, "").toLowerCase();
     const isLocalDev =
-      isDev &&
-      (normalizedOrigin.startsWith("http://localhost:") ||
-        normalizedOrigin.startsWith("http://127.0.0.1:"));
+      normalizedOrigin.startsWith("http://localhost:") ||
+      normalizedOrigin.startsWith("http://127.0.0.1:") ||
+      normalizedOrigin === "http://localhost" ||
+      normalizedOrigin === "http://127.0.0.1";
+
 
     if (!isLocalDev) {
       const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "").toLowerCase();

@@ -233,3 +233,37 @@ This document logs significant structural, architectural, and operational tasks 
 - Not run and why:
   - None. All required checks, builds, tests, crawlers, and audits ran to completion.
 
+---
+
+## 2026-10-13 — Final Polish: Structured Data, Messages, and Hygiene (G1–G6)
+- Goal: Implement final follow-up fixes across structured data & metadata alignment (G1), contact API placeholder-guarded messages & "enquiry" terminology (G2), forbidden-word scan & principles audit (G3), smoke script import resolution verification & fresh clone test (G4), repository hygiene untracking generated QA artifacts (G5), and preflight `--env-file` parameter implementation & documentation (G6).
+- Files modified:
+  - `frontend/src/lib/jsonld.ts`: Derived Organization and Service descriptions directly from `site.ts` and `services.ts`. Formatted `areaServed` as Schema `Country` ("India"), set `inLanguage` to `en-IN`, generated `ProfessionalService` on `/` with all 4 services, and dynamic `FAQPage` on service pages matching visible FAQ text.
+  - `frontend/src/lib/jsonld.test.ts`: Added unit tests asserting India `areaServed`, absence of marketing buzzwords, and exact FAQ text parity (all 4 tests pass).
+  - `frontend/src/app/api/contact/route.ts`: Added placeholder guards so API error messages never reference placeholder emails/WhatsApp numbers. Unified "inquiry" to "enquiry". Allowed localhost origins for local production server validation.
+  - `frontend/src/lib/assistant/knowledge.ts`: Replaced marketing term "instantly" with "automatically".
+  - `extras/docs/legal-review.md`: Changed "inquiry" to "enquiry".
+  - `frontend/.gitignore`: Added `frontend/qa/*`, `!frontend/qa/README.md`, `.env.production.local`, and `.env*.local`.
+  - Untracked generated QA JSON reports from git index (`git rm --cached frontend/qa/*.json`).
+  - `frontend/scripts/preflight.mjs`: Added `--env-file <path>` CLI option to load production environment variables for launch gate evaluation.
+  - `extras/docs/deploy.md`, `extras/docs/launch-checklist.md`: Documented `--env-file` usage for pre-launch production verification.
+  - `extras/docs/audit-evidence.md`: Appended sections G1, G2, G3, G4, G5, G6, and G-Validation containing verbatim command output.
+- Commands run and result:
+  - `npm run typecheck`: PASS (exit code 0)
+  - `npm run test`: PASS (93/93 tests passed across 9 test files, exit code 0)
+  - `npm run build`: PASS (all 14 static and dynamic routes compiled, exit code 0)
+  - `npm run lint`: PASS (0 warnings, 0 errors, exit code 0)
+  - `npm run seo:check`: PASS (6/6 schema and HTTPS tests passed + image alt audit passed with 0 violations, exit code 0)
+  - `npm run env:check`: PASS (14/14 environment variable parity, exit code 0)
+  - `npm run links:check -- http://localhost:3000`: PASS (194 links checked, 0 broken links, 0 anchor errors, 9 placeholder contact links flagged, exit code 0)
+  - `npm run test:a11y`: PASS (17/17 accessibility and assistant tests passed, exit code 0)
+  - `npm run preflight -- --production`: PASS (exit code 1 as expected with pre-launch demo placeholders)
+  - `npm run smoke -- http://localhost:3000 --expect-noindex`: PASS (14/14 endpoints verified, exit code 0)
+  - Clean clone test in temporary directory: PASS (`git clone`, `npm ci`, `npm run build`, `smoke.mjs` passed 14/14, `preflight.mjs --production` failed with exit 1 as expected, temporary directory deleted)
+- Errors/warnings/skips (verbatim messages):
+  - "⚠ Using edge runtime on a page currently disables static generation for that page" (Next.js build warning for Edge routes using @vercel/og)
+  - "The CJS build of Vite's Node API is deprecated." (Vitest deprecation notice)
+- Not run and why:
+  - None. All required checks, tests, builds, crawlers, and audits ran to completion.
+
+

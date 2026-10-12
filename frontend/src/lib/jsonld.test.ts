@@ -63,9 +63,10 @@ describe("JSON-LD Structured Data", () => {
   it("generates valid service schemas with matching FAQ text and areaServed India", () => {
     for (const service of services) {
       const schemas = getServiceJsonLd(service);
-      const serviceSchema = schemas.find((s) => s["@type"] === "Service");
-      const breadcrumb = schemas.find((s) => s["@type"] === "BreadcrumbList");
-      const faq = schemas.find((s) => s["@type"] === "FAQPage");
+      const serviceSchema = schemas.find((s) => s && s["@type"] === "Service");
+      const breadcrumb = schemas.find((s) => s && s["@type"] === "BreadcrumbList");
+      const faq = schemas.find((s) => s && s["@type"] === "FAQPage");
+
 
       expect(serviceSchema).toBeDefined();
       if (serviceSchema && serviceSchema["@type"] === "Service") {

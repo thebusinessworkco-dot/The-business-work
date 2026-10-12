@@ -50,46 +50,49 @@ export type HomeJsonLd = [
   }
 ];
 
-export type ServiceJsonLd = Array<
-  | {
-      "@context": "https://schema.org";
-      "@type": "Service";
-      name: string;
-      description: string;
-      url: string;
-      provider: {
-        "@type": "Organization";
-        name: string;
-        url: string;
-      };
-      areaServed: {
-        "@type": "Country";
-        name: string;
-      };
-    }
-  | {
-      "@context": "https://schema.org";
-      "@type": "BreadcrumbList";
-      itemListElement: Array<{
-        "@type": "ListItem";
-        position: number;
-        name: string;
-        item: string;
-      }>;
-    }
-  | {
-      "@context": "https://schema.org";
-      "@type": "FAQPage";
-      mainEntity: Array<{
-        "@type": "Question";
-        name: string;
-        acceptedAnswer: {
-          "@type": "Answer";
-          text: string;
-        };
-      }>;
-    }
->;
+export type ServiceSchema = {
+  "@context": "https://schema.org";
+  "@type": "Service";
+  name: string;
+  description: string;
+  url: string;
+  provider: {
+    "@type": "Organization";
+    name: string;
+    url: string;
+  };
+  areaServed: {
+    "@type": "Country";
+    name: string;
+  };
+};
+
+export type BreadcrumbListSchema = {
+  "@context": "https://schema.org";
+  "@type": "BreadcrumbList";
+  itemListElement: Array<{
+    "@type": "ListItem";
+    position: number;
+    name: string;
+    item: string;
+  }>;
+};
+
+export type FAQPageSchema = {
+  "@context": "https://schema.org";
+  "@type": "FAQPage";
+  mainEntity: Array<{
+    "@type": "Question";
+    name: string;
+    acceptedAnswer: {
+      "@type": "Answer";
+      text: string;
+    };
+  }>;
+};
+
+export type ServiceJsonLd = [ServiceSchema, BreadcrumbListSchema, FAQPageSchema?];
+
 
 /**
  * Structured data for the Home page:
