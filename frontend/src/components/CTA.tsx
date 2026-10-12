@@ -17,7 +17,7 @@ export default function CTA() {
         </p>
         <div className="flex flex-col items-center justify-center gap-4 pt-4 sm:flex-row">
           <button
-            onClick={() => openModal()}
+            onClick={() => openModal(undefined, "cta")}
             className="group inline-flex w-full items-center justify-center gap-3 rounded bg-ink px-8 py-4 font-headline text-xs font-semibold uppercase tracking-wider text-background transition-colors hover:bg-accent-ochre sm:w-auto"
           >
             <span>Send an Enquiry</span>

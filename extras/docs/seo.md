@@ -68,7 +68,21 @@ Structured data is generated dynamically and escaped to prevent script injection
 
 ---
 
-## 6. Pre-Launch & Launch Checklist
+## 6. Adding Images & Media Best Practices
+
+The website currently uses clean inline vector SVGs and Lucide icons for maximum speed and zero raster layout shift. When adding photography, screenshots, or case study raster images in the future, follow these performance and accessibility guidelines:
+
+1. **Use `next/image`**: Always import `Image` from `next/image`. Never use raw `<img>` tags.
+2. **Explicit Dimensions**: Always supply explicit `width` and `height` (or use `fill` within a positioned parent with a `sizes` attribute) to eliminate Cumulative Layout Shift (CLS).
+3. **Descriptive `alt` Text**:
+   - Provide informative `alt` descriptions explaining what the image shows (e.g. `alt="Dashboard interface displaying automated invoice status in CRM"`).
+   - If an image is purely decorative, use `alt=""` explicitly so screen readers ignore it.
+4. **Modern Image Formats**: Serve images in modern formats like WebP or AVIF. Next.js image optimization automatically converts supported sources.
+5. **Above-the-Fold Priority**: If adding a hero image or visual element above the fold, mark it with `priority` so Next.js preloads it, optimizing Largest Contentful Paint (LCP).
+
+---
+
+## 7. Pre-Launch & Launch Checklist
 
 Follow this checklist before opening the site to search engines:
 

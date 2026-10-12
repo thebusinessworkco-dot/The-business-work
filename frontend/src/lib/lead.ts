@@ -10,13 +10,18 @@ export interface Lead {
   consent: true;
   receivedAt: string;
   source: "website-contact-form";
+  page?: string;
+  cta?: string;
+  utm_source?: string;
+  utm_medium?: string;
+  utm_campaign?: string;
 }
 
 export type ParseLeadResult =
   | { ok: true; lead: Lead }
   | { ok: false; error: string };
 
-const clean = (v: unknown, max: number): string =>
+export const clean = (v: unknown, max: number): string =>
   typeof v === "string"
     ? v
         .replace(/[\u0000-\u001F\u007F]/g, " ")
@@ -35,6 +40,7 @@ const validServiceTitles = new Set([
 /**
  * Validates and sanitizes a raw request body into a typed Lead object.
  * Pure function: does not mutate inputs or perform I/O.
+ * Unrecognized properties are strictly dropped.
  */
 export function parseLead(body: unknown): ParseLeadResult {
   if (!body || typeof body !== "object") {
@@ -95,18 +101,33 @@ export function parseLead(body: unknown): ParseLeadResult {
     return { ok: false, error: "Please reduce the number of links in your message." };
   }
 
+  // Optional conversion context and campaign parameters (capped & sanitized)
+  const page = clean(raw.page, 120);
+  const cta = clean(raw.cta, 50);
+  const utm_source = clean(raw.utm_source, 80);
+  const utm_medium = clean(raw.utm_medium, 80);
+  const utm_campaign = clean(raw.utm_campaign, 80);
+
+  const lead: Lead = {
+    name,
+    business,
+    email,
+    phone,
+    service,
+    problem,
+    consent: true,
+    receivedAt: new Date().toISOString(),
+    source: "website-contact-form",
+  };
+
+  if (page) lead.page = page;
+  if (cta) lead.cta = cta;
+  if (utm_source) lead.utm_source = utm_source;
+  if (utm_medium) lead.utm_medium = utm_medium;
+  if (utm_campaign) lead.utm_campaign = utm_campaign;
+
   return {
     ok: true,
-    lead: {
-      name,
-      business,
-      email,
-      phone,
-      service,
-      problem,
-      consent: true,
-      receivedAt: new Date().toISOString(),
-      source: "website-contact-form",
-    },
+    lead,
   };
 }

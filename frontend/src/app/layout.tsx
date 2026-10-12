@@ -1,10 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { Manrope, Space_Grotesk } from "next/font/google";
-import Script from "next/script";
 import "./globals.css";
 import dynamic from "next/dynamic";
 import { site, isIndexingAllowed, getCleanSiteUrl } from "@/lib/site";
 import { ContactModalProvider } from "@/components/ContactModal";
+import CookieConsent from "@/components/CookieConsent";
 
 const AssistantWidget = dynamic(() => import("@/components/assistant/AssistantWidget"), {
   ssr: false,
@@ -99,8 +99,6 @@ export const metadata: Metadata = {
 export const viewport: Viewport = { themeColor: "#F7F4EE" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const gaId = process.env.NEXT_PUBLIC_GA_ID;
-
   return (
     <html lang="en-IN" className={`${spaceGrotesk.variable} ${manrope.variable}`}>
       <body className="bg-background font-body text-ink antialiased selection:bg-[#EAE4D7] selection:text-ink">
@@ -114,26 +112,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
           {process.env.NEXT_PUBLIC_ASSISTANT_ENABLED !== "false" && <AssistantWidget />}
         </ContactModalProvider>
-
-        {/* Optional Google Analytics 4 (only loaded if NEXT_PUBLIC_GA_ID is set) */}
-        {gaId && (
-          <>
-            <Script
-              src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
-              strategy="afterInteractive"
-            />
-            <Script id="google-analytics" strategy="afterInteractive">
-              {`
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', '${gaId}', {
-                  page_path: window.location.pathname,
-                });
-              `}
-            </Script>
-          </>
-        )}
+        <CookieConsent />
       </body>
     </html>
   );

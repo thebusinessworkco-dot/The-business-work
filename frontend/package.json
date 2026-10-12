@@ -9,13 +9,14 @@
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "seo:check": "vitest run src/lib/jsonld.test.ts",
+    "seo:check": "vitest run src/lib/jsonld.test.ts src/lib/https.test.ts && node scripts/images-check.mjs",
     "legal:check": "node scripts/legal-check.mjs",
     "test:a11y": "playwright test tests/a11y.spec.ts tests/assistant.spec.ts",
     "preflight": "node scripts/preflight.mjs",
     "smoke": "node scripts/smoke.mjs",
     "contrast": "node scripts/contrast.mjs",
-    "assistant:eval": "node scripts/assistant-eval.mjs"
+    "assistant:eval": "node scripts/assistant-eval.mjs",
+    "links:check": "node scripts/links-check.mjs"
   },
   "dependencies": {
     "lucide-react": "^0.452.0",

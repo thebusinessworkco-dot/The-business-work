@@ -27,6 +27,7 @@ export const privacySections: LegalSection[] = [
     ],
     list: [
       "Contact Form Information: When you submit an enquiry through our website modal, we collect your full name, business or company name, email address, phone or WhatsApp number, service of interest, and your description of the problem you want to automate.",
+      "Enquiry Context & Campaign Metadata: When you submit an enquiry, our system also records the page path where you opened the form, the button or call-to-action clicked, and any campaign tags (utm_source, utm_medium, utm_campaign) present in the link; no cookies or persistent browser storage are used for this tracking.",
       "Consent Record: When submitting the form, you must explicitly check an agreement box. We record your affirmative consent together with a server-generated UTC timestamp.",
       "Technical & Security Data: To protect our service from automated spam and abuse, our servers temporarily inspect your IP address for rate limiting (limiting submissions to 5 per 10 minutes), evaluate submission timing, and discard honeypot submissions. Server access logs record standard technical metadata such as HTTP method, URL, and user agent.",
       "Analytics Data: If and only if analytics is enabled by the site operator, Google Analytics 4 collects pseudonymous pageview data. If analytics is not configured, no analytics scripts or trackers run.",
@@ -115,11 +116,11 @@ export const privacySections: LegalSection[] = [
   },
   {
     id: "cookies-and-analytics",
-    heading: "10. Cookies and Analytics",
+    heading: "10. Cookies, Analytics, and Spam Protection",
     paragraphs: [
-      "We do not use advertising cookies, marketing trackers, or cross-site fingerprinting scripts.",
-      "Essential Cookies: Our hosting platform may use temporary, strictly necessary session tokens for routing and security.",
-      "Analytics Cookies: If Google Analytics is enabled by the site owner, it sets first-party analytics cookies (_ga) to measure aggregated visitor counts and navigation patterns. If Google Analytics is not enabled, zero analytics cookies are placed on your browser.",
+      "Default Cookie-Free Mode: By default, this website operates in a strictly cookie-free mode. We do not use advertising trackers, marketing cookies, third-party analytics pixels, or cross-site tracking scripts. No cookies, localStorage, or sessionStorage items are stored on your device when browsing the public website.",
+      "Optional Google Analytics: If and only if Google Analytics 4 is enabled by the site operator, a non-modal cookie consent banner is displayed. Google Analytics scripts and cookies (_ga) load only after you explicitly click 'Accept'. If you click 'Reject' or if analytics is unset, zero analytics cookies or tracking scripts are loaded.",
+      "Optional Spam Protection: If Cloudflare Turnstile is enabled by the site operator to prevent automated spam abuse, a privacy-preserving security widget runs when you open the contact modal to verify human interaction without invasive profiling. [[TO CONFIRM: lawyer to confirm applicable privacy disclosures if Cloudflare Turnstile spam protection is enabled in production]].",
       "[[TO CONFIRM: lawyer to confirm cookie notice, consent banner, or opt-out requirements if analytics is deployed in production]].",
     ],
   },

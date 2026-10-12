@@ -13,7 +13,7 @@ This option requires no third-party automation tools or paid subscriptions. Goog
 ### Step 1: Create the Google Sheet
 1. Create a new Google Sheet named `The Business Work - Leads`.
 2. Name the first tab (sheet) `Leads`.
-3. In row 1, set the following header columns (columns A to I):
+3. In row 1, set the following header columns (columns A to N):
    - **A1**: `receivedAt`
    - **B1**: `name`
    - **C1**: `business`
@@ -23,94 +23,23 @@ This option requires no third-party automation tools or paid subscriptions. Goog
    - **G1**: `problem`
    - **H1**: `consent`
    - **I1**: `source`
+   - **J1**: `page`
+   - **K1**: `cta`
+   - **L1**: `utm_source`
+   - **M1**: `utm_medium`
+   - **N1**: `utm_campaign`
+
+*(Note: The Apps Script code automatically appends missing columns if migrating an older 9-column sheet).*
 
 ### Step 2: Add the Apps Script Code
 1. In your Google Sheet, click **Extensions** > **Apps Script**.
-2. Replace all existing code in `Code.gs` with the following script (also available directly in [lead-capture.gs](../automation/google-apps-script/lead-capture.gs)):
-
-```javascript
-/**
- * Google Apps Script Web App for "The Business Work" Lead Capture
- */
-var CONFIG = {
-  SHEET_NAME: "Leads",
-  // Set your shared secret here (must match LEAD_WEBHOOK_SECRET in .env.local):
-  SHARED_SECRET: "YOUR_SHARED_SECRET_HERE"
-};
-
-function doPost(e) {
-  var lock = LockService.getScriptLock();
-  try {
-    // Wait up to 10 seconds for concurrent write locks
-    lock.waitLock(10000);
-
-    if (!e || !e.postData || !e.postData.contents) {
-      return responseJson({ error: "Missing post body" }, 400);
-    }
-
-    var data;
-    try {
-      data = JSON.parse(e.postData.contents);
-    } catch (parseErr) {
-      return responseJson({ error: "Invalid JSON" }, 400);
-    }
-
-    // Verify secret if configured
-    if (CONFIG.SHARED_SECRET && CONFIG.SHARED_SECRET !== "YOUR_SHARED_SECRET_HERE") {
-      var providedSecret = data.secret;
-      if (!providedSecret || providedSecret !== CONFIG.SHARED_SECRET) {
-        return responseJson({ error: "Unauthorized" }, 401);
-      }
-    }
-
-    var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(CONFIG.SHEET_NAME);
-    if (!sheet) {
-      sheet = SpreadsheetApp.getActiveSpreadsheet().insertSheet(CONFIG.SHEET_NAME);
-      sheet.appendRow([
-        "receivedAt",
-        "name",
-        "business",
-        "email",
-        "phone",
-        "service",
-        "problem",
-        "consent",
-        "source"
-      ]);
-    }
-
-    // Append new row
-    sheet.appendRow([
-      data.receivedAt || new Date().toISOString(),
-      data.name || "",
-      data.business || "",
-      data.email || "",
-      data.phone || "",
-      data.service || "",
-      data.problem || "",
-      data.consent === true ? "TRUE" : "FALSE",
-      data.source || "website-contact-form"
-    ]);
-
-    return responseJson({ ok: true, status: "saved" }, 200);
-  } catch (err) {
-    return responseJson({ error: err.message || "Failed to process lead" }, 500);
-  } finally {
-    lock.releaseLock();
-  }
-}
-
-function responseJson(payload, statusCode) {
-  return ContentService.createTextOutput(JSON.stringify(payload))
-    .setMimeType(ContentService.MimeType.JSON);
-}
-```
+2. Replace all existing code in `Code.gs` with the updated script from [lead-capture.gs](../automation/google-apps-script/lead-capture.gs).
 
 ### Step 3: Deploy as a Web App
 1. In the Apps Script editor, click the blue **Deploy** button > **New deployment**.
 2. Click the gear icon next to "Select type" and choose **Web app**.
 3. Set the fields:
-   - **Description**: `The Business Work - Lead Intake v1`
+   - **Description**: `The Business Work - Lead Intake v2`
    - **Execute as**: `Me (<your-email@gmail.com>)`
    - **Who has access**: `Anyone` (Required so Next.js server can POST to it)
 4. Click **Deploy**.
@@ -155,6 +84,11 @@ If you use n8n (self-hosted or cloud), you can route leads to Google Sheets, CRM
      - `problem` -> `{{ $json.body.problem }}`
      - `consent` -> `{{ $json.body.consent }}`
      - `source` -> `{{ $json.body.source }}`
+     - `page` -> `{{ $json.body.page }}`
+     - `cta` -> `{{ $json.body.cta }}`
+     - `utm_source` -> `{{ $json.body.utm_source }}`
+     - `utm_medium` -> `{{ $json.body.utm_medium }}`
+     - `utm_campaign` -> `{{ $json.body.utm_campaign }}`
 
 3. **Optional Owner Alert (WhatsApp / Telegram / Email)**:
    - Connect an alert node to send an instant message when a lead is logged.
@@ -183,7 +117,12 @@ The Next.js backend sends the following JSON body to `LEAD_WEBHOOK_URL`:
   "problem": "Looking to automate patient appointment intake.",
   "consent": true,
   "receivedAt": "2026-10-12T01:50:00.000Z",
-  "source": "website-contact-form"
+  "source": "website-contact-form",
+  "page": "/services/ai-agents-chatbots",
+  "cta": "hero",
+  "utm_source": "google",
+  "utm_medium": "cpc",
+  "utm_campaign": "q4_automation"
 }
 ```
 *(If `LEAD_WEBHOOK_SECRET_MODE=body`, a `"secret": "..."` field is included in this payload).*

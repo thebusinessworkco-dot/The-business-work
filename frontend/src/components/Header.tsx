@@ -46,7 +46,7 @@ export default function Header() {
 
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           <button
-            onClick={() => openModal()}
+            onClick={() => openModal(undefined, "header")}
             aria-label="Discuss Your Project"
             className="inline-flex items-center justify-center rounded-full border border-border-taupe bg-surface-card px-3 sm:px-5 py-1.5 sm:py-2.5 font-headline text-[10px] sm:text-xs font-medium uppercase tracking-wider text-ink transition-all hover:border-ink hover:bg-[#F2ECE0] whitespace-nowrap"
           >

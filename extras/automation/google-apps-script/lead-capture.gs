@@ -1,11 +1,30 @@
 /**
  * Google Apps Script Web App for "The Business Work" Lead Capture
+ * Supports core lead data plus conversion context (page, cta, utm tags).
+ * Safely appends missing headers if migrating from an older sheet structure.
  */
 var CONFIG = {
   SHEET_NAME: "Leads",
   // Set your shared secret here (must match LEAD_WEBHOOK_SECRET in .env.local):
   SHARED_SECRET: "YOUR_SHARED_SECRET_HERE"
 };
+
+var EXPECTED_HEADERS = [
+  "receivedAt",
+  "name",
+  "business",
+  "email",
+  "phone",
+  "service",
+  "problem",
+  "consent",
+  "source",
+  "page",
+  "cta",
+  "utm_source",
+  "utm_medium",
+  "utm_campaign"
+];
 
 function doPost(e) {
   var lock = LockService.getScriptLock();
@@ -35,31 +54,45 @@ function doPost(e) {
     var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(CONFIG.SHEET_NAME);
     if (!sheet) {
       sheet = SpreadsheetApp.getActiveSpreadsheet().insertSheet(CONFIG.SHEET_NAME);
-      sheet.appendRow([
-        "receivedAt",
-        "name",
-        "business",
-        "email",
-        "phone",
-        "service",
-        "problem",
-        "consent",
-        "source"
-      ]);
+      sheet.appendRow(EXPECTED_HEADERS);
+    } else {
+      var lastCol = sheet.getLastColumn();
+      if (lastCol > 0) {
+        var existingHeaders = sheet.getRange(1, 1, 1, lastCol).getValues()[0];
+        EXPECTED_HEADERS.forEach(function(h) {
+          if (existingHeaders.indexOf(h) === -1) {
+            sheet.getRange(1, ++lastCol).setValue(h);
+            existingHeaders.push(h);
+          }
+        });
+      } else {
+        sheet.appendRow(EXPECTED_HEADERS);
+      }
     }
 
-    // Append new row
-    sheet.appendRow([
-      data.receivedAt || new Date().toISOString(),
-      data.name || "",
-      data.business || "",
-      data.email || "",
-      data.phone || "",
-      data.service || "",
-      data.problem || "",
-      data.consent === true ? "TRUE" : "FALSE",
-      data.source || "website-contact-form"
-    ]);
+    // Map row values dynamically matching header positions
+    var headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+    var row = headers.map(function(header) {
+      switch (header) {
+        case "receivedAt": return data.receivedAt || new Date().toISOString();
+        case "name": return data.name || "";
+        case "business": return data.business || "";
+        case "email": return data.email || "";
+        case "phone": return data.phone || "";
+        case "service": return data.service || "";
+        case "problem": return data.problem || "";
+        case "consent": return data.consent === true ? "TRUE" : "FALSE";
+        case "source": return data.source || "website-contact-form";
+        case "page": return data.page || "";
+        case "cta": return data.cta || "";
+        case "utm_source": return data.utm_source || "";
+        case "utm_medium": return data.utm_medium || "";
+        case "utm_campaign": return data.utm_campaign || "";
+        default: return "";
+      }
+    });
+
+    sheet.appendRow(row);
 
     return responseJson({ ok: true, status: "saved" }, 200);
   } catch (err) {

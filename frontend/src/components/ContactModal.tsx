@@ -5,7 +5,10 @@ import { X } from "lucide-react";
 import { services } from "@/content/services";
 import { whatsappLink, isPlaceholder } from "@/lib/site";
 
-type Ctx = { openModal: (service?: string) => void; isOpen: boolean };
+type Ctx = {
+  openModal: (service?: string, cta?: string) => void;
+  isOpen: boolean;
+};
 const ModalContext = createContext<Ctx>({ openModal: () => {}, isOpen: false });
 export const useContactModal = () => useContext(ModalContext);
 
@@ -22,17 +25,53 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
   const [error, setError] = useState("");
   const [consent, setConsent] = useState(false);
   const [startedAt, setStartedAt] = useState<number>(0);
+  const [openCta, setOpenCta] = useState<string>("direct");
+  const [openPage, setOpenPage] = useState<string>("/");
+  const [turnstileToken, setTurnstileToken] = useState<string>("");
+  const [utm, setUtm] = useState<{
+    utm_source?: string;
+    utm_medium?: string;
+    utm_campaign?: string;
+  }>({});
+
   const dialogRef = useRef<HTMLDivElement>(null);
   const firstFieldRef = useRef<HTMLInputElement>(null);
   const triggerRef = useRef<HTMLElement | null>(null);
+  const turnstileWidgetId = useRef<string | null>(null);
 
-  const openModal = useCallback((s?: string) => {
+  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+
+  // Capture landing UTM tags in React state only (no localStorage, no cookies)
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const s = params.get("utm_source");
+        const m = params.get("utm_medium");
+        const c = params.get("utm_campaign");
+        const newUtm: Record<string, string> = {};
+        if (s) newUtm.utm_source = s.replace(/[\u0000-\u001F\u007F]/g, " ").trim().slice(0, 80);
+        if (m) newUtm.utm_medium = m.replace(/[\u0000-\u001F\u007F]/g, " ").trim().slice(0, 80);
+        if (c) newUtm.utm_campaign = c.replace(/[\u0000-\u001F\u007F]/g, " ").trim().slice(0, 80);
+        if (Object.keys(newUtm).length > 0) {
+          setUtm(newUtm);
+        }
+      } catch {}
+    }
+  }, []);
+
+  const openModal = useCallback((s?: string, c?: string) => {
     triggerRef.current = document.activeElement as HTMLElement | null;
     if (s) setService(s);
+    setOpenCta(c || "direct");
+    if (typeof window !== "undefined") {
+      setOpenPage(window.location.pathname);
+    }
     setStatus("idle");
     setError("");
     setConsent(false);
     setStartedAt(Date.now());
+    setTurnstileToken("");
     setOpen(true);
   }, []);
 
@@ -40,6 +79,73 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
     setOpen(false);
     triggerRef.current?.focus();
   }, []);
+
+  // Turnstile script & widget lifecycle (only loaded if configured and modal is open)
+  useEffect(() => {
+    if (!open || !turnstileSiteKey) return;
+
+    const scriptId = "cf-turnstile-script";
+    let script = document.getElementById(scriptId) as HTMLScriptElement | null;
+
+    function renderWidget() {
+      const win = window as unknown as {
+        turnstile?: {
+          render: (
+            container: HTMLElement,
+            options: Record<string, unknown>
+          ) => string;
+          remove: (id: string) => void;
+        };
+      };
+      if (win.turnstile) {
+        const container = document.getElementById("cf-turnstile-container");
+        if (container) {
+          container.innerHTML = "";
+          try {
+            turnstileWidgetId.current = win.turnstile.render(container, {
+              sitekey: turnstileSiteKey,
+              callback: (token: string) => {
+                setTurnstileToken(token);
+              },
+              "error-callback": () => {
+                setTurnstileToken("");
+              },
+              "expired-callback": () => {
+                setTurnstileToken("");
+              },
+            });
+          } catch {}
+        }
+      }
+    }
+
+    if (!script) {
+      script = document.createElement("script");
+      script.id = scriptId;
+      script.src =
+        "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+      script.async = true;
+      script.defer = true;
+      script.onload = () => {
+        renderWidget();
+      };
+      document.body.appendChild(script);
+    } else {
+      renderWidget();
+    }
+
+    return () => {
+      const win = window as unknown as {
+        turnstile?: { remove: (id: string) => void };
+      };
+      if (turnstileWidgetId.current && win.turnstile) {
+        try {
+          win.turnstile.remove(turnstileWidgetId.current);
+        } catch {}
+        turnstileWidgetId.current = null;
+      }
+    };
+  }, [open, turnstileSiteKey]);
 
   useEffect(() => {
     if (!open) return;
@@ -52,9 +158,15 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
           'a[href], button:not([disabled]), input:not([type="hidden"]), select, textarea'
         );
         if (!f.length) return;
-        const first = f[0], last = f[f.length - 1];
-        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+        const first = f[0],
+          last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
       }
     };
     document.addEventListener("keydown", onKey);
@@ -71,8 +183,8 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
     const form = e.currentTarget;
     const fd = new FormData(form);
 
-    const emailVal = (fd.get("email") as string || "").trim();
-    const phoneVal = (fd.get("phone") as string || "").trim();
+    const emailVal = ((fd.get("email") as string) || "").trim();
+    const phoneVal = ((fd.get("phone") as string) || "").trim();
 
     if (!emailVal && !phoneVal) {
       setError("Please provide an email or phone number.");
@@ -90,7 +202,9 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
     }
 
     if (phoneVal) {
-      const digitsOnly = phoneVal.replace(/^\+/, "").replace(/[\s\-\(\)\[\]\.]/g, "");
+      const digitsOnly = phoneVal
+        .replace(/^\+/, "")
+        .replace(/[\s\-\(\)\[\]\.]/g, "");
       if (!/^\d{7,15}$/.test(digitsOnly)) {
         setError("Please enter a valid phone number (7 to 15 digits).");
         setStatus("error");
@@ -104,9 +218,22 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
       return;
     }
 
+    if (turnstileSiteKey && !turnstileToken) {
+      setError("Please complete the security check to continue.");
+      setStatus("error");
+      return;
+    }
+
     const payload: Record<string, unknown> = Object.fromEntries(fd.entries());
     payload.startedAt = startedAt;
     payload.consent = consent;
+    payload.page =
+      openPage || (typeof window !== "undefined" ? window.location.pathname : "/");
+    payload.cta = openCta;
+    if (utm.utm_source) payload.utm_source = utm.utm_source;
+    if (utm.utm_medium) payload.utm_medium = utm.utm_medium;
+    if (utm.utm_campaign) payload.utm_campaign = utm.utm_campaign;
+    if (turnstileToken) payload.turnstileToken = turnstileToken;
 
     setStatus("sending");
     setError("");
@@ -117,7 +244,10 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
         body: JSON.stringify(payload),
       });
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || "Something went wrong. Please try again or use WhatsApp.");
+      if (!res.ok)
+        throw new Error(
+          data.error || "Something went wrong. Please try again or use WhatsApp."
+        );
       setStatus("success");
       form.reset();
     } catch (err) {
@@ -132,7 +262,9 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
       {open && (
         <div
           className="fixed inset-0 z-[70] flex items-center justify-center bg-ink/40 p-4 backdrop-blur-sm"
-          onMouseDown={(e) => { if (e.target === e.currentTarget) close(); }}
+          onMouseDown={(e) => {
+            if (e.target === e.currentTarget) close();
+          }}
         >
           <div
             ref={dialogRef}
@@ -144,7 +276,12 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
             <div className="flex items-center justify-between border-b border-border-sand pb-4">
               <div className="flex items-center gap-2">
                 <div className="h-2 w-2 bg-accent-ochre" />
-                <h2 id="enquiry-title" className="font-headline text-xs font-semibold uppercase tracking-wider text-ink">Discuss Your Project</h2>
+                <h2
+                  id="enquiry-title"
+                  className="font-headline text-xs font-semibold uppercase tracking-wider text-ink"
+                >
+                  Discuss Your Project
+                </h2>
               </div>
               <button
                 type="button"
@@ -157,51 +294,140 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
             </div>
 
             {status === "success" ? (
-              <div role="status" aria-live="polite" className="space-y-4 py-4 text-center">
-                <p className="font-headline text-sm uppercase tracking-wider text-ink">Thanks. Your enquiry has been sent.</p>
-                <p className="font-body text-sm text-ink-muted">We&apos;ll review it and get back to you.</p>
-                <button type="button" onClick={close} className="bg-ink px-6 py-3 font-headline text-xs font-semibold uppercase tracking-wider text-background hover:bg-accent-ochre">Close</button>
+              <div
+                role="status"
+                aria-live="polite"
+                className="space-y-4 py-4 text-center"
+              >
+                <p className="font-headline text-sm uppercase tracking-wider text-ink">
+                  Thanks. Your enquiry has been sent.
+                </p>
+                <p className="font-body text-sm text-ink-muted">
+                  We&apos;ll review it and get back to you.
+                </p>
+                <button
+                  type="button"
+                  onClick={close}
+                  className="bg-ink px-6 py-3 font-headline text-xs font-semibold uppercase tracking-wider text-background hover:bg-accent-ochre"
+                >
+                  Close
+                </button>
               </div>
             ) : (
               <form onSubmit={onSubmit} className="space-y-4" noValidate={false}>
-                <p className="font-body text-sm text-ink-muted">Share a few details and a short description of the problem. We&apos;ll reply with next steps.</p>
+                <p className="font-body text-sm text-ink-muted">
+                  Share a few details and a short description of the problem.
+                  We&apos;ll reply with next steps.
+                </p>
 
                 {/* Honeypot: real users never see or fill this */}
-                <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
-                  <label htmlFor="hp-website">Website</label>
-                  <input id="hp-website" name="website" tabIndex={-1} autoComplete="off" />
+                <div
+                  aria-hidden="true"
+                  className="absolute -left-[9999px] h-0 w-0 overflow-hidden"
+                >
+                  <label htmlFor="c-website">Website</label>
+                  <input
+                    id="c-website"
+                    name="website"
+                    tabIndex={-1}
+                    autoComplete="off"
+                  />
                 </div>
 
                 <div>
-                  <label className={labelCls} htmlFor="c-name">Name</label>
-                  <input ref={firstFieldRef} id="c-name" name="name" required maxLength={100} autoComplete="name" className={inputCls} />
+                  <label className={labelCls} htmlFor="c-name">
+                    Your name <span className="text-accent-ochre">*</span>
+                  </label>
+                  <input
+                    ref={firstFieldRef}
+                    id="c-name"
+                    name="name"
+                    required
+                    maxLength={100}
+                    autoComplete="name"
+                    className={inputCls}
+                  />
                 </div>
                 <div>
-                  <label className={labelCls} htmlFor="c-business">Business name</label>
-                  <input id="c-business" name="business" maxLength={120} autoComplete="organization" className={inputCls} />
+                  <label className={labelCls} htmlFor="c-business">
+                    Business name
+                  </label>
+                  <input
+                    id="c-business"
+                    name="business"
+                    maxLength={120}
+                    autoComplete="organization"
+                    className={inputCls}
+                  />
                 </div>
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
-                    <label className={labelCls} htmlFor="c-email">Email</label>
-                    <input id="c-email" name="email" type="email" maxLength={160} autoComplete="email" className={inputCls} />
+                    <label className={labelCls} htmlFor="c-email">
+                      Email
+                    </label>
+                    <input
+                      id="c-email"
+                      name="email"
+                      type="email"
+                      maxLength={160}
+                      autoComplete="email"
+                      className={inputCls}
+                    />
                   </div>
                   <div>
-                    <label className={labelCls} htmlFor="c-phone">Phone / WhatsApp</label>
-                    <input id="c-phone" name="phone" type="tel" maxLength={25} autoComplete="tel" className={inputCls} />
+                    <label className={labelCls} htmlFor="c-phone">
+                      Phone / WhatsApp
+                    </label>
+                    <input
+                      id="c-phone"
+                      name="phone"
+                      type="tel"
+                      maxLength={25}
+                      autoComplete="tel"
+                      className={inputCls}
+                    />
                   </div>
                 </div>
-                <p className="-mt-2 font-body text-xs text-ink-faint">Provide at least an email or a phone number.</p>
+                <p className="-mt-2 font-body text-xs text-ink-faint">
+                  Provide at least an email or a phone number.
+                </p>
                 <div>
-                  <label className={labelCls} htmlFor="c-service">Service of interest</label>
-                  <select id="c-service" name="service" value={service} onChange={(e) => setService(e.target.value)} className={inputCls}>
-                    {services.map((s) => <option key={s.id}>{s.title}</option>)}
+                  <label className={labelCls} htmlFor="c-service">
+                    Service of interest
+                  </label>
+                  <select
+                    id="c-service"
+                    name="service"
+                    value={service}
+                    onChange={(e) => setService(e.target.value)}
+                    className={inputCls}
+                  >
+                    {services.map((s) => (
+                      <option key={s.id}>{s.title}</option>
+                    ))}
                     <option>Not sure yet / custom solution</option>
                   </select>
                 </div>
                 <div>
-                  <label className={labelCls} htmlFor="c-problem">What would you like to improve?</label>
-                  <textarea id="c-problem" name="problem" rows={3} maxLength={1500} className={inputCls} placeholder="e.g. We reply to appointment requests on WhatsApp by hand." />
+                  <label className={labelCls} htmlFor="c-problem">
+                    What would you like to improve?
+                  </label>
+                  <textarea
+                    id="c-problem"
+                    name="problem"
+                    rows={3}
+                    maxLength={1500}
+                    className={inputCls}
+                    placeholder="e.g. We reply to appointment requests on WhatsApp by hand."
+                  />
                 </div>
+
+                {turnstileSiteKey && (
+                  <div
+                    id="cf-turnstile-container"
+                    className="min-h-[65px] pt-1"
+                  />
+                )}
 
                 <div className="flex items-start gap-2.5 pt-1">
                   <input
@@ -213,7 +439,10 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
                     onChange={(e) => setConsent(e.target.checked)}
                     className="mt-0.5 h-4 w-4 rounded border-border-sand bg-background text-ink accent-ink focus:outline-none focus:ring-1 focus:ring-ink"
                   />
-                  <label htmlFor="c-consent" className="font-body text-xs leading-relaxed text-ink-muted">
+                  <label
+                    htmlFor="c-consent"
+                    className="font-body text-xs leading-relaxed text-ink-muted"
+                  >
                     I agree to be contacted about my enquiry. See the{" "}
                     <a
                       href="/privacy"
@@ -227,14 +456,30 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
                   </label>
                 </div>
 
-                {status === "error" && <p role="alert" className="font-body text-sm text-red-700">{error}</p>}
+                {status === "error" && (
+                  <p role="alert" className="font-body text-sm text-red-700">
+                    {error}
+                  </p>
+                )}
 
-                <button type="submit" disabled={status === "sending"} className="w-full rounded bg-ink py-3.5 font-headline text-xs font-semibold uppercase tracking-wider text-background transition-colors hover:bg-accent-ochre disabled:opacity-60">
+                <button
+                  type="submit"
+                  disabled={status === "sending"}
+                  className="w-full rounded bg-ink py-3.5 font-headline text-xs font-semibold uppercase tracking-wider text-background transition-colors hover:bg-accent-ochre disabled:opacity-60"
+                >
                   {status === "sending" ? "Sending…" : "Send Enquiry"}
                 </button>
                 {!isPlaceholder("whatsapp") && (
                   <p className="text-center font-body text-xs text-ink-muted">
-                    Prefer chat? <a className="underline underline-offset-4 hover:text-accent-ochre" href={whatsappLink()} target="_blank" rel="noopener noreferrer">Message us on WhatsApp</a>
+                    Prefer chat?{" "}
+                    <a
+                      className="underline underline-offset-4 hover:text-accent-ochre"
+                      href={whatsappLink()}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Message us on WhatsApp
+                    </a>
                   </p>
                 )}
               </form>

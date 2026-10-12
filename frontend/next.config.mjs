@@ -1,10 +1,11 @@
 const cspHeader = `
   default-src 'self';
-  script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com;
+  script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://challenges.cloudflare.com;
   style-src 'self' 'unsafe-inline';
   img-src 'self' data: blob: https://www.googletagmanager.com https://www.google-analytics.com;
   font-src 'self' data:;
   connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://*.upstash.io;
+  frame-src 'self' https://challenges.cloudflare.com;
   frame-ancestors 'none';
   base-uri 'self';
   form-action 'self';

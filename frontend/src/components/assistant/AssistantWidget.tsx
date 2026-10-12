@@ -330,7 +330,7 @@ export default function AssistantWidget() {
               type="button"
               onClick={() => {
                 setIsOpen(false);
-                openModal();
+                openModal(undefined, "assistant");
               }}
               className="flex-1 min-h-[44px] flex items-center justify-center rounded bg-ink px-3 py-2 font-headline text-xs font-semibold uppercase tracking-wider text-background transition-colors hover:bg-accent-ochre focus:outline-none focus:ring-2 focus:ring-ink"
             >

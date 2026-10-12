@@ -137,6 +137,66 @@ export async function POST(req: Request) {
 
   const { lead } = parseResult;
 
+  // 8b. Optional Cloudflare Turnstile CAPTCHA verification (when configured)
+  const turnstileSecret = process.env.TURNSTILE_SECRET_KEY;
+  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+  if (turnstileSecret && turnstileSiteKey) {
+    const turnstileToken =
+      typeof body.turnstileToken === "string" ? body.turnstileToken.trim() : "";
+    if (!turnstileToken) {
+      return NextResponse.json(
+        { error: "Please complete the security check to continue." },
+        { status: 400 }
+      );
+    }
+
+    try {
+      const verifyRes = await fetch(
+        "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            secret: turnstileSecret,
+            response: turnstileToken,
+            remoteip: clientIp,
+          }),
+          signal: AbortSignal.timeout(8000),
+        }
+      );
+
+      if (!verifyRes.ok) {
+        console.error(`[turnstile] Verification endpoint returned HTTP ${verifyRes.status}`);
+        return NextResponse.json(
+          {
+            error:
+              "Security verification service temporarily unavailable. Please message us on WhatsApp or try again.",
+          },
+          { status: 503 }
+        );
+      }
+
+      const verifyData = (await verifyRes.json().catch(() => ({}))) as {
+        success?: boolean;
+      };
+      if (!verifyData.success) {
+        return NextResponse.json(
+          { error: "Security check failed. Please refresh and try again." },
+          { status: 400 }
+        );
+      }
+    } catch {
+      console.error("[turnstile] Security verification timed out or network error");
+      return NextResponse.json(
+        {
+          error:
+            "Security verification service timed out. Please try again or message us on WhatsApp.",
+        },
+        { status: 503 }
+      );
+    }
+  }
+
   // 9. Webhook configuration check
   const hook = process.env.LEAD_WEBHOOK_URL;
   if (!hook) {
@@ -159,6 +219,33 @@ export async function POST(req: Request) {
       devNotice:
         "Lead validated successfully. In local development without LEAD_WEBHOOK_URL, lead delivery is skipped.",
     });
+  }
+
+  // In production, refuse non-HTTPS webhooks (fail safe without logging URL)
+  if (process.env.NODE_ENV === "production") {
+    if (!hook.startsWith("https://")) {
+      console.error("[contact] Refused non-HTTPS LEAD_WEBHOOK_URL in production.");
+      return NextResponse.json(
+        {
+          error:
+            "Our enquiry service is temporarily unavailable. Please message us on WhatsApp or email.",
+        },
+        { status: 503 }
+      );
+    }
+    if (
+      process.env.NOTIFY_WEBHOOK_URL &&
+      !process.env.NOTIFY_WEBHOOK_URL.startsWith("https://")
+    ) {
+      console.error("[contact] Refused non-HTTPS NOTIFY_WEBHOOK_URL in production.");
+      return NextResponse.json(
+        {
+          error:
+            "Our enquiry service is temporarily unavailable. Please message us on WhatsApp or email.",
+        },
+        { status: 503 }
+      );
+    }
   }
 
   // 10. Webhook delivery with 1 retry on network error or 5xx

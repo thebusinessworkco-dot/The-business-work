@@ -32,6 +32,27 @@ allOk = step("Vitest Unit Tests", "npm run test") && allOk;
 allOk = step("Production Build", "npm run build") && allOk;
 
 if (isProduction) {
+  console.log("▶ In production mode, checking HTTPS safety for site URL and configured webhooks:");
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+  if (siteUrl && !siteUrl.startsWith("https://")) {
+    console.error(`✗ Production safety FAILED: NEXT_PUBLIC_SITE_URL must start with https:// in production mode (got: ${siteUrl})\n`);
+    allOk = false;
+  } else {
+    console.log("✓ Site URL HTTPS check passed\n");
+  }
+
+  const leadWebhook = process.env.LEAD_WEBHOOK_URL;
+  if (leadWebhook && !leadWebhook.startsWith("https://")) {
+    console.error("✗ Production safety FAILED: LEAD_WEBHOOK_URL must start with https:// in production mode.\n");
+    allOk = false;
+  }
+
+  const notifyWebhook = process.env.NOTIFY_WEBHOOK_URL;
+  if (notifyWebhook && !notifyWebhook.startsWith("https://")) {
+    console.error("✗ Production safety FAILED: NOTIFY_WEBHOOK_URL must start with https:// in production mode.\n");
+    allOk = false;
+  }
+
   console.log("▶ Note: In production mode, checking legal placeholders status:");
   try {
     execSync("npm run legal:check", { cwd: frontendDir, stdio: "inherit" });

@@ -124,7 +124,7 @@ export default function Services() {
               Not sure which one you need? Describe the problem. We&apos;ll recommend the simplest solution, which may combine WhatsApp, AI, a CRM and a calendar, or be just one small workflow.
             </p>
           </div>
-          <button onClick={() => openModal()} className="shrink-0 bg-ink px-6 py-3.5 font-headline text-xs font-semibold uppercase tracking-wider text-background transition-colors hover:bg-accent-ochre">
+          <button onClick={() => openModal(undefined, "services")} className="shrink-0 bg-ink px-6 py-3.5 font-headline text-xs font-semibold uppercase tracking-wider text-background transition-colors hover:bg-accent-ochre">
             Discuss Your Project
           </button>
         </div>

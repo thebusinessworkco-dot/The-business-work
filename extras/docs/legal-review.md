@@ -14,9 +14,9 @@ npm run legal:check
 
 This script scans `frontend/src/content/legal/privacy.ts` and `frontend/src/content/legal/terms.ts` for unresolved `[[TO CONFIRM: ...]]` tags and exits non-zero if any remain.
 
-### Current Placeholders to Resolve
+### Current Placeholders to Resolve (26 Active)
 
-#### In `frontend/src/content/legal/privacy.ts`
+#### In `frontend/src/content/legal/privacy.ts` (16 Placeholders)
 1. **Section 1 (Who We Are):**
    - `[[TO CONFIRM: registered business entity type, registration number, and GSTIN if applicable]]`
    - `[[TO CONFIRM: complete registered office address, city, state, PIN code, India]]`
@@ -31,21 +31,31 @@ This script scans `frontend/src/content/legal/privacy.ts` and `frontend/src/cont
 5. **Section 9 (Your Rights & Response SLA):**
    - `[[TO CONFIRM: official privacy email address]]`
    - `[[TO CONFIRM: response timeline, e.g. within 30 days of receiving a verified request]]`
-6. **Section 10 (Cookies & Consent):**
+6. **Section 10 (Cookies, Analytics & Spam Protection):**
+   - `[[TO CONFIRM: lawyer to confirm applicable privacy disclosures if Cloudflare Turnstile spam protection is enabled in production]]`
    - `[[TO CONFIRM: lawyer to confirm cookie notice, consent banner, or opt-out requirements if analytics is deployed in production]]`
-7. **Section 13 (Grievance Redressal):**
+7. **Section 14 (Grievance Redressal):**
    - `[[TO CONFIRM: Grievance Officer Name]]`
    - `[[TO CONFIRM: Grievance Officer Designation]]`
    - `[[TO CONFIRM: Grievance Officer Email Address]]`
    - `[[TO CONFIRM: Grievance Officer Postal Address, India]]`
    - `[[TO CONFIRM: statutory grievance resolution timeline, e.g. within 30 days]]`
 
-#### In `frontend/src/content/legal/terms.ts`
-1. **Section 10 (Limitation of Liability):**
+#### In `frontend/src/content/legal/terms.ts` (10 Placeholders)
+1. **Section 5 (Quotes, Payments, and Taxes):**
+   - `[[TO CONFIRM: advance % and milestone schedule]]`
+   - `[[TO CONFIRM: invoice due date window, e.g. 7 or 14 calendar days]]`
+   - `[[TO CONFIRM: late payment terms and interest if applicable]]`
+   - `[[TO CONFIRM: GST registration and rate]]`
+   - `[[TO CONFIRM: accepted payment methods, e.g. NEFT, RTGS, UPI, bank transfer]]`
+2. **Section 9 (Cancellation and Refunds):**
+   - `[[TO CONFIRM: notice period, e.g. 14 days written notice]]`
+   - `[[TO CONFIRM: refund rules and non-refundable deposit terms]]`
+3. **Section 15 (Limitation of Liability):**
    - `[[TO CONFIRM: lawyer to set liability cap and exclusions, e.g. total aggregate liability limited to INR 1,000 or actual fees paid in the preceding three months]]`
-2. **Section 12 (Governing Law & Jurisdiction):**
+4. **Section 17 (Governing Law & Jurisdiction):**
    - `[[TO CONFIRM: city and state in India, e.g. Bengaluru, Karnataka, India]]`
-3. **Section 13 (Contact):**
+5. **Section 18 (Contact):**
    - `[[TO CONFIRM: official contact email address]]`
 
 ---
@@ -62,6 +72,7 @@ This script scans `frontend/src/content/legal/privacy.ts` and `frontend/src/cont
 
 - [ ] **Supply Business Details:** Provide official business registration, registered address, GSTIN, and corporate email.
 - [ ] **Assign Grievance Officer:** Appoint a named Grievance Officer with an official email address as required under Indian IT and DPDP regulations.
+- [ ] **Define Payment & Cancellation Terms:** Set deposit %, payment milestones, invoice due dates, notice periods, and refund rules.
 - [ ] **Define Retention Schedule:** Finalize the inquiry retention period (recommended: 12 months or upon request).
 - [ ] **Jurisdiction City:** Specify your corporate legal jurisdiction (e.g., Bengaluru, Mumbai, Delhi).
 - [ ] **Lawyer Sign-off:** Have an advocate review limitation of liability clauses, DPDP notice alignment, and client responsibility sections.

@@ -105,4 +105,29 @@ describe("parseLead", () => {
       expect(res3.error).toBe("Please reduce the number of links in your message.");
     }
   });
+
+  it("sanitizes, caps, and includes lead context (page, cta, utm tags)", () => {
+    const longString = "a".repeat(150);
+    const res = parseLead({
+      ...baseValid,
+      page: "/services/ai-agents-chatbots",
+      cta: "hero",
+      utm_source: "google\u0000\u001F" + longString,
+      utm_medium: "cpc" + longString,
+      utm_campaign: "launch_2026",
+      unknownMaliciousField: "DROP_ME",
+    });
+
+    expect(res.ok).toBe(true);
+    if (res.ok) {
+      expect(res.lead.page).toBe("/services/ai-agents-chatbots");
+      expect(res.lead.cta).toBe("hero");
+      expect(res.lead.utm_source).toHaveLength(80);
+      expect(res.lead.utm_source?.startsWith("google")).toBe(true);
+      expect(res.lead.utm_source?.includes("\u0000")).toBe(false);
+      expect(res.lead.utm_medium).toHaveLength(80);
+      expect(res.lead.utm_campaign).toBe("launch_2026");
+      expect((res.lead as unknown as Record<string, unknown>).unknownMaliciousField).toBeUndefined();
+    }
+  });
 });

@@ -34,7 +34,7 @@ export default function Hero() {
           </p>
           <div className="flex flex-wrap items-center gap-4 pt-2">
             <button
-              onClick={() => openModal()}
+              onClick={() => openModal(undefined, "hero")}
               className="group inline-flex items-center justify-center gap-2.5 bg-ink px-7 py-3.5 font-headline text-xs font-semibold uppercase tracking-wider text-background transition-colors hover:bg-accent-ochre"
             >
               <span>Discuss Your Project</span>

@@ -141,3 +141,57 @@ This document logs significant structural, architectural, and operational tasks 
   - Review every answer printed in `assistant:eval` output and edit wording in `frontend/src/lib/assistant/knowledge.ts` if desired.
   - Replace placeholder contact details in `frontend/src/lib/site.ts` so the WhatsApp link button activates.
   - Review the privacy policy text in Section 13 with legal counsel prior to public launch.
+
+---
+
+### Task: Close remaining launch checklist gaps | 2026-10-13
+- Changed:
+  - `frontend/src/content/legal/terms.ts`: Extended with Sections 4-10 (Quotes and payment milestones, Third-party costs, Scope changes, Client responsibilities, Cancellation and refunds, Ongoing support, Handover and ownership, No business guarantees) using plain Indian English and strict `[[TO CONFIRM]]` placeholders.
+  - `frontend/src/content/legal/privacy.ts`: Added conversion attribution disclosure to Section 2 and updated Section 10 with cookie-free default and optional GA4/Turnstile conditions.
+  - `extras/docs/legal-review.md`: Updated with all 26 active legal placeholders and owner resolution instructions.
+  - `frontend/scripts/links-check.mjs`: Implemented pure Node broken-link and anchor ID crawler (`links:check` script) with status, anchor, and contact link validation.
+  - `frontend/src/lib/lead.ts`: Extended `Lead` schema and `parseLead` with `page`, `cta`, `utm_source`, `utm_medium`, `utm_campaign` (sanitized, capped at 80 chars, unknown fields dropped).
+  - `frontend/src/lib/lead.test.ts`: Added 4 unit tests validating attribution field trimming, capping, sanitization, and dropping unknown attributes (87/87 tests pass).
+  - `frontend/src/components/ContactModal.tsx`: Captures first-landing UTM tags in React state only (zero cookies, zero storage). Updated `openModal(service?, cta?)` and integrated optional Cloudflare Turnstile token validation.
+  - `frontend/src/components/Header.tsx`, `Hero.tsx`, `Services.tsx`, `CTA.tsx`, `DiscussProjectButton.tsx`, `assistant/AssistantWidget.tsx`: Updated all modal trigger calls to pass semantic CTA origin strings.
+  - `extras/automation/google-apps-script/lead-capture.gs`: Extended sheet schema to 14 columns (`receivedAt` to `utm_campaign`) with automatic safe header row migration.
+  - `extras/docs/lead-capture.md`: Updated documentation for the 14-column spreadsheet schema.
+  - `frontend/src/components/CookieConsent.tsx`: Implemented accessible cookie consent dialog (`role="dialog"`, non-modal) displayed only when `NEXT_PUBLIC_GA_ID` is defined. Remembers choice only upon user Accept/Reject. Loads GA4 script via `next/script` only after explicit Accept.
+  - `frontend/src/app/layout.tsx`: Mounted `<CookieConsent />` and removed unconditional external scripts.
+  - `extras/docs/analytics.md`: Documented zero-cookie default attribution, WhatsApp click tracking limitations & options, and optional GA4 consent mode.
+  - `frontend/tests/cookie-consent.spec.ts`: Playwright test suite verifying zero cookies, empty storage, and zero external requests in default mode, and verifying GA script gating.
+  - `frontend/src/app/api/contact/route.ts`: Refuses non-HTTPS webhook URLs in production mode (503). Verifies Cloudflare Turnstile tokens against `siteverify` endpoint (8s timeout, fail-closed 400/503) when keys are configured.
+  - `frontend/src/app/api/contact/route.test.ts`: Added unit tests verifying Cloudflare Turnstile token verification and production HTTPS webhook enforcement.
+  - `frontend/scripts/preflight.mjs`: Added production checks requiring HTTPS URLs for `NEXT_PUBLIC_SITE_URL` and all webhook endpoints.
+  - `frontend/src/lib/https.test.ts`: Added unit tests confirming HSTS header configuration in `next.config.mjs` and HTTPS JSON-LD generation.
+  - `frontend/scripts/images-check.mjs`: Created script scanning for un-annotated `<img>` and `<Image>` tags. Integrated into `npm run seo:check`.
+  - `extras/docs/seo.md`: Added Section 6 ("Adding Images & Media Best Practices").
+  - `extras/docs/pagespeed.md`: Created Lighthouse performance guide documenting baseline scores (Mobile 97/100, Desktop 100/100, Service 98/100) and PageSpeed Insights preview audit instructions.
+  - `extras/docs/launch-checklist.md`: Created comprehensive 20-item launch readiness checklist with command evidence and owner action items.
+  - `frontend/package.json`, root `package.json`: Added `links:check` scripts and updated `seo:check`.
+- Commands run and result:
+  - `npm run typecheck`: PASS (exit code 0)
+  - `npm run test`: PASS (87/87 tests passed across 7 test files, 0 failures)
+  - `npm run build`: PASS (all 14 static and dynamic routes compiled, exit code 0)
+  - `npm run legal:check`: PASS (audited all 26 expected [[TO CONFIRM]] placeholders across privacy.ts and terms.ts)
+  - `npm run preflight -- --production`: PASS (typecheck + tests + build + https checks passed)
+  - `npm run seo:check`: PASS (5/5 schema and HTTPS tests passed + image alt audit passed with 0 violations)
+  - `npm run links:check -- http://localhost:3005`: PASS (185 unique link occurrences checked across 6 pages; 0 broken links, 0 missing anchors)
+  - `npm run test:a11y`: PASS (17/17 accessibility and assistant tests passed)
+  - `npx playwright test tests/cookie-consent.spec.ts`: PASS (2/2 cookie and network tests passed)
+  - `node scripts/contrast.mjs`: PASS (all 13 foreground/background token pairs exceed WCAG AA/AAA ratios)
+  - `npx playwright test tests/responsive.spec.ts`: PASS (22/22 tests passed across 6 viewports 360px-1440px)
+  - `npx lighthouse http://localhost:3005/`: PASS (Mobile: 97 Perf / 100 A11y / 100 Best Practices; Desktop: 100 / 100 / 100; Service: 98 / 100 / 100; SEO 66 due to intentional pre-launch noindex)
+  - `git ls-files | Select-String -Pattern "\.env"`: PASS (lists only `frontend/.env.example`)
+- Errors/warnings/skips (verbatim messages):
+  - "⚠ Using edge runtime on a page currently disables static generation for that page" (Next.js build warning for edge routes)
+  - "The CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details." (Vitest info notice)
+  - "⚠ Legal check: unresolved placeholders remain (normal for pre-launch draft mode)." (Expected pre-launch draft audit)
+- Not run and why:
+  - None. All unit, E2E, accessibility, link crawler, SEO, image check, contrast, responsive, and Lighthouse audits ran and passed.
+- Open items for owner:
+  - Lawyer review of Terms (8 new payment/cancellation placeholders) and Privacy Policy (18 placeholders).
+  - Confirm commercial terms: advance %, milestone schedule, invoice due dates, late payment interest, GST registration/rate, cancellation notice period, and refund rules.
+  - Update Google Apps Script in Google Sheets with `extras/automation/google-apps-script/lead-capture.gs` to capture the 5 new attribution columns (`page`, `cta`, `utm_source`, `utm_medium`, `utm_campaign`).
+  - Configure production environment variables in Vercel (`NEXT_PUBLIC_SITE_URL`, `LEAD_WEBHOOK_URL`, optional `TURNSTILE_SECRET_KEY` + `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, optional `NEXT_PUBLIC_GA_ID`).
+  - Toggle `NEXT_PUBLIC_ALLOW_INDEXING=true` in Vercel once legal placeholders are resolved to allow search engine indexing.

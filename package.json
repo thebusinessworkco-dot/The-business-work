@@ -16,6 +16,7 @@
     "seo:check": "npm --prefix frontend run seo:check",
     "contrast": "npm --prefix frontend run contrast",
     "lint": "npm --prefix frontend run lint",
-    "assistant:eval": "npm --prefix frontend run assistant:eval --"
+    "assistant:eval": "npm --prefix frontend run assistant:eval --",
+    "links:check": "npm --prefix frontend run links:check --"
   }
 }
