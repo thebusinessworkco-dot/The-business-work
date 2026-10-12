@@ -11,11 +11,11 @@
     "test": "vitest run",
     "seo:check": "vitest run src/lib/jsonld.test.ts",
     "legal:check": "node scripts/legal-check.mjs",
-    "test:a11y": "playwright test tests/a11y.spec.ts",
+    "test:a11y": "playwright test tests/a11y.spec.ts tests/assistant.spec.ts",
     "preflight": "node scripts/preflight.mjs",
     "smoke": "node scripts/smoke.mjs",
     "contrast": "node scripts/contrast.mjs",
-    "chat:eval": "node scripts/chat-eval.mjs"
+    "assistant:eval": "node scripts/assistant-eval.mjs"
   },
   "dependencies": {
     "lucide-react": "^0.452.0",

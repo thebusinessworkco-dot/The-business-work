@@ -138,12 +138,11 @@ export const privacySections: LegalSection[] = [
     ],
   },
   {
-    id: "website-chat-assistant",
-    heading: "13. Website Chat Assistant",
+    id: "website-assistant",
+    heading: "13. Website Automated Assistant",
     paragraphs: [
-      "When you interact with our website chat assistant widget, messages you submit are sent to an external AI provider (Google, via the Gemini API) to generate replies. We do not intentionally store chat messages on our servers.",
-      "Users should not share sensitive, health or confidential information in the chat. Rate-limit data (such as temporary IP hashes) is used solely to prevent automated abuse.",
-      "[[TO CONFIRM: AI provider data-use and retention terms for the plan in use]].",
+      "Our website includes an automated assistant designed to answer routine questions from published website content. The assistant operates entirely inside your web browser using client-side rule-based matching.",
+      "It does not transmit your questions to our servers or to any third-party AI provider, and does not store conversation histories. Submitting an enquiry through our Contact form is the only method by which personal data is transmitted to us.",
     ],
   },
   {

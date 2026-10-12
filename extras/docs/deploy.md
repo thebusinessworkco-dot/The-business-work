@@ -41,12 +41,8 @@ Configure the following in the Vercel Dashboard (**Settings** > **Environment Va
 7. `UPSTASH_REDIS_REST_URL` & `UPSTASH_REDIS_REST_TOKEN`: (Optional) Distributed rate limiting tokens.
 8. `NEXT_PUBLIC_GA_ID`: (Optional) Google Analytics 4 Measurement ID (`G-XXXXXXXXXX`).
 
-#### Website Chat Assistant Variables (Set for Production AND Preview):
-9. `GEMINI_API_KEY`: Server-side secret key from Google AI Studio (NEVER prefix with `NEXT_PUBLIC_`).
-10. `GEMINI_MODEL`: Model ID (e.g. `gemini-3.8-flash`).
-11. `CHAT_ENABLED`: Set to `"true"` to enable `/api/chat`.
-12. `NEXT_PUBLIC_CHAT_ENABLED`: Set to `"true"` to enable the floating chat widget on client browsers (widget remains hidden when false).
-13. `CHAT_DAILY_LIMIT`: Global daily cap on chat messages across all visitors (default: `500`).
+#### Website Assistant Variable (Optional):
+9. `NEXT_PUBLIC_ASSISTANT_ENABLED`: Controls whether the rule-based assistant widget mounts on client browsers (enabled by default when unset; set to `"false"` to disable). No backend API or API keys are used.
 
 ---
 

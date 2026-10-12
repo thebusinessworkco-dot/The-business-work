@@ -35,24 +35,20 @@ npm run start
 
 - `src/app/`: Next.js 14 App Router pages, metadata, sitemap, and API routes.
 - `src/app/api/contact/`: Server-side lead intake endpoint with anti-bot, rate limiting, and webhook forwarding.
-- `src/app/api/chat/`: Server-side AI chat assistant endpoint (Gemini REST API, rate limits, daily cap, output filter).
-- `src/components/chat/`: Accessible website chat widget client components.
+- `src/components/assistant/`: Accessible client-side rule-based website assistant components.
 - `src/components/`: Accessible UI components.
 - `src/content/`: Honest, structured copy and services definitions.
-- `src/lib/`: Core utilities (`site.ts`, `lead.ts`, `rate-limit.ts`, `chat-knowledge.ts`, `chat-prompt.ts`, `chat-filter.ts`).
-- `tests/`: Automated Playwright test suites (accessibility, keyboard, responsive viewports, chat widget).
-- `scripts/`: Operational scripts (`smoke.mjs`, `preflight.mjs`, `contrast.mjs`, `legal-check.mjs`, `chat-eval.mjs`).
+- `src/lib/assistant/`: Assistant knowledge base (`knowledge.ts`) and rule-based keyword matcher (`match.ts`).
+- `src/lib/`: Core utilities (`site.ts`, `lead.ts`, `rate-limit.ts`, `jsonld.ts`, `legal.ts`).
+- `tests/`: Automated Playwright test suites (accessibility, keyboard, responsive viewports, assistant widget).
+- `scripts/`: Operational scripts (`smoke.mjs`, `preflight.mjs`, `contrast.mjs`, `legal-check.mjs`, `assistant-eval.mjs`).
 
 ---
 
 ## Environment Variables
 Copy `.env.example` to `.env.local` and configure variables.
 
-### Website Chat Assistant Variables:
-- `GEMINI_API_KEY`: Server-side API key from Google AI Studio (secret, no `NEXT_PUBLIC_` prefix).
-- `GEMINI_MODEL`: Gemini model ID (default: `gemini-3.8-flash`).
-- `CHAT_ENABLED`: Set to `"true"` to enable `/api/chat`.
-- `NEXT_PUBLIC_CHAT_ENABLED`: Set to `"true"` to show the chat launcher widget on the site.
-- `CHAT_DAILY_LIMIT`: Global daily request cap (default: `500`).
+### Website Assistant Variables:
+- `NEXT_PUBLIC_ASSISTANT_ENABLED`: Controls whether the rule-based assistant widget mounts on client browsers (default: enabled when unset; set to `"false"` to disable).
 
-See [`../extras/docs/chatbot.md`](../extras/docs/chatbot.md), [`../extras/docs/lead-capture.md`](../extras/docs/lead-capture.md), and [`../extras/docs/deploy.md`](../extras/docs/deploy.md).
+See [`../extras/docs/assistant.md`](../extras/docs/assistant.md), [`../extras/docs/lead-capture.md`](../extras/docs/lead-capture.md), and [`../extras/docs/deploy.md`](../extras/docs/deploy.md).

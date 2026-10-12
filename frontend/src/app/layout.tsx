@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 import { site, isIndexingAllowed, getCleanSiteUrl } from "@/lib/site";
 import { ContactModalProvider } from "@/components/ContactModal";
 
-const ChatWidget = dynamic(() => import("@/components/chat/ChatWidget"), {
+const AssistantWidget = dynamic(() => import("@/components/assistant/AssistantWidget"), {
   ssr: false,
 });
 
@@ -101,7 +101,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </a>
         <ContactModalProvider>
           {children}
-          {process.env.NEXT_PUBLIC_CHAT_ENABLED === "true" && <ChatWidget />}
+          {process.env.NEXT_PUBLIC_ASSISTANT_ENABLED !== "false" && <AssistantWidget />}
         </ContactModalProvider>
 
         {/* Optional Google Analytics 4 (only loaded if NEXT_PUBLIC_GA_ID is set) */}

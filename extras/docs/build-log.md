@@ -95,3 +95,49 @@ This document logs significant structural, architectural, and operational tasks 
   - Replace placeholder business details in `frontend/src/lib/site.ts`.
   - Review and confirm 19 legal `[[TO CONFIRM]]` placeholders in `privacy.ts` and `terms.ts`.
   - Run `npm run chat:eval` once `GEMINI_API_KEY` is set and review every response.
+
+---
+
+### Task: Rule-based website assistant widget | 2026-10-12
+- Changed:
+  - `frontend/src/lib/assistant/knowledge.ts`: Complete curated Q&A knowledge base dynamically extracted from site content files (`services.ts`, `process.ts`, `industries.ts`, `work.ts`, `principles.ts`, `site.ts`). All answers <= 70 words, Indian English, honest demo statuses, pricing dependencies with no amounts, healthcare non-clinical boundaries, no placeholders.
+  - `frontend/src/lib/assistant/knowledge.test.ts`: Unit tests verifying services, demo statuses, absence of `[[TO CONFIRM]]`, absence of placeholder contacts, absence of currency/guarantees, and answer length <= 70 words.
+  - `frontend/src/lib/assistant/match.ts`: Pure deterministic matching engine with input capping (200 chars), punctuation normalization, light stemming, typo tolerance via Levenshtein distance, weighted scoring, fallback answer with 3 "did you mean" suggestion chips.
+  - `frontend/src/lib/assistant/match.test.ts`: Vitest test suite covering 50+ queries (English, Hinglish, typos, single-word queries, out-of-scope queries falling back, prompt-injection attempts falling back, empty and 700-char bounds).
+  - `frontend/src/components/assistant/AssistantWidget.tsx`: Accessible client widget adhering to site tokens: 56px launcher with `Logo.tsx` square mark in cream + `accent-ochre` dot + "Ask us" label on md+; dialog panel (380px on desktop, full-width bottom sheet on mobile); instant replies with typing delay respecting `prefers-reduced-motion`; menu chips, follow-up chips; hidden when `ContactModal` is open; zero data persistence.
+  - `frontend/src/app/layout.tsx`: Mounted `AssistantWidget` via `next/dynamic` (`ssr: false`) inside `ContactModalProvider`, conditioned on `process.env.NEXT_PUBLIC_ASSISTANT_ENABLED !== "false"`.
+  - `frontend/src/content/legal/privacy.ts`: Section 13 updated to "Website Automated Assistant", detailing that the assistant runs entirely client-side in the visitor's browser, transmits no chat data to any server or AI provider, stores no messages, and that the contact form is the only method by which personal data is transmitted.
+  - `frontend/scripts/assistant-eval.mjs`: Pure Node evaluation script evaluating 51 questions and outputting query, match, score, answer, and follow-ups.
+  - `frontend/tests/assistant.spec.ts`: Comprehensive Playwright + Axe test suite covering desktop/mobile viewports, keyboard flow, chip interactions, Hinglish queries, out-of-scope fallback, ContactModal suppression, zero network requests, and screenshot captures.
+  - `frontend/tests/a11y.spec.ts` & `frontend/package.json`: Updated `test:a11y` script to include assistant Playwright tests.
+  - `frontend/.env.example`, `frontend/.env.local`, `frontend/README.md`, `extras/docs/deploy.md`: Updated environment configuration with `NEXT_PUBLIC_ASSISTANT_ENABLED=true` and removed all Gemini keys and variables.
+  - `extras/docs/assistant.md`: Complete architecture documentation covering flow, adding/editing knowledge, testing, disabling, limitations, and future AI considerations.
+- Deleted:
+  - Stray `scratch/` folder at repo root removed.
+  - Removed old AI chat server route: `frontend/src/app/api/chat/route.ts`.
+  - Removed AI prompts and filters: `chat-prompt.ts`, `chat-filter.ts`, `chat-filter.test.ts`, `chat-api.test.ts`, `chat-knowledge.ts`, `chat-knowledge.test.ts`.
+  - Removed old UI component: `frontend/src/components/chat/ChatWidget.tsx` and test `frontend/tests/chat.spec.ts`.
+  - Removed `frontend/scripts/chat-eval.mjs` and `extras/docs/chatbot.md`.
+  - Restored `frontend/scripts/smoke.mjs` and `frontend/src/lib/rate-limit.ts` to remove Gemini chat routes and ratelimit namespaces.
+- Commands run and result:
+  - `npm run typecheck`: PASS (exit code 0; 0 errors)
+  - `npm run test`: PASS (75/75 tests passed across 5 test files, 0 failures)
+  - `npm run build`: PASS (First Load JS of `/` remained unchanged at 109 kB / 87.2 kB shared; widget loaded via ssr: false, not in initial bundle)
+  - `npm run legal:check`: PASS (audited 18 unresolved placeholders as expected for pre-launch draft mode)
+  - `npm run preflight -- --production`: PASS (typecheck + test + build all succeeded, exit code 0)
+  - `npm run test:a11y`: PASS (17/17 tests passed across `a11y.spec.ts` and `assistant.spec.ts` with 0 violations)
+  - `npm run assistant:eval`: PASS (51 questions evaluated: 47 matched, 4 graceful fallbacks)
+  - `npm run contrast`: PASS (all 13 foreground/background token pairs exceed WCAG 2.2 AA ratios)
+- Network & Grep Verification:
+  - Playwright Network check: Verified zero network requests made during interactive widget usage.
+  - Grep verification in assistant widget code: 0 occurrences of `fetch(`, `localStorage`, `sessionStorage`, `document.cookie`, `dangerouslySetInnerHTML`.
+- Errors/warnings/skips (verbatim messages):
+  - "⚠ Using edge runtime on a page currently disables static generation for that page" (Next.js build warning for edge routes)
+  - "The CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details." (Vitest info notice)
+  - "⚠ Legal check: unresolved placeholders remain (normal for pre-launch draft mode)." (Expected pre-launch draft audit)
+- Not run and why:
+  - None. All unit, E2E, accessibility, build, typecheck, preflight, and evaluation scripts ran and passed.
+- Open items for owner:
+  - Review every answer printed in `assistant:eval` output and edit wording in `frontend/src/lib/assistant/knowledge.ts` if desired.
+  - Replace placeholder contact details in `frontend/src/lib/site.ts` so the WhatsApp link button activates.
+  - Review the privacy policy text in Section 13 with legal counsel prior to public launch.

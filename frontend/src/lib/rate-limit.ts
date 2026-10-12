@@ -24,22 +24,19 @@ export class InMemoryRateLimiter implements RateLimiter {
   private store = new Map<string, { count: number; resetAt: number }>();
   public readonly windowMs: number;
   public readonly limit: number;
-  public readonly keyPrefix: string;
 
-  constructor(limit = 5, windowMs = 10 * 60 * 1000, keyPrefix = "") {
+  constructor(limit = 5, windowMs = 10 * 60 * 1000) {
     this.limit = limit;
     this.windowMs = windowMs;
-    this.keyPrefix = keyPrefix;
   }
 
   async check(key: string): Promise<RateLimitResult> {
-    const storageKey = this.keyPrefix ? `${this.keyPrefix}${key}` : key;
     const now = Date.now();
-    const entry = this.store.get(storageKey);
+    const entry = this.store.get(key);
 
     if (!entry || now >= entry.resetAt) {
       const resetAt = now + this.windowMs;
-      this.store.set(storageKey, { count: 1, resetAt });
+      this.store.set(key, { count: 1, resetAt });
       return {
         allowed: true,
         limit: this.limit,
@@ -81,24 +78,16 @@ export class UpstashRedisRateLimiter implements RateLimiter {
   private readonly token: string;
   public readonly limit: number;
   public readonly windowSeconds: number;
-  public readonly keyPrefix: string;
 
-  constructor(
-    url: string,
-    token: string,
-    limit = 5,
-    windowSeconds = 600,
-    keyPrefix = "ratelimit:lead:"
-  ) {
+  constructor(url: string, token: string, limit = 5, windowSeconds = 600) {
     this.url = url.replace(/\/$/, "");
     this.token = token;
     this.limit = limit;
     this.windowSeconds = windowSeconds;
-    this.keyPrefix = keyPrefix;
   }
 
   async check(key: string): Promise<RateLimitResult> {
-    const redisKey = `${this.keyPrefix}${key}`;
+    const redisKey = `ratelimit:lead:${key}`;
     try {
       const res = await fetch(`${this.url}/pipeline`, {
         method: "POST",
@@ -191,54 +180,10 @@ export function getRateLimiter(): RateLimiter {
   const token = process.env.UPSTASH_REDIS_REST_TOKEN;
 
   if (url && token) {
-    defaultLimiter = new UpstashRedisRateLimiter(url, token, 5, 600, "ratelimit:lead:");
+    defaultLimiter = new UpstashRedisRateLimiter(url, token);
   } else {
-    defaultLimiter = new InMemoryRateLimiter(5, 10 * 60 * 1000, "ratelimit:lead:");
+    defaultLimiter = new InMemoryRateLimiter();
   }
 
   return defaultLimiter;
-}
-
-let chatIpLimiter: RateLimiter | null = null;
-
-export function getChatRateLimiter(): RateLimiter {
-  if (chatIpLimiter) return chatIpLimiter;
-
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
-
-  if (url && token) {
-    chatIpLimiter = new UpstashRedisRateLimiter(url, token, 20, 600, "ratelimit:chat:ip:");
-  } else {
-    chatIpLimiter = new InMemoryRateLimiter(20, 10 * 60 * 1000, "ratelimit:chat:ip:");
-  }
-
-  return chatIpLimiter;
-}
-
-let chatDailyLimiter: RateLimiter | null = null;
-
-export function getChatDailyLimiter(): RateLimiter {
-  if (chatDailyLimiter) return chatDailyLimiter;
-
-  const dailyLimit = parseInt(process.env.CHAT_DAILY_LIMIT || "500", 10) || 500;
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
-
-  if (url && token) {
-    chatDailyLimiter = new UpstashRedisRateLimiter(url, token, dailyLimit, 86400, "ratelimit:chat:daily:");
-  } else {
-    chatDailyLimiter = new InMemoryRateLimiter(dailyLimit, 24 * 60 * 60 * 1000, "ratelimit:chat:daily:");
-  }
-
-  return chatDailyLimiter;
-}
-
-/**
- * Resets limiters for isolated testing.
- */
-export function resetLimitersForTesting(): void {
-  defaultLimiter = null;
-  chatIpLimiter = null;
-  chatDailyLimiter = null;
 }
