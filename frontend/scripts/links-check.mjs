@@ -4,6 +4,7 @@
 
 const args = process.argv.slice(2);
 const checkExternal = args.includes("--external");
+const strictMode = args.includes("--strict");
 const urlArg = args.find((a) => a.startsWith("http://") || a.startsWith("https://"));
 const baseUrlStr = (urlArg || "http://localhost:3000").replace(/\/$/, "");
 
@@ -11,7 +12,7 @@ const baseUrl = new URL(baseUrlStr);
 const baseHost = baseUrl.host;
 
 const visitedPages = new Map(); // path -> { status, html, ids: Set<string> }
-const checkedLinks = []; // { source, href, type, status, note, ok }
+const checkedLinks = []; // { source, href, type, status, note, ok, isPlaceholder }
 const externalChecked = new Map(); // url -> { status, note, ok }
 
 function extractIds(html) {
@@ -168,6 +169,7 @@ async function main() {
   // 3. Inspect every link on every crawled page
   let brokenInternalCount = 0;
   let missingAnchorCount = 0;
+  let placeholderContactCount = 0;
 
   for (const [pagePath, pageData] of visitedPages.entries()) {
     if (!pageData.ok) {
@@ -178,6 +180,7 @@ async function main() {
         status: pageData.status,
         note: `HTTP ${pageData.status}`,
         ok: false,
+        isPlaceholder: false,
       });
       brokenInternalCount++;
       continue;
@@ -192,13 +195,15 @@ async function main() {
         const email = rawHref.replace(/^mailto:/, "").split("?")[0].trim();
         const isPlaceholder = email.includes("example.com") || /0000/.test(email);
         const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        if (isPlaceholder) placeholderContactCount++;
         checkedLinks.push({
           source: pagePath,
           href: rawHref,
           type: "mailto",
-          status: valid ? (isPlaceholder ? "PLACEHOLDER" : "VALID") : "INVALID",
+          status: isPlaceholder ? "PLACEHOLDER" : (valid ? "VALID" : "INVALID"),
           note: isPlaceholder ? "PLACEHOLDER email detected" : valid ? "Valid email syntax" : "Malformed mailto",
-          ok: valid, // Placeholders are permitted in draft mode, invalid syntax is not
+          ok: valid && (!strictMode || !isPlaceholder),
+          isPlaceholder,
         });
         continue;
       }
@@ -209,13 +214,15 @@ async function main() {
         const isPlaceholder = /00000/.test(phone);
         const digits = phone.replace(/\D/g, "");
         const valid = digits.length >= 7 && digits.length <= 15;
+        if (isPlaceholder) placeholderContactCount++;
         checkedLinks.push({
           source: pagePath,
           href: rawHref,
           type: "tel",
-          status: valid ? (isPlaceholder ? "PLACEHOLDER" : "VALID") : "INVALID",
+          status: isPlaceholder ? "PLACEHOLDER" : (valid ? "VALID" : "INVALID"),
           note: isPlaceholder ? "PLACEHOLDER phone detected" : valid ? "Valid tel format" : "Malformed tel",
-          ok: valid,
+          ok: valid && (!strictMode || !isPlaceholder),
+          isPlaceholder,
         });
         continue;
       }
@@ -223,13 +230,15 @@ async function main() {
       // Check whatsapp:
       if (rawHref.includes("wa.me") || rawHref.includes("api.whatsapp.com")) {
         const isPlaceholder = /00000/.test(rawHref) || /910000000000/.test(rawHref);
+        if (isPlaceholder) placeholderContactCount++;
         checkedLinks.push({
           source: pagePath,
           href: rawHref,
           type: "whatsapp",
           status: isPlaceholder ? "PLACEHOLDER" : "VALID",
           note: isPlaceholder ? "PLACEHOLDER WhatsApp link" : "Valid WhatsApp URL",
-          ok: true,
+          ok: !strictMode || !isPlaceholder,
+          isPlaceholder,
         });
         continue;
       }
@@ -258,6 +267,7 @@ async function main() {
               status: destData.status,
               note: `Page returned HTTP ${destData.status}`,
               ok: false,
+              isPlaceholder: false,
             });
             brokenInternalCount++;
           } else if (hash) {
@@ -270,6 +280,7 @@ async function main() {
               status: idExists ? "200 (ID found)" : "MISSING ID",
               note: idExists ? `Target #${hash} verified` : `Target #${hash} not found in destination DOM`,
               ok: idExists,
+              isPlaceholder: false,
             });
             if (!idExists) missingAnchorCount++;
           } else {
@@ -280,6 +291,7 @@ async function main() {
               status: destData.status,
               note: `HTTP ${destData.status} OK`,
               ok: true,
+              isPlaceholder: false,
             });
           }
         } else if (resolved.protocol === "http:" || resolved.protocol === "https:") {
@@ -293,6 +305,7 @@ async function main() {
               status: extResult.status,
               note: extResult.note,
               ok: extResult.ok,
+              isPlaceholder: false,
             });
           } else {
             checkedLinks.push({
@@ -302,6 +315,7 @@ async function main() {
               status: "SKIPPED",
               note: "External check disabled (pass --external to check)",
               ok: true,
+              isPlaceholder: false,
             });
           }
         }
@@ -313,6 +327,7 @@ async function main() {
           status: "ERR",
           note: `Invalid URL: ${err.message}`,
           ok: false,
+          isPlaceholder: false,
         });
         brokenInternalCount++;
       }
@@ -330,7 +345,7 @@ async function main() {
     const key = `${c.type}:${c.source}:${c.href}`;
     if (!seenTable.has(key)) {
       seenTable.add(key);
-      const mark = c.ok ? "✓" : "✗";
+      const mark = c.ok ? "✓" : (c.isPlaceholder ? "⚠" : "✗");
       console.log(`| ${c.type} | ${c.source} | ${c.href} | ${mark} ${c.status} | ${c.note} |`);
     }
   }
@@ -339,12 +354,19 @@ async function main() {
   console.log(`- Total unique link occurrences checked: ${checkedLinks.length}`);
   console.log(`- Broken internal links: ${brokenInternalCount}`);
   console.log(`- Missing anchor IDs: ${missingAnchorCount}`);
+  console.log(`- Placeholder contact links (mailto/tel/wa.me): ${placeholderContactCount}`);
 
   if (brokenInternalCount > 0 || missingAnchorCount > 0) {
     console.error(`\n✗ Broken link check FAILED: resolve broken internal routes or missing anchors.`);
     process.exit(1);
+  } else if (strictMode && placeholderContactCount > 0) {
+    console.error(`\n✗ Strict link check FAILED: ${placeholderContactCount} placeholder contact link(s) found under --strict.`);
+    process.exit(1);
   } else {
     console.log(`\n✓ All internal links and anchor references PASSED.`);
+    if (placeholderContactCount > 0) {
+      console.log(`ℹ Notice: ${placeholderContactCount} placeholder contact link(s) detected (expected before final owner contact info update).`);
+    }
     process.exit(0);
   }
 }

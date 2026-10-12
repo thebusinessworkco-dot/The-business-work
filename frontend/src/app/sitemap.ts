@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getCleanSiteUrl, LAST_MODIFIED } from "@/lib/site";
 import { services } from "@/content/services";
-import { isLegalIndexable } from "@/lib/legal";
+import { isLegalDraft } from "@/lib/legal";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const siteUrl = getCleanSiteUrl();
@@ -23,9 +23,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const legalEntries: MetadataRoute.Sitemap = [];
 
-  // /privacy and /terms are automatically included once all placeholders are resolved
-  // and indexing is permitted via NEXT_PUBLIC_ALLOW_INDEXING="true"
-  if (isLegalIndexable("privacy")) {
+  // /privacy and /terms are excluded while [[TO CONFIRM placeholders remain,
+  // and included automatically once all placeholders are resolved.
+  if (!isLegalDraft("privacy")) {
     legalEntries.push({
       url: `${siteUrl}/privacy`,
       lastModified,
@@ -34,7 +34,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     });
   }
 
-  if (isLegalIndexable("terms")) {
+  if (!isLegalDraft("terms")) {
     legalEntries.push({
       url: `${siteUrl}/terms`,
       lastModified,

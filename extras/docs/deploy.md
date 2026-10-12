@@ -46,10 +46,36 @@ Configure the following in the Vercel Dashboard (**Settings** > **Environment Va
 
 ---
 
-## 3. Post-Deployment Verification
+## 3. Launch Gate Preflight vs. CI Build/Test
+
+Production readiness is verified in two distinct stages:
+
+1. **Continuous Integration (CI):**
+   Runs code quality, typing, linting, and automated unit/integration/accessibility tests:
+   ```bash
+   npm run typecheck
+   npm run lint
+   npm run test
+   npm run test:a11y
+   npm run build
+   ```
+
+2. **Launch Gate (`preflight`):**
+   `npm run preflight -- --production` serves as the explicit deployment launch gate. It does **not** re-run typecheck or build; instead, it enforces that the deployment environment is genuinely ready for production:
+   - Validates that `NEXT_PUBLIC_SITE_URL` is configured, uses HTTPS, and does not contain localhost/example/vercel.app domains.
+   - Verifies that business details in `site.ts` (email, phone, WhatsApp) are real and not demo placeholders.
+   - Enforces valid `LEAD_WEBHOOK_URL` and audits webhook secret configuration.
+   - Enforces legal signoff (zero unresolved `[[TO CONFIRM]]` placeholders).
+   - Validates Cloudflare Turnstile key symmetry.
+   - Preflight exits non-zero if any required launch gate check fails.
+
+---
+
+## 4. Post-Deployment Verification
 
 After deployment, run the production smoke test from the repository root:
 ```bash
 npm run smoke -- https://thebusinesswork.com
 ```
-This validates HTTP status codes for the homepage, services, `robots.txt`, and `sitemap.xml`.
+This validates HTTP status codes for the homepage, all service pages, privacy, terms, `robots.txt`, dynamic OG images, and `sitemap.xml`.
+

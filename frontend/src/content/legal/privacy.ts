@@ -14,7 +14,7 @@ export const privacySections: LegalSection[] = [
       "Official Name: The Business Work",
       "Legal Entity Details: [[TO CONFIRM: registered business entity type, registration number, and GSTIN if applicable]]",
       "Registered Address: [[TO CONFIRM: complete registered office address, city, state, PIN code, India]]",
-      "Email: [[TO CONFIRM: official contact and privacy email address, e.g. privacy@thebusinesswork.com]]",
+      "Email: [[TO CONFIRM: official contact and privacy email address, e.g. privacy@yourdomain]]",
       "Phone / WhatsApp: [[TO CONFIRM: official business contact phone number]]",
     ],
   },
@@ -83,7 +83,7 @@ export const privacySections: LegalSection[] = [
     heading: "7. Data Retention",
     paragraphs: [
       "We retain contact form enquiries and correspondence only as long as necessary to address your project request, conduct business negotiations, and fulfill legal or accounting obligations.",
-      "Enquiry records are retained for [[TO CONFIRM: retention period, e.g. 12 months after last contact or until consent is withdrawn]], after which they are securely deleted or anonymized.",
+      "Enquiry records are retained for [[TO CONFIRM: retention period, e.g. specified retention duration or until consent is withdrawn]], after which they are securely deleted or anonymized.",
     ],
   },
   {
@@ -111,7 +111,7 @@ export const privacySections: LegalSection[] = [
       "Right to Correction: You may ask us to update, complete, or correct inaccurate personal information.",
       "Right to Erasure: You may request the deletion of your personal data, subject to any statutory retention requirements.",
       "Right to Withdraw Consent: You may withdraw your consent for future communication at any time by contacting us.",
-      "How to Request: To exercise any of these rights, email us at [[TO CONFIRM: official privacy email address]]. We will review and respond within [[TO CONFIRM: response timeline, e.g. within 30 days of receiving a verified request]].",
+      "How to Request: To exercise any of these rights, email us at [[TO CONFIRM: official privacy email address]]. We will review and respond within [[TO CONFIRM: response timeline, e.g. within statutory timeline of receiving a verified request]].",
     ],
   },
   {
@@ -158,7 +158,7 @@ export const privacySections: LegalSection[] = [
       "Designation: [[TO CONFIRM: Grievance Officer Designation]]",
       "Email: [[TO CONFIRM: Grievance Officer Email Address]]",
       "Postal Address: [[TO CONFIRM: Grievance Officer Postal Address, India]]",
-      "Resolution Timeline: [[TO CONFIRM: statutory grievance resolution timeline, e.g. within 30 days]]",
+      "Resolution Timeline: [[TO CONFIRM: statutory grievance resolution timeline, e.g. within prescribed statutory window]]",
     ],
   },
 ];

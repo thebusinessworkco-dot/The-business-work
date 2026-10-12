@@ -20,17 +20,17 @@ This script scans `frontend/src/content/legal/privacy.ts` and `frontend/src/cont
 1. **Section 1 (Who We Are):**
    - `[[TO CONFIRM: registered business entity type, registration number, and GSTIN if applicable]]`
    - `[[TO CONFIRM: complete registered office address, city, state, PIN code, India]]`
-   - `[[TO CONFIRM: official contact and privacy email address, e.g. privacy@thebusinesswork.com]]`
+   - `[[TO CONFIRM: official contact and privacy email address, e.g. privacy@yourdomain]]`
    - `[[TO CONFIRM: official business contact phone number]]`
 2. **Section 4 (Indian DPDP Act Alignment):**
    - `[[TO CONFIRM: lawyer to confirm applicable statutory notices and rules under the DPDP Act 2023]]`
 3. **Section 6 (Cross-Border Transfers):**
    - `[[TO CONFIRM: lawyer to confirm international data transfer safeguards and restrictions under Indian law]]`
 4. **Section 7 (Data Retention):**
-   - `[[TO CONFIRM: retention period, e.g. 12 months after last contact or until consent is withdrawn]]`
+   - `[[TO CONFIRM: retention period, e.g. specified retention duration or until consent is withdrawn]]`
 5. **Section 9 (Your Rights & Response SLA):**
    - `[[TO CONFIRM: official privacy email address]]`
-   - `[[TO CONFIRM: response timeline, e.g. within 30 days of receiving a verified request]]`
+   - `[[TO CONFIRM: response timeline, e.g. within statutory timeline of receiving a verified request]]`
 6. **Section 10 (Cookies, Analytics & Spam Protection):**
    - `[[TO CONFIRM: lawyer to confirm applicable privacy disclosures if Cloudflare Turnstile spam protection is enabled in production]]`
    - `[[TO CONFIRM: lawyer to confirm cookie notice, consent banner, or opt-out requirements if analytics is deployed in production]]`
@@ -39,22 +39,22 @@ This script scans `frontend/src/content/legal/privacy.ts` and `frontend/src/cont
    - `[[TO CONFIRM: Grievance Officer Designation]]`
    - `[[TO CONFIRM: Grievance Officer Email Address]]`
    - `[[TO CONFIRM: Grievance Officer Postal Address, India]]`
-   - `[[TO CONFIRM: statutory grievance resolution timeline, e.g. within 30 days]]`
+   - `[[TO CONFIRM: statutory grievance resolution timeline, e.g. within prescribed statutory window]]`
 
 #### In `frontend/src/content/legal/terms.ts` (10 Placeholders)
 1. **Section 5 (Quotes, Payments, and Taxes):**
    - `[[TO CONFIRM: advance % and milestone schedule]]`
-   - `[[TO CONFIRM: invoice due date window, e.g. 7 or 14 calendar days]]`
+   - `[[TO CONFIRM: invoice due date window, e.g. agreed number of calendar days]]`
    - `[[TO CONFIRM: late payment terms and interest if applicable]]`
    - `[[TO CONFIRM: GST registration and rate]]`
-   - `[[TO CONFIRM: accepted payment methods, e.g. NEFT, RTGS, UPI, bank transfer]]`
+   - `[[TO CONFIRM: accepted payment methods, e.g. approved electronic banking methods]]`
 2. **Section 9 (Cancellation and Refunds):**
-   - `[[TO CONFIRM: notice period, e.g. 14 days written notice]]`
+   - `[[TO CONFIRM: notice period, e.g. agreed written notice period]]`
    - `[[TO CONFIRM: refund rules and non-refundable deposit terms]]`
 3. **Section 15 (Limitation of Liability):**
-   - `[[TO CONFIRM: lawyer to set liability cap and exclusions, e.g. total aggregate liability limited to INR 1,000 or actual fees paid in the preceding three months]]`
+   - `[[TO CONFIRM: lawyer to set liability cap and exclusions, e.g. liability limited to agreed cap or fees paid]]`
 4. **Section 17 (Governing Law & Jurisdiction):**
-   - `[[TO CONFIRM: city and state in India, e.g. Bengaluru, Karnataka, India]]`
+   - `[[TO CONFIRM: city and state jurisdiction in India]]`
 5. **Section 18 (Contact):**
    - `[[TO CONFIRM: official contact email address]]`
 

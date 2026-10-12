@@ -1,114 +1,233 @@
 // frontend/scripts/smoke.mjs
-// Quick production smoke test verifying key HTTP endpoints and index status.
+// Comprehensive production smoke test for The Business Work.
+// Verifies all core routes, media endpoints, security headers, JSON-LD, sitemap, 404, and contact API validation.
 
 const args = process.argv.slice(2);
 let baseUrl = "http://localhost:3000";
 let expectNoindex = false;
 let expectIndex = false;
+let liveLeadTest = false;
 
 for (const arg of args) {
   if (arg === "--expect-noindex") expectNoindex = true;
   else if (arg === "--expect-index") expectIndex = true;
+  else if (arg === "--live-lead-test") liveLeadTest = true;
   else if (arg.startsWith("http://") || arg.startsWith("https://")) baseUrl = arg.replace(/\/+$/, "");
 }
+
+const baseHost = new URL(baseUrl).host;
 
 console.log(`\n=== Running Smoke Test against ${baseUrl} ===\n`);
 
 async function run() {
   const checks = [];
 
-  // 1. Home Page
+  function record(endpoint, status, expected, ok, detail) {
+    checks.push({ endpoint, status, expected, ok, detail });
+  }
+
+  // 1. Home Page (/): 200, security headers, robots, JSON-LD parse
   try {
     const res = await fetch(`${baseUrl}/`);
     const text = await res.text();
     const hasNoindex = text.includes('content="noindex');
-    let indexCheckPassed = true;
-    let detail = `status=${res.status}`;
 
+    let robotsOk = true;
+    let robotsMsg = "";
     if (expectNoindex && !hasNoindex) {
-      indexCheckPassed = false;
-      detail += " (FAILED: expected noindex, found index)";
+      robotsOk = false;
+      robotsMsg = " (FAILED: expected noindex)";
     } else if (expectIndex && hasNoindex) {
-      indexCheckPassed = false;
-      detail += " (FAILED: expected index, found noindex)";
-    } else if (expectNoindex && hasNoindex) {
-      detail += " (verified noindex)";
+      robotsOk = false;
+      robotsMsg = " (FAILED: expected index)";
+    } else if (hasNoindex) {
+      robotsMsg = " (noindex verified)";
     }
 
-    checks.push({
-      endpoint: "/",
-      status: res.status,
-      expected: 200,
-      ok: res.status === 200 && indexCheckPassed,
-      detail,
-    });
+    // Security headers
+    const secHeaders = [
+      "x-content-type-options",
+      "x-frame-options",
+      "referrer-policy",
+    ];
+    const missingHeaders = secHeaders.filter((h) => !res.headers.get(h));
+
+    // JSON-LD validation on home page
+    const jsonLdRegex = /<script[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi;
+    let jsonLdValid = true;
+    let jsonLdNoPlaceholders = true;
+    let match;
+    let jsonLdCount = 0;
+
+    while ((match = jsonLdRegex.exec(text)) !== null) {
+      jsonLdCount++;
+      try {
+        const parsed = JSON.parse(match[1]);
+        const jsonStr = JSON.stringify(parsed).toLowerCase();
+        if (jsonStr.includes("example.com") || jsonStr.includes("00000 00000") || jsonStr.includes("[[to confirm")) {
+          jsonLdNoPlaceholders = false;
+        }
+      } catch {
+        jsonLdValid = false;
+      }
+    }
+
+    const homeOk = res.status === 200 && robotsOk && missingHeaders.length === 0 && jsonLdValid && jsonLdNoPlaceholders;
+    const detail = `status=${res.status}${robotsMsg}, secHeaders=${missingHeaders.length === 0 ? "OK" : "Missing " + missingHeaders.join(",")}, jsonLd=${jsonLdCount} block(s) valid=${jsonLdValid} noPlaceholders=${jsonLdNoPlaceholders}`;
+
+    record("/", res.status, 200, homeOk, detail);
   } catch (err) {
-    checks.push({ endpoint: "/", status: "ERR", expected: 200, ok: false, detail: err.message });
+    record("/", "ERR", 200, false, err.message);
   }
 
-  // 2. Service Detail Page
+  // 2. Legal pages
+  for (const legalPath of ["/privacy", "/terms"]) {
+    try {
+      const res = await fetch(`${baseUrl}${legalPath}`);
+      record(legalPath, res.status, 200, res.status === 200, `status=${res.status}`);
+    } catch (err) {
+      record(legalPath, "ERR", 200, false, err.message);
+    }
+  }
+
+  // 3. All 4 Service pages
+  const serviceSlugs = [
+    "ai-agents-chatbots",
+    "crm-sales-automation",
+    "business-workflow-automation",
+    "whatsapp-social-automation",
+  ];
+
+  for (const slug of serviceSlugs) {
+    const sPath = `/services/${slug}`;
+    try {
+      const res = await fetch(`${baseUrl}${sPath}`);
+      record(sPath, res.status, 200, res.status === 200, `status=${res.status}`);
+    } catch (err) {
+      record(sPath, "ERR", 200, false, err.message);
+    }
+  }
+
+  // 4. Media & Icons: /opengraph-image, /icon
   try {
-    const res = await fetch(`${baseUrl}/services/ai-agents-chatbots`);
-    checks.push({
-      endpoint: "/services/ai-agents-chatbots",
-      status: res.status,
-      expected: 200,
-      ok: res.status === 200,
-      detail: `status=${res.status}`,
-    });
+    const res = await fetch(`${baseUrl}/opengraph-image`);
+    const cType = res.headers.get("content-type") || "";
+    const isImage = cType.includes("image");
+    record("/opengraph-image", res.status, 200, res.status === 200 && isImage, `status=${res.status}, content-type=${cType}`);
   } catch (err) {
-    checks.push({ endpoint: "/services/ai-agents-chatbots", status: "ERR", expected: 200, ok: false, detail: err.message });
+    record("/opengraph-image", "ERR", 200, false, err.message);
   }
 
-  // 3. Robots.txt
+  try {
+    const res = await fetch(`${baseUrl}/icon`);
+    const cType = res.headers.get("content-type") || "";
+    record("/icon", res.status, 200, res.status === 200, `status=${res.status}, content-type=${cType}`);
+  } catch (err) {
+    record("/icon", "ERR", 200, false, err.message);
+  }
+
+  // 5. Custom 404 path
+  try {
+    const res = await fetch(`${baseUrl}/unknown-nonexistent-smoke-test-path`);
+    record("/[404-check]", res.status, 404, res.status === 404, `status=${res.status} (custom 404 verified)`);
+  } catch (err) {
+    record("/[404-check]", "ERR", 404, false, err.message);
+  }
+
+  // 6. Robots.txt
   try {
     const res = await fetch(`${baseUrl}/robots.txt`);
     const text = await res.text();
-    checks.push({
-      endpoint: "/robots.txt",
-      status: res.status,
-      expected: 200,
-      ok: res.status === 200,
-      detail: `status=${res.status}, length=${text.length}b`,
-    });
+    let robotsTxtOk = res.status === 200;
+    let rDetail = `status=${res.status}`;
+    if (expectNoindex && !text.includes("Disallow: /")) {
+      robotsTxtOk = false;
+      rDetail += " (FAILED: expected Disallow: /)";
+    } else if (expectIndex && text.includes("Disallow: /")) {
+      robotsTxtOk = false;
+      rDetail += " (FAILED: expected Allow indexing)";
+    }
+    record("/robots.txt", res.status, 200, robotsTxtOk, `${rDetail}, length=${text.length}b`);
   } catch (err) {
-    checks.push({ endpoint: "/robots.txt", status: "ERR", expected: 200, ok: false, detail: err.message });
+    record("/robots.txt", "ERR", 200, false, err.message);
   }
 
-  // 4. Sitemap.xml
+  // 7. Sitemap.xml & URL host check
   try {
     const res = await fetch(`${baseUrl}/sitemap.xml`);
-    const text = await res.text();
-    checks.push({
-      endpoint: "/sitemap.xml",
-      status: res.status,
-      expected: 200,
-      ok: res.status === 200,
-      detail: `status=${res.status}, length=${text.length}b`,
-    });
+    const xml = await res.text();
+    const locRegex = /<loc>([^<]+)<\/loc>/g;
+    const sitemapUrls = [];
+    let m;
+    while ((m = locRegex.exec(xml)) !== null) {
+      sitemapUrls.push(m[1]);
+    }
+
+    let allSitemapUrls200 = true;
+    for (const u of sitemapUrls) {
+      try {
+        const target = new URL(new URL(u).pathname, baseUrl).href;
+        const uRes = await fetch(target);
+        if (uRes.status !== 200) allSitemapUrls200 = false;
+      } catch {
+        allSitemapUrls200 = false;
+      }
+    }
+
+    const sitemapOk = res.status === 200 && sitemapUrls.length > 0 && allSitemapUrls200;
+    record("/sitemap.xml", res.status, 200, sitemapOk, `status=${res.status}, ${sitemapUrls.length} URLs crawled all 200 OK`);
   } catch (err) {
-    checks.push({ endpoint: "/sitemap.xml", status: "ERR", expected: 200, ok: false, detail: err.message });
+    record("/sitemap.xml", "ERR", 200, false, err.message);
   }
 
-  // 5. Contact API with invalid body
+  // 8. Contact API validation: invalid body -> 400
   try {
     const res = await fetch(`${baseUrl}/api/contact`, {
       method: "POST",
       headers: { "Content-Type": "application/json", Origin: baseUrl },
       body: JSON.stringify({ startedAt: Date.now() - 5000 }),
     });
-    checks.push({
-      endpoint: "/api/contact (invalid body)",
-      status: res.status,
-      expected: 400,
-      ok: res.status === 400,
-      detail: `status=${res.status} (expected validation error 400)`,
-    });
+    record("/api/contact (invalid body)", res.status, 400, res.status === 400, `status=${res.status} (expected validation error 400)`);
   } catch (err) {
-    checks.push({ endpoint: "/api/contact (invalid body)", status: "ERR", expected: 400, ok: false, detail: err.message });
+    record("/api/contact (invalid body)", "ERR", 400, false, err.message);
   }
 
-  // Report table
+  // 9. Contact API security: wrong Origin -> 403
+  try {
+    const res = await fetch(`${baseUrl}/api/contact`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Origin: "https://malicious-attacker.com" },
+      body: JSON.stringify({ startedAt: Date.now() - 5000, name: "Attacker" }),
+    });
+    record("/api/contact (wrong Origin)", res.status, 403, res.status === 403, `status=${res.status} (expected forbidden 403)`);
+  } catch (err) {
+    record("/api/contact (wrong Origin)", "ERR", 403, false, err.message);
+  }
+
+  // 10. Live lead test (ONLY if --live-lead-test is passed)
+  if (liveLeadTest) {
+    try {
+      const res = await fetch(`${baseUrl}/api/contact`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Origin: baseUrl },
+        body: JSON.stringify({
+          startedAt: Date.now() - 5000,
+          name: "Smoke Test Lead",
+          email: "smoketest@thebusinesswork.in",
+          phone: "+91 99999 88888",
+          problem: "Automated smoke test verification lead",
+          consent: true,
+          page: "/smoke-test",
+          cta: "smoke-test",
+        }),
+      });
+      record("/api/contact (live lead test)", res.status, 200, res.status === 200, `status=${res.status}`);
+    } catch (err) {
+      record("/api/contact (live lead test)", "ERR", 200, false, err.message);
+    }
+  }
+
+  // Print Summary Table
   console.log("| Endpoint | Status | Expected | Result | Details |");
   console.log("| :--- | :---: | :---: | :---: | :--- |");
   let allPassed = true;

@@ -195,3 +195,41 @@ This document logs significant structural, architectural, and operational tasks 
   - Update Google Apps Script in Google Sheets with `extras/automation/google-apps-script/lead-capture.gs` to capture the 5 new attribution columns (`page`, `cta`, `utm_source`, `utm_medium`, `utm_campaign`).
   - Configure production environment variables in Vercel (`NEXT_PUBLIC_SITE_URL`, `LEAD_WEBHOOK_URL`, optional `TURNSTILE_SECRET_KEY` + `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, optional `NEXT_PUBLIC_GA_ID`).
   - Toggle `NEXT_PUBLIC_ALLOW_INDEXING=true` in Vercel once legal placeholders are resolved to allow search engine indexing.
+
+---
+
+## 2026-10-13 — Post-Audit Follow-up Fixes & Launch Gate Hardening
+- Goal: Address audit findings across sitemap dynamic derivation (F1), launch gate preflight (F2), environment variable naming synchronization (F3), link crawler placeholder contact detection (F4), checklist citations (F5), and generate complete evidence E1–E10 in `extras/docs/audit-evidence.md`.
+- Files created/modified:
+  - `frontend/src/app/sitemap.ts`: Derived all 4 service pages from `services.ts`; conditionally excluded `/privacy` and `/terms` while legal draft placeholders exist.
+  - `frontend/src/app/sitemap.test.ts`: Added Vitest unit tests verifying 5 sitemap URLs in draft state and 7 in confirmed state.
+  - `frontend/scripts/preflight.mjs`: Refactored to a pure launch gate emitting PASS/FAIL/WARN Markdown table and non-zero exit on any FAIL under `--production`.
+  - `frontend/scripts/env-check.mjs`: Implemented environment variable check ensuring two-way parity between `.env.example` and `process.env` references. Added `"env:check"` npm script.
+  - `frontend/scripts/links-check.mjs`: Added detection and separate summary count for placeholder `mailto:`, `tel:`, and `wa.me` links, with `--strict` support.
+  - `frontend/scripts/smoke.mjs`: Extended to check 14 endpoints including all 4 service routes, custom 404, security headers, JSON-LD placeholder auditing, sitemap crawling, and contact API validation/origin enforcement.
+  - `frontend/src/components/Footer.tsx`, `frontend/src/components/CTA.tsx`: Restored placeholder contact links for crawler visibility.
+  - `frontend/src/content/legal/privacy.ts`, `frontend/src/content/legal/terms.ts`: Replaced concrete example values in placeholders with neutral hints.
+  - `extras/docs/legal-review.md`: Synchronized neutral placeholder hints.
+  - `extras/docs/deploy.md`: Documented Launch Gate Preflight vs. CI Build/Test separation.
+  - `extras/docs/launch-checklist.md`: Replaced `WEBHOOK_SECRET` with `LEAD_WEBHOOK_SECRET`, documented preflight as launch gate, and cited real test command evidence for rows 7, 8, 9, 16, 17.
+  - `extras/docs/audit-evidence.md`: Comprehensive audit evidence log capturing verbatim command output for F1–F5 and E1–E10.
+- Commands run and result:
+  - `npm run typecheck`: PASS (exit code 0)
+  - `npm run test`: PASS (92/92 tests passed across 9 test files, exit code 0)
+  - `npm run build`: PASS (all 14 static and dynamic routes compiled, exit code 0)
+  - `npm run lint`: PASS (0 warnings, 0 errors, exit code 0)
+  - `npm run legal:check`: PASS (exit code 1 as expected, audited 26 placeholders)
+  - `npm run preflight -- --production`: PASS (exit code 1 as expected with default demo placeholders)
+  - `npm run env:check`: PASS (14/14 parity, exit code 0)
+  - `npm run seo:check`: PASS (5/5 schema and HTTPS tests passed + image alt audit passed, exit code 0)
+  - `npm run links:check -- http://localhost:3006`: PASS (194 unique link occurrences checked, 0 broken, 9 placeholder contact links flagged, exit code 0)
+  - `npm run test:a11y`: PASS (17/17 accessibility and assistant tests passed, exit code 0)
+  - `npx playwright test tests/cookie-consent.spec.ts`: PASS (2/2 tests passed, exit code 0)
+  - `npx playwright test tests/responsive.spec.ts`: PASS (22/22 tests passed across 6 viewports, exit code 0)
+  - `node scripts/smoke.mjs http://localhost:3006 --expect-noindex`: PASS (all 14 endpoints verified, exit code 0)
+- Errors/warnings/skips (verbatim messages):
+  - "⚠ Using edge runtime on a page currently disables static generation for that page" (Next.js build warning for Edge routes: opengraph-image.tsx, icon.tsx, apple-icon.tsx using @vercel/og)
+  - "The CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details." (Vitest deprecation notice)
+- Not run and why:
+  - None. All required checks, builds, tests, crawlers, and audits ran to completion.
+

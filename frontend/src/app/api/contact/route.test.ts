@@ -132,4 +132,49 @@ describe("Contact API Route (/api/contact)", () => {
     const data = await res.json();
     expect(data.error).toContain("temporarily unavailable");
   });
+
+  it("sends lead with attribution fields to webhook and retries on 500 error", async () => {
+    let callCount = 0;
+    let receivedPayload: Record<string, unknown> = {};
+
+    globalThis.fetch = vi.fn().mockImplementation((url: string, options: any) => {
+      callCount++;
+      if (options && options.body) {
+        try {
+          receivedPayload = JSON.parse(options.body);
+        } catch {}
+      }
+
+      // First call fails with 500; second call succeeds with 200
+      if (callCount === 1) {
+        return Promise.resolve(new Response("Internal Error", { status: 500 }));
+      }
+      return Promise.resolve(new Response(JSON.stringify({ ok: true }), { status: 200 }));
+    });
+
+    const req = createRequest(validLeadBody);
+    const res = await POST(req);
+
+    expect(res.status).toBe(200);
+    // Exactly one retry happened (2 calls total)
+    expect(callCount).toBe(2);
+
+    // Verify received payload contains attribution fields
+    expect(receivedPayload).toHaveProperty("page", "/services/ai-agents-chatbots");
+    expect(receivedPayload).toHaveProperty("cta", "hero");
+    expect(receivedPayload).toHaveProperty("utm_source", "linkedin");
+  });
+
+  it("returns 502 when webhook endpoint repeatedly fails", async () => {
+    globalThis.fetch = vi.fn().mockImplementation(() => {
+      return Promise.resolve(new Response("Gateway Down", { status: 500 }));
+    });
+
+    const req = createRequest(validLeadBody);
+    const res = await POST(req);
+
+    expect(res.status).toBe(502);
+    const data = await res.json();
+    expect(data.error).toContain("couldn't send your enquiry");
+  });
 });

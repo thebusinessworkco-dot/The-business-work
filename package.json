@@ -17,6 +17,7 @@
     "contrast": "npm --prefix frontend run contrast",
     "lint": "npm --prefix frontend run lint",
     "assistant:eval": "npm --prefix frontend run assistant:eval --",
-    "links:check": "npm --prefix frontend run links:check --"
+    "links:check": "npm --prefix frontend run links:check --",
+    "env:check": "npm --prefix frontend run env:check"
   }
 }

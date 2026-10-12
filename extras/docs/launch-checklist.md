@@ -2,6 +2,8 @@
 
 This document tracks the readiness of **The Business Work (TBW)** website for public production launch across 20 critical engineering, design, legal, and operational dimensions.
 
+> **Launch Gate**: `npm run preflight -- --production` serves as the explicit deployment launch gate. CI typecheck, lint, unit tests, and build are maintained separately. Preflight enforces that production domain HTTPS is configured, business details are populated, lead webhook is active, legal placeholders are resolved, and Turnstile keys are symmetrical.
+
 ---
 
 ## Launch Checklist Status
@@ -10,21 +12,21 @@ This document tracks the readiness of **The Business Work (TBW)** website for pu
 |---|---|---|---|---|
 | 1 | **Privacy Policy** | **Owner action** | `frontend/src/content/legal/privacy.ts`, `npm run legal:check` | Legal review by a qualified Indian lawyer to confirm grievance officer details, address, and retention period placeholders. |
 | 2 | **Terms of Service** | **Owner action** | `frontend/src/content/legal/terms.ts`, `npm run legal:check` | Legal review and commercial decisions on advance %, milestone schedule, GST registration/rate, notice period, and refund rules. |
-| 3 | **Secrets only in env** | **Done** | `git ls-files \| grep -i "\.env"` (only `.env.example` committed) | Configure production environment variables in Vercel project settings (`TURNSTILE_SECRET_KEY`, `WEBHOOK_SECRET`, `LEAD_WEBHOOK_URL`). |
+| 3 | **Secrets only in env** | **Done** | `git ls-files \| grep -i "\.env"` (only `.env.example` committed), `npm run env:check` | Configure production environment variables in Vercel project settings (`TURNSTILE_SECRET_KEY`, `LEAD_WEBHOOK_SECRET`, `LEAD_WEBHOOK_URL`). |
 | 4 | **HTTPS & Webhook Safety** | **Done** | `npm run seo:check` (running `src/lib/https.test.ts`), `scripts/preflight.mjs --production` | Configure production domain SSL certificate on Vercel and verify `NEXT_PUBLIC_SITE_URL` begins with `https://`. |
 | 5 | **Cookie Consent** | **Done** | `frontend/src/components/CookieConsent.tsx`, `npx playwright test tests/cookie-consent.spec.ts` | Default zero-cookie state verified. If owner opts to enable Google Analytics (`NEXT_PUBLIC_GA_ID`), consent banner activates automatically. |
 | 6 | **SEO metadata unique per page** | **Done** | `npm run seo:check`, `frontend/src/app/layout.tsx`, `src/app/services/[slug]/page.tsx` | All metadata and OpenGraph tags configured. Set `NEXT_PUBLIC_ALLOW_INDEXING=true` at launch. |
-| 7 | **Social preview image** | **Done** | `frontend/src/app/opengraph-image.tsx` | Generates 1200x630 dynamic OpenGraph preview card matching brand design tokens. |
-| 8 | **Favicon and mobile icons** | **Done** | `frontend/src/app/icon.svg`, `frontend/src/app/apple-icon.png`, `frontend/src/app/manifest.ts` | Brand icon assets verified across browser tabs, PWA manifest, and mobile home screen bookmarks. |
-| 9 | **Sitemap and robots** | **Done** | `frontend/src/app/sitemap.ts`, `frontend/src/app/robots.ts` | Dynamically indexes all 6 public routes (`/`, `/privacy`, `/terms`, 3 service routes). Disallows indexing until `NEXT_PUBLIC_ALLOW_INDEXING=true`. |
+| 7 | **Social preview image** | **Done** | `frontend/src/app/opengraph-image.tsx`, `curl -I /opengraph-image` (200 image/png) | Generates 1200x630 dynamic OpenGraph preview card matching brand design tokens. Verified `og:image` and `twitter:card` tags. |
+| 8 | **Favicon and mobile icons** | **Done** | `frontend/src/app/icon.tsx`, `frontend/src/app/apple-icon.tsx`, `frontend/src/app/manifest.ts` | Brand icon assets verified via HEAD check: `/icon` (200 image/png), `/apple-icon` (200 image/png), `/manifest.webmanifest` (200 application/manifest+json). |
+| 9 | **Sitemap and robots** | **Done** | `frontend/src/app/sitemap.ts`, `frontend/src/app/robots.ts`, `src/app/sitemap.test.ts` | Lists `/` and all 4 service pages derived from `services.ts` (5 URLs total). `/privacy` and `/terms` are excluded while any `[[TO CONFIRM` placeholders remain in their content, and will automatically be included once resolved. Disallows indexing until `NEXT_PUBLIC_ALLOW_INDEXING=true`. |
 | 10 | **Image alt text** | **Done** | `node scripts/images-check.mjs` (0 raw or missing alt attributes) | Site exclusively uses vector SVG icons. If raster photography is added later, enforce `next/image` and descriptive alt text per `extras/docs/seo.md`. |
 | 11 | **Image optimisation** | **Done** | `extras/docs/seo.md` (Section 6) | Modern WebP/AVIF format and `next/image` guidelines documented for content editors. |
 | 12 | **Page speed (Lighthouse)** | **Done** | `npx lighthouse`, `extras/docs/pagespeed.md` | Mobile: 97 Perf / 100 A11y / 100 Best Practices. Desktop: 100 Perf / 100 A11y / 100 Best Practices. (SEO score 66 reflects intentional pre-launch `noindex`). |
 | 13 | **Colour contrast** | **Done** | `node scripts/contrast.mjs` | All 13 text and surface pairs pass WCAG AAA/AA (contrast ratios range from 4.68:1 to 17.90:1). |
 | 14 | **Responsive layouts** | **Done** | `npx playwright test tests/responsive.spec.ts` | 22/22 tests passing across 6 viewports (360x740, 390x844, 768x1024, 1024x768, 1280x800, 1440x900). Zero horizontal overflow; modal fits on mobile; anchor offset clear. |
 | 15 | **Custom 404** | **Done** | `frontend/src/app/not-found.tsx` | Branded not-found page with clear navigation back to home page. |
-| 16 | **Broken links** | **Done** | `npm run links:check -- http://localhost:3005` | 185 unique link occurrences checked across sitemap and crawled pages; 0 broken internal links, 0 missing anchors. |
-| 17 | **Form validation** | **Done** | `vitest run src/lib/lead.test.ts` (87/87 tests pass) | Rigorous validation and sanitization for name, phone, email, requirement, budget, and UTM attribution parameters. |
+| 16 | **Broken links** | **Done** | `npm run links:check -- http://localhost:3006` | 194 unique link occurrences checked across sitemap and crawled pages; 0 broken internal links, 0 missing anchors. 9 placeholder contact links flagged as warnings. |
+| 17 | **Form validation** | **Done** | `vitest run src/lib/lead.test.ts` (9 tests pass) | Rigorous validation and sanitization for form fields: `name`, `business`, `email`, `phone`, `service`, `problem`, `consent` plus attribution fields (`page`, `cta`, `utm_*`). |
 | 18 | **Spam protection** | **Done** | `vitest run src/app/api/contact/route.test.ts` | Honeypot trap, submission speed limits, rate limiting (5 req / 10 min), and optional Cloudflare Turnstile CAPTCHA. |
 | 19 | **Analytics and lead tracking** | **Done** | `frontend/src/components/ContactModal.tsx`, `extras/docs/analytics.md` | Zero-cookie in-memory attribution captures `page`, `cta`, and first-landing UTM tags. Optional GA4 consent integration ready. |
 | 20 | **Clear CTAs** | **Done** | `frontend/src/components/Header.tsx`, `Hero.tsx`, `Services.tsx`, `CTA.tsx`, `DiscussProjectButton.tsx` | Prominent "Discuss Your Project" actions across all sections and pages passing semantic CTA origins (`header`, `hero`, `services`, `cta`, `service-page`, `assistant`). |

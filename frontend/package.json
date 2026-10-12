@@ -16,7 +16,8 @@
     "smoke": "node scripts/smoke.mjs",
     "contrast": "node scripts/contrast.mjs",
     "assistant:eval": "node scripts/assistant-eval.mjs",
-    "links:check": "node scripts/links-check.mjs"
+    "links:check": "node scripts/links-check.mjs",
+    "env:check": "node scripts/env-check.mjs"
   },
   "dependencies": {
     "lucide-react": "^0.452.0",

@@ -39,10 +39,10 @@ export const termsSections: LegalSection[] = [
     heading: "5. Quotes, Payments, and Taxes",
     paragraphs: [
       "Project work commences upon payment of an agreed advance fee, with remaining balances linked to defined project milestone completions ([[TO CONFIRM: advance % and milestone schedule]]).",
-      "Invoices are issued upon milestone completion and must be settled within [[TO CONFIRM: invoice due date window, e.g. 7 or 14 calendar days]].",
+      "Invoices are issued upon milestone completion and must be settled within [[TO CONFIRM: invoice due date window, e.g. agreed number of calendar days]].",
       "Late payments may lead to project suspension until outstanding balances are cleared ([[TO CONFIRM: late payment terms and interest if applicable]]).",
       "Applicable taxes, including Goods and Services Tax (GST), will be charged on all professional fees as required under Indian law ([[TO CONFIRM: GST registration and rate]]).",
-      "All payments must be made through approved banking channels ([[TO CONFIRM: accepted payment methods, e.g. NEFT, RTGS, UPI, bank transfer]]).",
+      "All payments must be made through approved banking channels ([[TO CONFIRM: accepted payment methods, e.g. approved electronic banking methods]]).",
     ],
   },
   {
@@ -81,7 +81,7 @@ export const termsSections: LegalSection[] = [
     id: "cancellation-and-refunds",
     heading: "9. Cancellation and Refunds",
     paragraphs: [
-      "Either party may terminate an ongoing project agreement by giving written notice to the other party ([[TO CONFIRM: notice period, e.g. 14 days written notice]]).",
+      "Either party may terminate an ongoing project agreement by giving written notice to the other party ([[TO CONFIRM: notice period, e.g. agreed written notice period]]).",
       "In the event of cancellation, the client is liable for payment of all work completed, milestones delivered, and non-recoverable direct expenses incurred up to the date of cancellation.",
       "Advance payments, initial setup deposits, and fees for completed milestones are non-refundable ([[TO CONFIRM: refund rules and non-refundable deposit terms]]).",
     ],
@@ -135,7 +135,7 @@ export const termsSections: LegalSection[] = [
     heading: "15. Limitation of Liability",
     paragraphs: [
       "To the maximum extent permitted by applicable law, in no event shall The Business Work, its proprietors, partners, employees, or contractors be liable for any indirect, consequential, punitive, incidental, or special damages, including lost profits, loss of data, loss of goodwill, or business interruption arising out of or in connection with your use of or inability to use this website.",
-      "[[TO CONFIRM: lawyer to set liability cap and exclusions, e.g. total aggregate liability limited to INR 1,000 or actual fees paid in the preceding three months]].",
+      "[[TO CONFIRM: lawyer to set liability cap and exclusions, e.g. liability limited to agreed cap or fees paid]].",
     ],
   },
   {
@@ -151,7 +151,7 @@ export const termsSections: LegalSection[] = [
     heading: "17. Governing Law and Dispute Resolution",
     paragraphs: [
       "These Terms shall be governed by and construed in accordance with the laws of India, without regard to conflict of law principles.",
-      "Any dispute, controversy, or claim arising out of or relating to these Terms or your use of the website shall be subject to the exclusive jurisdiction of the competent courts in [[TO CONFIRM: city and state in India, e.g. Bengaluru, Karnataka, India]].",
+      "Any dispute, controversy, or claim arising out of or relating to these Terms or your use of the website shall be subject to the exclusive jurisdiction of the competent courts in [[TO CONFIRM: city and state jurisdiction in India]].",
     ],
   },
   {

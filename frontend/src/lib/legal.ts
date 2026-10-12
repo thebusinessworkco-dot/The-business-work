@@ -18,10 +18,13 @@ export function hasUnresolvedPlaceholders(
   });
 }
 
-export function isLegalIndexable(page: "privacy" | "terms"): boolean {
+export function isLegalDraft(page: "privacy" | "terms"): boolean {
   const sections = page === "privacy" ? privacySections : termsSections;
-  const hasPlaceholders = hasUnresolvedPlaceholders(sections);
-  if (hasPlaceholders) return false;
+  return hasUnresolvedPlaceholders(sections);
+}
+
+export function isLegalIndexable(page: "privacy" | "terms"): boolean {
+  if (isLegalDraft(page)) return false;
   return isIndexingAllowed();
 }
 
