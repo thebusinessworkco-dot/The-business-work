@@ -208,6 +208,9 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
       keywords: [
         "process",
         "how it works",
+        "how a project works",
+        "how does a project work",
+        "start to finish",
         "steps",
         "methodology",
         "delivery",
