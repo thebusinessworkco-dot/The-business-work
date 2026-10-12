@@ -2,8 +2,13 @@ import type { Metadata, Viewport } from "next";
 import { Manrope, Space_Grotesk } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
+import dynamic from "next/dynamic";
 import { site, isIndexingAllowed, getCleanSiteUrl } from "@/lib/site";
 import { ContactModalProvider } from "@/components/ContactModal";
+
+const ChatWidget = dynamic(() => import("@/components/chat/ChatWidget"), {
+  ssr: false,
+});
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -94,7 +99,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           Skip to main content
         </a>
-        <ContactModalProvider>{children}</ContactModalProvider>
+        <ContactModalProvider>
+          {children}
+          {process.env.NEXT_PUBLIC_CHAT_ENABLED === "true" && <ChatWidget />}
+        </ContactModalProvider>
 
         {/* Optional Google Analytics 4 (only loaded if NEXT_PUBLIC_GA_ID is set) */}
         {gaId && (

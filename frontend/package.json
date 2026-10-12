@@ -14,7 +14,8 @@
     "test:a11y": "playwright test tests/a11y.spec.ts",
     "preflight": "node scripts/preflight.mjs",
     "smoke": "node scripts/smoke.mjs",
-    "contrast": "node scripts/contrast.mjs"
+    "contrast": "node scripts/contrast.mjs",
+    "chat:eval": "node scripts/chat-eval.mjs"
   },
   "dependencies": {
     "lucide-react": "^0.452.0",

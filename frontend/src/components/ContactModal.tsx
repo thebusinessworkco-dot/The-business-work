@@ -5,8 +5,8 @@ import { X } from "lucide-react";
 import { services } from "@/content/services";
 import { whatsappLink } from "@/lib/site";
 
-type Ctx = { openModal: (service?: string) => void };
-const ModalContext = createContext<Ctx>({ openModal: () => {} });
+type Ctx = { openModal: (service?: string) => void; isOpen: boolean };
+const ModalContext = createContext<Ctx>({ openModal: () => {}, isOpen: false });
 export const useContactModal = () => useContext(ModalContext);
 
 type Status = "idle" | "sending" | "success" | "error";
@@ -93,7 +93,7 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
   }
 
   return (
-    <ModalContext.Provider value={{ openModal }}>
+    <ModalContext.Provider value={{ openModal, isOpen: open }}>
       {children}
       {open && (
         <div

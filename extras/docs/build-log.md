@@ -46,3 +46,52 @@ This document logs significant structural, architectural, and operational tasks 
   - Confirm and replace 18 draft `[[TO CONFIRM]]` placeholders in `frontend/src/content/legal/privacy.ts` and `frontend/src/content/legal/terms.ts` prior to indexing legal pages.
   - Update any local IDE workspace or run configurations to target the new monorepo root or `frontend/` folder.
 - Resumed after a crash; items found already done: layout relocation into frontend/, backend/, extras/, root proxy package.json, docs/deploy.md, and lead-capture.gs extraction; items completed in resume: state audit and duplicate/missing file verification, smoke test endpoint validation, full test suite pass from root and frontend, accessibility verification (9/9 passed), build-log completion, and final git commit.
+
+---
+
+### Task: Website AI Chat Assistant | 2026-10-12
+- Changed:
+  - `frontend/src/lib/chat-knowledge.ts`: Dynamic plain-text knowledge compiler from `site.ts`, `services.ts`, `process.ts`, `industries.ts`, `work.ts`, `principles.ts`. Filters all placeholders and includes true demo statuses.
+  - `frontend/src/lib/chat-prompt.ts`: Strict system instruction defining "The Business Work assistant", enforces no pricing, no guarantees, healthcare boundaries, untrusted input protection, and language handling (English / Hinglish).
+  - `frontend/src/lib/chat-filter.ts`: Output safety filter stripping currency (₹, $, INR, USD, Rs), guarantees ("guarantee", "100%"), placeholders, and capping responses.
+  - `frontend/src/lib/rate-limit.ts`: Added namespace prefixes (`ratelimit:lead:`, `ratelimit:chat:ip:`, `ratelimit:chat:daily:`) and factory functions `getChatRateLimiter` and `getChatDailyLimiter`.
+  - `frontend/src/app/api/chat/route.ts`: Node.js server route with 8 KB body limit, 415/403/413/400 validation, IP and daily rate limits, Gemini REST call with 1 retry on 5xx/network error, output filtering, and zero content logging.
+  - `frontend/src/components/ContactModal.tsx`: Updated `ModalContext` to expose `isOpen` so launcher hides when the modal is open.
+  - `frontend/src/components/chat/ChatWidget.tsx`: Accessible client widget (56px launcher with Logo brand mark + status dot; responsive bottom sheet on mobile, 380px panel on desktop, suggestion chips, live character count, 15-message cap, direct triggers for ContactModal & WhatsApp).
+  - `frontend/src/app/layout.tsx`: Dynamically mounted `ChatWidget` with `ssr: false` inside `ContactModalProvider`, conditioned on `NEXT_PUBLIC_CHAT_ENABLED === "true"`.
+  - `frontend/src/content/legal/privacy.ts`: Added Section 13 ("Website Chat Assistant") detailing AI provider transmission and lack of message storage, with draft banner placeholder for provider plan terms.
+  - `frontend/.env.example`, `frontend/.env.local`: Documented and configured `GEMINI_API_KEY`, `GEMINI_MODEL`, `CHAT_ENABLED`, `NEXT_PUBLIC_CHAT_ENABLED`, and `CHAT_DAILY_LIMIT`.
+  - `frontend/README.md`, `extras/docs/deploy.md`: Updated with chat assistant architecture, environment variables, and deployment instructions.
+  - `extras/docs/chatbot.md`: Created comprehensive documentation covering architecture, pricing/quotas, updating knowledge, testing, and limitations.
+  - `frontend/scripts/smoke.mjs`: Added `/api/chat` security and validation checks (wrong Origin -> 403, text/plain -> 415, invalid body -> 400).
+  - `frontend/scripts/chat-eval.mjs`: Created 25+ question automated test suite with boundary and injection evaluations.
+  - `frontend/package.json`, `package.json`: Added `chat:eval` script and proxy.
+  - `frontend/src/lib/chat-knowledge.test.ts`: Unit tests verifying services, demo statuses, absence of placeholders and currency amounts.
+  - `frontend/src/lib/chat-filter.test.ts`: Unit tests verifying currency and guarantee replacements.
+  - `frontend/src/lib/chat-api.test.ts`: Integration tests verifying rate limit namespace separation and 12 mocked Gemini API route behaviors.
+  - `frontend/tests/chat.spec.ts`: Playwright + axe tests verifying desktop/mobile UI, keyboard flow, suggestion chips, error state, and modal suppression.
+- Commands run and result:
+  - `npm run typecheck`: PASS (exit code 0; 0 errors)
+  - `npm run test`: PASS (38/38 tests across 6 test files passed, 0 failures)
+  - `npm run build`: PASS (15 routes compiled; First Load JS of `/` remained unchanged at 109 kB / 87.2 kB shared)
+  - `npm run legal:check`: PASS (audited 19 draft placeholders as expected pre-launch)
+  - `npm run preflight -- --production`: PASS (typecheck + test + build all succeeded, exit code 0)
+  - `npx playwright test tests/chat.spec.ts`: PASS (6/6 chat tests passed)
+  - `npm run test:a11y`: PASS (9/9 axe accessibility tests passed with 0 violations)
+  - `npm run smoke -- http://localhost:3005`: PASS (all 8 endpoints verified: home, service, robots, sitemap, contact invalid 400, chat origin 403, chat text/plain 415, chat invalid body 400)
+  - `npx lighthouse http://localhost:3005/`: PASS (Performance: 98, Accessibility: 100, Best Practices: 100, SEO: 66)
+- Errors/warnings/skips (verbatim messages):
+  - "⚠ Using edge runtime on a page currently disables static generation for that page" (Next.js build warning for edge routes)
+  - "The CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details." (Vitest info notice)
+  - "⚠ Legal check: unresolved placeholders remain (normal for pre-launch draft mode)." (Expected pre-launch draft audit)
+  - "=== Website Chat Evaluation Suite === NOT RUN: no key Reason: GEMINI_API_KEY is not configured in environment or .env.local." (`npm run chat:eval` skipped real Gemini API calls as expected due to missing key)
+- Not run and why:
+  - Live Gemini API evaluation in `npm run chat:eval`: NOT RUN (no API key configured in `.env.local`). All 12 API behavioral cases verified via mocked route tests in Vitest.
+- Kept but uncertain (owner to decide):
+  - Did NOT alter the demo status of "Website AI Chatbot" in `frontend/src/content/work.ts` (currently "Proof of concept"). Owner to decide whether to upgrade status after connecting live API key.
+- Open items for owner:
+  - Obtain a Gemini API key from Google AI Studio and configure `GEMINI_API_KEY`, `GEMINI_MODEL`, `CHAT_ENABLED=true`, `NEXT_PUBLIC_CHAT_ENABLED=true` in Vercel Production and Preview settings.
+  - Set up Upstash Redis (`UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN`) for distributed rate limiting across serverless instances.
+  - Replace placeholder business details in `frontend/src/lib/site.ts`.
+  - Review and confirm 19 legal `[[TO CONFIRM]]` placeholders in `privacy.ts` and `terms.ts`.
+  - Run `npm run chat:eval` once `GEMINI_API_KEY` is set and review every response.

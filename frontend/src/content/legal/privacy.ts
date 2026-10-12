@@ -138,8 +138,17 @@ export const privacySections: LegalSection[] = [
     ],
   },
   {
+    id: "website-chat-assistant",
+    heading: "13. Website Chat Assistant",
+    paragraphs: [
+      "When you interact with our website chat assistant widget, messages you submit are sent to an external AI provider (Google, via the Gemini API) to generate replies. We do not intentionally store chat messages on our servers.",
+      "Users should not share sensitive, health or confidential information in the chat. Rate-limit data (such as temporary IP hashes) is used solely to prevent automated abuse.",
+      "[[TO CONFIRM: AI provider data-use and retention terms for the plan in use]].",
+    ],
+  },
+  {
     id: "policy-changes-and-grievance",
-    heading: "13. Changes to this Policy and Grievance Redressal",
+    heading: "14. Changes to this Policy and Grievance Redressal",
     paragraphs: [
       "We may update this Privacy Policy periodically to reflect operational, technical, or legal changes. Any updates will be posted on this page with an updated 'Last Updated' date.",
       "If you have any grievance or concern regarding the processing of your personal data, you may reach our designated Grievance Officer:",

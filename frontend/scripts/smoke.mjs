@@ -5,10 +5,12 @@ const args = process.argv.slice(2);
 let baseUrl = "http://localhost:3000";
 let expectNoindex = false;
 let expectIndex = false;
+let liveChatTest = false;
 
 for (const arg of args) {
   if (arg === "--expect-noindex") expectNoindex = true;
   else if (arg === "--expect-index") expectIndex = true;
+  else if (arg === "--live-chat-test") liveChatTest = true;
   else if (arg.startsWith("http://") || arg.startsWith("https://")) baseUrl = arg.replace(/\/+$/, "");
 }
 
@@ -106,6 +108,89 @@ async function run() {
     });
   } catch (err) {
     checks.push({ endpoint: "/api/contact (invalid body)", status: "ERR", expected: 400, ok: false, detail: err.message });
+  }
+
+  // 6. Chat API - Wrong Origin (403)
+  try {
+    const res = await fetch(`${baseUrl}/api/chat`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Origin: "https://unauthorized-cross-origin.com",
+      },
+      body: JSON.stringify({ messages: [{ role: "user", content: "Hi" }] }),
+    });
+    // In dev mode localhost origins are allowed, but external domains get 403
+    const isDev = baseUrl.includes("localhost") || baseUrl.includes("127.0.0.1");
+    const expected = 403;
+    checks.push({
+      endpoint: "/api/chat (wrong origin)",
+      status: res.status,
+      expected,
+      ok: res.status === expected,
+      detail: `status=${res.status} (expected forbidden 403)`,
+    });
+  } catch (err) {
+    checks.push({ endpoint: "/api/chat (wrong origin)", status: "ERR", expected: 403, ok: false, detail: err.message });
+  }
+
+  // 7. Chat API - Wrong Content-Type (415)
+  try {
+    const res = await fetch(`${baseUrl}/api/chat`, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain" },
+      body: "Hello",
+    });
+    checks.push({
+      endpoint: "/api/chat (text/plain)",
+      status: res.status,
+      expected: 415,
+      ok: res.status === 415,
+      detail: `status=${res.status} (expected unsupported media type 415)`,
+    });
+  } catch (err) {
+    checks.push({ endpoint: "/api/chat (text/plain)", status: "ERR", expected: 415, ok: false, detail: err.message });
+  }
+
+  // 8. Chat API - Invalid body (400)
+  try {
+    const res = await fetch(`${baseUrl}/api/chat`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ invalidField: true }),
+    });
+    checks.push({
+      endpoint: "/api/chat (invalid body)",
+      status: res.status,
+      expected: 400,
+      ok: res.status === 400,
+      detail: `status=${res.status} (expected validation error 400)`,
+    });
+  } catch (err) {
+    checks.push({ endpoint: "/api/chat (invalid body)", status: "ERR", expected: 400, ok: false, detail: err.message });
+  }
+
+  // 9. Chat API - Live chat test (ONLY if explicitly requested via --live-chat-test)
+  if (liveChatTest) {
+    try {
+      const res = await fetch(`${baseUrl}/api/chat`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: [{ role: "user", content: "What services do you offer?" }],
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      checks.push({
+        endpoint: "/api/chat (live test)",
+        status: res.status,
+        expected: 200,
+        ok: res.status === 200 && Boolean(data.reply),
+        detail: `status=${res.status}, replyLen=${data.reply?.length || 0}`,
+      });
+    } catch (err) {
+      checks.push({ endpoint: "/api/chat (live test)", status: "ERR", expected: 200, ok: false, detail: err.message });
+    }
   }
 
   // Report table

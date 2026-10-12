@@ -15,6 +15,7 @@
     "smoke": "npm --prefix frontend run smoke --",
     "seo:check": "npm --prefix frontend run seo:check",
     "contrast": "npm --prefix frontend run contrast",
-    "lint": "npm --prefix frontend run lint"
+    "lint": "npm --prefix frontend run lint",
+    "chat:eval": "npm --prefix frontend run chat:eval --"
   }
 }
