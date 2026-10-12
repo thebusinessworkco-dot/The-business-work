@@ -94,7 +94,7 @@ async function run() {
   try {
     const res = await fetch(`${baseUrl}/api/contact`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", Origin: baseUrl },
       body: JSON.stringify({ startedAt: Date.now() - 5000 }),
     });
     checks.push({

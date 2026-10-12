@@ -97,7 +97,7 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
           <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-12">
             <div className="space-y-6 lg:col-span-8">
               <div className="inline-flex items-center gap-2.5 rounded border border-border-sand bg-surface-card px-3 py-1 font-headline text-xs font-semibold uppercase tracking-wider text-accent-ochre">
-                <span>{service.index} // 04</span>
+                <span>{service.index} {"//"} 04</span>
                 <span className="text-border-taupe">·</span>
                 <span>{service.tag}</span>
               </div>

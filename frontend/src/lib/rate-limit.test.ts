@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { InMemoryRateLimiter } from "./rate-limit";
+import { InMemoryRateLimiter, getClientIp } from "./rate-limit";
 
 describe("InMemoryRateLimiter", () => {
   let limiter: InMemoryRateLimiter;
@@ -63,5 +63,42 @@ describe("InMemoryRateLimiter", () => {
 
     expect((await limiter.check(keyA)).allowed).toBe(false);
     expect((await limiter.check(keyB)).allowed).toBe(true);
+  });
+});
+
+describe("getClientIp", () => {
+  it("prioritizes x-vercel-ip when present", () => {
+    const req = new Request("http://localhost/api/test", {
+      headers: {
+        "x-vercel-ip": "203.0.113.195",
+        "x-real-ip": "198.51.100.1",
+        "x-forwarded-for": "192.0.2.1, 198.51.100.1",
+      },
+    });
+    expect(getClientIp(req)).toBe("203.0.113.195");
+  });
+
+  it("falls back to x-real-ip when x-vercel-ip is missing", () => {
+    const req = new Request("http://localhost/api/test", {
+      headers: {
+        "x-real-ip": "198.51.100.5",
+        "x-forwarded-for": "192.0.2.2",
+      },
+    });
+    expect(getClientIp(req)).toBe("198.51.100.5");
+  });
+
+  it("extracts first IP from x-forwarded-for when platform headers are missing", () => {
+    const req = new Request("http://localhost/api/test", {
+      headers: {
+        "x-forwarded-for": "192.0.2.45, 10.0.0.1",
+      },
+    });
+    expect(getClientIp(req)).toBe("192.0.2.45");
+  });
+
+  it("returns 127.0.0.1 when no IP headers are provided", () => {
+    const req = new Request("http://localhost/api/test");
+    expect(getClientIp(req)).toBe("127.0.0.1");
   });
 });

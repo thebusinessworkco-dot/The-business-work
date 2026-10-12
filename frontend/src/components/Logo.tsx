@@ -2,11 +2,11 @@ import { site } from "@/lib/site";
 
 export default function Logo({ small = false }: { small?: boolean }) {
   return (
-    <span className="inline-flex items-center" aria-label={site.name}>
+    <span className="inline-flex items-center" role="img" aria-label={site.name}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 350 48"
-        className={`h-auto ${small ? "w-[170px]" : "w-[204px]"} select-none`}
+        className={`h-auto ${small ? "w-[130px] sm:w-[170px]" : "w-[140px] xs:w-[160px] sm:w-[185px] md:w-[204px]"} select-none`}
         fill="none"
         aria-hidden="true"
       >

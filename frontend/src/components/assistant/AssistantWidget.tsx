@@ -381,21 +381,27 @@ export default function AssistantWidget() {
         aria-expanded={isOpen}
         aria-controls="assistant-panel"
         aria-label={isOpen ? "Close website assistant" : "Open website assistant"}
-        className="group flex min-h-[56px] min-w-[56px] items-center justify-center gap-2.5 rounded-lg bg-ink px-4 py-3.5 shadow-xl transition-all hover:bg-accent-ochre focus:outline-none focus:ring-2 focus:ring-ink focus:ring-offset-2"
+        className="group flex min-h-[48px] min-w-[48px] sm:min-h-[52px] sm:min-w-[52px] items-center justify-center gap-2 rounded-lg bg-ink p-2.5 sm:px-4 sm:py-3 shadow-xl transition-all hover:bg-accent-ochre focus:outline-none focus:ring-2 focus:ring-ink focus:ring-offset-2"
       >
         <span className="relative flex items-center justify-center">
-          {/* Brand mark from Logo.tsx in cream */}
-          <span
-            className="flex h-5 w-5 items-center justify-center bg-background"
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 48 48"
+            fill="none"
             aria-hidden="true"
+            className="select-none"
           >
-            <span className="h-1.5 w-1.5 bg-ink" />
-          </span>
-          {/* Accent ochre status dot */}
-          <span
-            className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-accent-ochre"
-            aria-hidden="true"
-          />
+            <g transform="translate(4, 4)">
+              <path d="M 2 6 H 20" stroke="#F7F4EE" strokeWidth="4" strokeLinecap="round" />
+              <path d="M 11 6 V 18" stroke="#F7F4EE" strokeWidth="4" strokeLinecap="round" />
+              <path d="M 2 21 L 6.5 34 L 11 25 L 15.5 34 L 20 21" stroke="#F7F4EE" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M 25 6 V 34" stroke="#F7F4EE" strokeWidth="4" strokeLinecap="round" />
+              <path d="M 25 6 H 34 C 37.5 6 40 8.5 40 12 C 40 15.5 37.5 18 34 18 H 25" stroke="#F7F4EE" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M 25 18 H 35 C 39 18 41.5 20.8 41.5 25 C 41.5 29.2 39 34 35 34 H 25" stroke="#F7F4EE" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
+              <circle cx="25" cy="6" r="3.5" fill="#A3512B" />
+            </g>
+          </svg>
         </span>
         <span className="hidden font-headline text-xs font-semibold uppercase tracking-wider text-background md:inline">
           {isOpen ? "Close" : "Ask us"}

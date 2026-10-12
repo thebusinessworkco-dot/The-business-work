@@ -34,7 +34,7 @@ export default function Home() {
     <>
       <JsonLd data={jsonLd} />
       <Header />
-      <main id="main" className="w-full pt-20">
+      <main id="main" className="w-full pt-16 sm:pt-20">
         <Hero />
         <Services />
         <Process />

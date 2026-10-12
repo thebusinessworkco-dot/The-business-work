@@ -15,7 +15,7 @@ export default function Process() {
           <li key={s.phase} className="flex flex-col justify-between border-border-sand py-10 md:border-r md:px-8 md:[&:nth-child(2n)]:border-r-0 lg:[&:nth-child(2n)]:border-r lg:[&:nth-child(3n)]:border-r-0 [&:not(:last-child)]:border-b lg:[&:nth-child(n+4)]:border-b-0 lg:[&:nth-child(-n+3)]:border-b">
             <div>
               <div className="mb-8 font-headline text-xs font-semibold uppercase tracking-wider text-accent-ochre">
-                STEP {String(i + 1).padStart(2, "0")} // {s.phase}
+                STEP {String(i + 1).padStart(2, "0")} {"//"} {s.phase}
               </div>
               <h3 className="mb-3 font-headline text-xl font-medium text-ink">{s.title}</h3>
               <p className="mb-6 font-body text-sm leading-relaxed text-ink-muted">{s.body}</p>

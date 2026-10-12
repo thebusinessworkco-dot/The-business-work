@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowRight, MessageCircle } from "lucide-react";
-import { site, whatsappLink } from "@/lib/site";
+import { site, whatsappLink, isPlaceholder } from "@/lib/site";
 import { useContactModal } from "./ContactModal";
 
 export default function CTA() {
@@ -23,19 +23,23 @@ export default function CTA() {
             <span>Send an Enquiry</span>
             <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
           </button>
-          <a
-            href={whatsappLink()}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex w-full items-center justify-center gap-3 rounded border border-border-taupe bg-surface-card px-8 py-4 font-headline text-xs font-semibold uppercase tracking-wider text-ink transition-colors hover:border-ink hover:bg-[#EAE4D7] sm:w-auto"
-          >
-            <MessageCircle size={18} aria-hidden />
-            <span>Chat on WhatsApp</span>
-          </a>
+          {!isPlaceholder("whatsapp") && (
+            <a
+              href={whatsappLink()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex w-full items-center justify-center gap-3 rounded border border-border-taupe bg-surface-card px-8 py-4 font-headline text-xs font-semibold uppercase tracking-wider text-ink transition-colors hover:border-ink hover:bg-[#EAE4D7] sm:w-auto"
+            >
+              <MessageCircle size={18} aria-hidden />
+              <span>Chat on WhatsApp</span>
+            </a>
+          )}
         </div>
-        <p className="pt-6 font-headline text-xs uppercase tracking-wider text-ink-muted">
-          Or write to <a className="text-ink underline decoration-border-taupe underline-offset-4 hover:text-accent-ochre" href={`mailto:${site.email}`}>{site.email}</a>
-        </p>
+        {!isPlaceholder("email") && (
+          <p className="pt-6 font-headline text-xs uppercase tracking-wider text-ink-muted">
+            Or write to <a className="text-ink underline decoration-border-taupe underline-offset-4 hover:text-accent-ochre" href={`mailto:${site.email}`}>{site.email}</a>
+          </p>
+        )}
         <p className="pt-2 font-body text-xs text-ink-muted">
           What you should know: Third-party costs (AI model usage, WhatsApp provider charges and hosting) are quoted separately.
         </p>

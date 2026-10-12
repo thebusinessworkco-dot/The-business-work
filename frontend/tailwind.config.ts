@@ -27,6 +27,9 @@ const config: Config = {
         xl: "0.75rem",
         full: "9999px",
       },
+      screens: {
+        xs: "480px",
+      },
       fontFamily: {
         headline: ["var(--font-space-grotesk)", "system-ui", "sans-serif"],
         body: ["var(--font-manrope)", "system-ui", "sans-serif"],

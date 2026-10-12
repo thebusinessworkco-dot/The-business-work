@@ -18,22 +18,60 @@ export async function POST(req: Request) {
 
   // 2. Same-origin check
   const origin = req.headers.get("origin");
-  if (origin) {
-    const isDev = process.env.NODE_ENV !== "production";
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "");
-    const normalizedOrigin = origin.replace(/\/$/, "");
+  const referer = req.headers.get("referer");
+  const isDev = process.env.NODE_ENV !== "production";
 
+  let requestOrigin = origin;
+  if (!requestOrigin && referer) {
+    try {
+      requestOrigin = new URL(referer).origin;
+    } catch {
+      requestOrigin = null;
+    }
+  }
+
+  if (requestOrigin) {
+    const normalizedOrigin = requestOrigin.replace(/\/$/, "").toLowerCase();
     const isLocalDev =
       isDev &&
       (normalizedOrigin.startsWith("http://localhost:") ||
         normalizedOrigin.startsWith("http://127.0.0.1:"));
 
-    if (!isLocalDev && (!siteUrl || normalizedOrigin !== siteUrl)) {
-      return NextResponse.json(
-        { error: "Forbidden: cross-origin requests are not allowed." },
-        { status: 403 }
-      );
+    if (!isLocalDev) {
+      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "").toLowerCase();
+      let isAllowed = false;
+
+      if (siteUrl) {
+        if (normalizedOrigin === siteUrl) {
+          isAllowed = true;
+        } else {
+          try {
+            const siteUrlObj = new URL(siteUrl);
+            const reqUrlObj = new URL(normalizedOrigin);
+            const siteHost = siteUrlObj.hostname.replace(/^www\./, "");
+            const reqHost = reqUrlObj.hostname.replace(/^www\./, "");
+
+            if (siteHost === reqHost && siteUrlObj.protocol === reqUrlObj.protocol) {
+              isAllowed = true;
+            }
+          } catch {
+            isAllowed = false;
+          }
+        }
+      }
+
+      if (!isAllowed) {
+        return NextResponse.json(
+          { error: "Forbidden: cross-origin requests are not allowed." },
+          { status: 403 }
+        );
+      }
     }
+  } else if (!isDev) {
+    return NextResponse.json(
+      { error: "Forbidden: request origin cannot be verified." },
+      { status: 403 }
+    );
   }
 
   // 3. Body size limit check on actual bytes read
@@ -116,7 +154,11 @@ export async function POST(req: Request) {
     console.warn(
       "[contact] Lead validated but LEAD_WEBHOOK_URL is not set (dev mode). Lead was not stored."
     );
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({
+      ok: true,
+      devNotice:
+        "Lead validated successfully. In local development without LEAD_WEBHOOK_URL, lead delivery is skipped.",
+    });
   }
 
   // 10. Webhook delivery with 1 retry on network error or 5xx

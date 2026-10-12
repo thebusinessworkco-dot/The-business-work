@@ -3,7 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
 import { services } from "@/content/services";
-import { whatsappLink } from "@/lib/site";
+import { whatsappLink, isPlaceholder } from "@/lib/site";
 
 type Ctx = { openModal: (service?: string) => void; isOpen: boolean };
 const ModalContext = createContext<Ctx>({ openModal: () => {}, isOpen: false });
@@ -70,6 +70,40 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
 
     const form = e.currentTarget;
     const fd = new FormData(form);
+
+    const emailVal = (fd.get("email") as string || "").trim();
+    const phoneVal = (fd.get("phone") as string || "").trim();
+
+    if (!emailVal && !phoneVal) {
+      setError("Please provide an email or phone number.");
+      setStatus("error");
+      return;
+    }
+
+    if (emailVal) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(emailVal)) {
+        setError("Please enter a valid email address.");
+        setStatus("error");
+        return;
+      }
+    }
+
+    if (phoneVal) {
+      const digitsOnly = phoneVal.replace(/^\+/, "").replace(/[\s\-\(\)\[\]\.]/g, "");
+      if (!/^\d{7,15}$/.test(digitsOnly)) {
+        setError("Please enter a valid phone number (7 to 15 digits).");
+        setStatus("error");
+        return;
+      }
+    }
+
+    if (!consent) {
+      setError("Please agree to be contacted to submit your enquiry.");
+      setStatus("error");
+      return;
+    }
+
     const payload: Record<string, unknown> = Object.fromEntries(fd.entries());
     payload.startedAt = startedAt;
     payload.consent = consent;
@@ -198,9 +232,11 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
                 <button type="submit" disabled={status === "sending"} className="w-full rounded bg-ink py-3.5 font-headline text-xs font-semibold uppercase tracking-wider text-background transition-colors hover:bg-accent-ochre disabled:opacity-60">
                   {status === "sending" ? "Sending…" : "Send Enquiry"}
                 </button>
-                <p className="text-center font-body text-xs text-ink-muted">
-                  Prefer chat? <a className="underline underline-offset-4 hover:text-accent-ochre" href={whatsappLink()} target="_blank" rel="noopener noreferrer">Message us on WhatsApp</a>
-                </p>
+                {!isPlaceholder("whatsapp") && (
+                  <p className="text-center font-body text-xs text-ink-muted">
+                    Prefer chat? <a className="underline underline-offset-4 hover:text-accent-ochre" href={whatsappLink()} target="_blank" rel="noopener noreferrer">Message us on WhatsApp</a>
+                  </p>
+                )}
               </form>
             )}
           </div>

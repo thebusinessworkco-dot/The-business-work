@@ -8,6 +8,14 @@
   :focus-visible { outline: 2px solid #181716; outline-offset: 2px; }
 }
 
+@layer utilities {
+  .accordion-panel-transition {
+    transition-property: grid-template-rows, opacity, visibility;
+    transition-duration: 350ms;
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }

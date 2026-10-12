@@ -148,13 +148,20 @@ export class UpstashRedisRateLimiter implements RateLimiter {
  * Extracts client IP safely from request headers.
  */
 export function getClientIp(req: Request): string {
-  const forwarded = req.headers.get("x-forwarded-for");
-  if (forwarded) {
-    const first = forwarded.split(",")[0]?.trim();
-    if (first) return first;
-  }
+  // 1. Check for platform-verified edge IP headers (Vercel, Cloudflare)
+  const vercelIp = req.headers.get("x-vercel-ip")?.trim();
+  if (vercelIp) return vercelIp;
+
   const realIp = req.headers.get("x-real-ip")?.trim();
   if (realIp) return realIp;
+
+  // 2. Safely parse x-forwarded-for header
+  const forwarded = req.headers.get("x-forwarded-for");
+  if (forwarded) {
+    const parts = forwarded.split(",").map((p) => p.trim()).filter(Boolean);
+    if (parts.length > 0) return parts[0];
+  }
+
   return "127.0.0.1";
 }
 

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Logo from "./Logo";
-import { site } from "@/lib/site";
+import { site, isPlaceholder } from "@/lib/site";
 import { services } from "@/content/services";
 
 export default function Footer() {
@@ -13,12 +13,14 @@ export default function Footer() {
             <p className="max-w-sm font-body text-sm leading-relaxed text-ink-muted">
               AI automation and connected digital systems, built around how your business actually works.
             </p>
-            <a
-              className="inline-block font-headline text-xs uppercase tracking-wider text-ink underline decoration-border-taupe underline-offset-4 hover:text-accent-ochre"
-              href={`mailto:${site.email}`}
-            >
-              {site.email}
-            </a>
+            {!isPlaceholder("email") && (
+              <a
+                className="inline-block font-headline text-xs uppercase tracking-wider text-ink underline decoration-border-taupe underline-offset-4 hover:text-accent-ochre"
+                href={`mailto:${site.email}`}
+              >
+                {site.email}
+              </a>
+            )}
           </div>
 
           <div className="space-y-4">
@@ -60,8 +62,11 @@ export default function Footer() {
           <div className="space-y-4">
             <div className="font-headline text-xs uppercase tracking-wider text-ink-muted">Contact</div>
             <div className="space-y-2 font-body text-sm text-ink-muted">
-              <div>{site.phone}</div>
-              <div>{site.location}</div>
+              {!isPlaceholder("phone") && <div>{site.phone}</div>}
+              {!isPlaceholder("location") && <div>{site.location}</div>}
+              {isPlaceholder("phone") && isPlaceholder("location") && (
+                <div>Inquiries via contact form</div>
+              )}
             </div>
             <div className="flex flex-col space-y-2.5 pt-2">
               <Link

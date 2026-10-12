@@ -54,6 +54,17 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     images: [`${siteUrl}/opengraph-image`],
   },
+  icons: {
+    icon: [
+      { url: "/tbw-icon.svg", type: "image/svg+xml" },
+      { url: "/icon", sizes: "32x32", type: "image/png" },
+    ],
+    shortcut: "/tbw-icon.svg",
+    apple: [
+      { url: "/tbw-icon.svg", type: "image/svg+xml" },
+      { url: "/apple-icon", sizes: "180x180", type: "image/png" },
+    ],
+  },
   formatDetection: {
     telephone: false,
     email: false,
