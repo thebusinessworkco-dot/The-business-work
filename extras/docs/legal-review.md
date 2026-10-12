@@ -73,7 +73,7 @@ This script scans `frontend/src/content/legal/privacy.ts` and `frontend/src/cont
 - [ ] **Supply Business Details:** Provide official business registration, registered address, GSTIN, and corporate email.
 - [ ] **Assign Grievance Officer:** Appoint a named Grievance Officer with an official email address as required under Indian IT and DPDP regulations.
 - [ ] **Define Payment & Cancellation Terms:** Set deposit %, payment milestones, invoice due dates, notice periods, and refund rules.
-- [ ] **Define Retention Schedule:** Finalize the inquiry retention period (recommended: 12 months or upon request).
+- [ ] **Define Retention Schedule:** Finalize the enquiry retention period (recommended: 12 months or upon request).
 - [ ] **Jurisdiction City:** Specify your corporate legal jurisdiction (e.g., Bengaluru, Mumbai, Delhi).
 - [ ] **Lawyer Sign-off:** Have an advocate review limitation of liability clauses, DPDP notice alignment, and client responsibility sections.
 - [ ] **Resolve Placeholders:** Replace all `[[TO CONFIRM: ...]]` strings in `frontend/src/content/legal/privacy.ts` and `frontend/src/content/legal/terms.ts`.

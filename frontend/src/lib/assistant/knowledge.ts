@@ -333,7 +333,7 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
       title: "Real estate",
       keywords: ["real estate", "property", "site visit", "builders", "brokers", "realtors"],
       answer:
-        "For real estate agencies, we qualify buyer requirements, schedule property site visits, and instantly notify sales agents with lead summaries.",
+        "For real estate agencies, we qualify buyer requirements, schedule property site visits, and automatically notify sales agents with lead summaries.",
       followUps: ["Our services", "Pricing", "Contact us"],
     },
     {

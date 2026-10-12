@@ -12,12 +12,18 @@ const frontendDir = path.resolve(__dirname, "..");
 
 const args = process.argv.slice(2);
 const isProduction = args.includes("--production");
+let customEnvPath = null;
+const envFileIdx = args.indexOf("--env-file");
+if (envFileIdx !== -1 && args[envFileIdx + 1]) {
+  customEnvPath = path.resolve(process.cwd(), args[envFileIdx + 1]);
+}
 
-// 1. Read process.env and frontend/.env.local (without logging secret values)
+// 1. Read process.env, custom env file or frontend/.env.local (without logging secret values)
 const env = { ...process.env };
-const envLocalPath = path.resolve(frontendDir, ".env.local");
-if (fs.existsSync(envLocalPath)) {
-  const content = fs.readFileSync(envLocalPath, "utf-8");
+
+function parseEnvFile(filePath) {
+  if (!fs.existsSync(filePath)) return;
+  const content = fs.readFileSync(filePath, "utf-8");
   for (const line of content.split("\n")) {
     const trimmed = line.trim();
     if (!trimmed || trimmed.startsWith("#")) continue;
@@ -28,12 +34,18 @@ if (fs.existsSync(envLocalPath)) {
       if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
         val = val.slice(1, -1);
       }
-      if (env[key] === undefined) {
-        env[key] = val;
-      }
+      env[key] = val;
     }
   }
 }
+
+if (customEnvPath) {
+  parseEnvFile(customEnvPath);
+} else {
+  const envLocalPath = path.resolve(frontendDir, ".env.local");
+  parseEnvFile(envLocalPath);
+}
+
 
 // 2. Placeholder guards matching src/lib/site.ts
 function isPlaceholderEmail(email) {

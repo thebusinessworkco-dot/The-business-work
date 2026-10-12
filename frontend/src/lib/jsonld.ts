@@ -1,5 +1,5 @@
 import { site, isPlaceholder, getCleanSiteUrl } from "@/lib/site";
-import type { Service } from "@/content/services";
+import { services, type Service } from "@/content/services";
 
 /**
  * Safely serialize JSON-LD with escaped `<` characters to prevent script injection.
@@ -14,6 +14,7 @@ export type HomeJsonLd = [
     "@type": "WebSite";
     name: string;
     url: string;
+    inLanguage: string;
   },
   {
     "@context": "https://schema.org";
@@ -22,6 +23,10 @@ export type HomeJsonLd = [
     url: string;
     description: string;
     logo: string;
+    areaServed: {
+      "@type": "Country";
+      name: string;
+    };
     email?: string;
     telephone?: string;
     address?: {
@@ -45,52 +50,52 @@ export type HomeJsonLd = [
   }
 ];
 
-export type ServiceJsonLd = [
-  {
-    "@context": "https://schema.org";
-    "@type": "Service";
-    name: string;
-    description: string;
-    url: string;
-    provider: {
-      "@type": "Organization";
+export type ServiceJsonLd = Array<
+  | {
+      "@context": "https://schema.org";
+      "@type": "Service";
       name: string;
+      description: string;
       url: string;
-    };
-    areaServed: {
-      "@type": "Country";
-      name: string;
-    };
-  },
-  {
-    "@context": "https://schema.org";
-    "@type": "BreadcrumbList";
-    itemListElement: Array<{
-      "@type": "ListItem";
-      position: number;
-      name: string;
-      item: string;
-    }>;
-  },
-  {
-    "@context": "https://schema.org";
-    "@type": "FAQPage";
-    mainEntity: Array<{
-      "@type": "Question";
-      name: string;
-      acceptedAnswer: {
-        "@type": "Answer";
-        text: string;
+      provider: {
+        "@type": "Organization";
+        name: string;
+        url: string;
       };
-    }>;
-  }
-];
+      areaServed: {
+        "@type": "Country";
+        name: string;
+      };
+    }
+  | {
+      "@context": "https://schema.org";
+      "@type": "BreadcrumbList";
+      itemListElement: Array<{
+        "@type": "ListItem";
+        position: number;
+        name: string;
+        item: string;
+      }>;
+    }
+  | {
+      "@context": "https://schema.org";
+      "@type": "FAQPage";
+      mainEntity: Array<{
+        "@type": "Question";
+        name: string;
+        acceptedAnswer: {
+          "@type": "Answer";
+          text: string;
+        };
+      }>;
+    }
+>;
 
 /**
  * Structured data for the Home page:
- * - WebSite
- * - Organization (omits placeholder email, phone, location, social)
- * - ProfessionalService (honest agency offering in India with zero fake reviews/ratings)
+ * - WebSite (with inLanguage en-IN)
+ * - Organization (areaServed India, omits placeholder email, phone, location, social)
+ * - ProfessionalService (honest agency offering in India with zero fake reviews/ratings, serviceType derived from services.ts)
  */
 export function getHomeJsonLd(): HomeJsonLd {
   const siteUrl = getCleanSiteUrl();
@@ -102,6 +107,10 @@ export function getHomeJsonLd(): HomeJsonLd {
     url: siteUrl,
     description: site.description,
     logo: `${siteUrl}/icon`,
+    areaServed: {
+      "@type": "Country",
+      name: "India",
+    },
   };
 
   // Only emit contact details if they are verified non-placeholder values
@@ -127,6 +136,7 @@ export function getHomeJsonLd(): HomeJsonLd {
     "@type": "WebSite",
     name: site.name,
     url: siteUrl,
+    inLanguage: "en-IN",
   };
 
   const professionalService: HomeJsonLd[2] = {
@@ -139,16 +149,12 @@ export function getHomeJsonLd(): HomeJsonLd {
       "@type": "Country",
       name: "India",
     },
-    serviceType: [
-      "AI Agents & Chatbots",
-      "CRM & Sales Automation",
-      "Business Workflow Automation",
-      "WhatsApp & Social Automation",
-    ],
+    serviceType: services.map((s) => s.title),
   };
 
   return [website, organization, professionalService];
 }
+
 
 /**
  * Structured data for a Service Detail page:
@@ -202,18 +208,23 @@ export function getServiceJsonLd(service: Service): ServiceJsonLd {
     ],
   };
 
-  const faqSchema: ServiceJsonLd[2] = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: service.faq.map((f) => ({
-      "@type": "Question",
-      name: f.question,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: f.answer,
-      },
-    })),
-  };
+  const schemas: ServiceJsonLd = [serviceSchema, breadcrumb];
 
-  return [serviceSchema, breadcrumb, faqSchema];
+  if (Array.isArray(service.faq) && service.faq.length > 0) {
+    schemas.push({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: service.faq.map((f) => ({
+        "@type": "Question",
+        name: f.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: f.answer,
+        },
+      })),
+    });
+  }
+
+  return schemas;
 }
+

@@ -1,10 +1,60 @@
 import { NextResponse } from "next/server";
 import { parseLead } from "@/lib/lead";
 import { getClientIp, getRateLimiter } from "@/lib/rate-limit";
+import { isPlaceholder } from "@/lib/site";
 
 export const runtime = "nodejs";
 
 const MAX_BODY_BYTES = 10_000;
+
+function getUnavailableMessage(): string {
+  const hasRealWhatsapp = !isPlaceholder("whatsapp");
+  const hasRealEmail = !isPlaceholder("email");
+
+  if (hasRealWhatsapp && hasRealEmail) {
+    return "Our enquiry service is temporarily unavailable. Please try again in a few minutes, or reach us on WhatsApp or email.";
+  }
+  if (hasRealWhatsapp) {
+    return "Our enquiry service is temporarily unavailable. Please try again in a few minutes, or message us on WhatsApp.";
+  }
+  if (hasRealEmail) {
+    return "Our enquiry service is temporarily unavailable. Please try again in a few minutes, or email us directly.";
+  }
+  return "Our enquiry service is temporarily unavailable. Please try again in a few minutes.";
+}
+
+function getTurnstileUnavailableMessage(): string {
+  const hasRealWhatsapp = !isPlaceholder("whatsapp");
+  if (hasRealWhatsapp) {
+    return "Security verification service temporarily unavailable. Please try again in a few minutes or message us on WhatsApp.";
+  }
+  return "Security verification service temporarily unavailable. Please try again in a few minutes.";
+}
+
+function getRateLimitMessage(): string {
+  const hasRealWhatsapp = !isPlaceholder("whatsapp");
+  if (hasRealWhatsapp) {
+    return "Too many requests. Please wait a few minutes before trying again or message us on WhatsApp.";
+  }
+  return "Too many requests. Please wait a few minutes before trying again.";
+}
+
+function getDeliveryFailedMessage(): string {
+  const hasRealWhatsapp = !isPlaceholder("whatsapp");
+  const hasRealEmail = !isPlaceholder("email");
+
+  if (hasRealWhatsapp && hasRealEmail) {
+    return "We couldn't send your enquiry. Please try again in a few minutes, or reach us on WhatsApp or email.";
+  }
+  if (hasRealWhatsapp) {
+    return "We couldn't send your enquiry. Please try again in a few minutes, or message us on WhatsApp.";
+  }
+  if (hasRealEmail) {
+    return "We couldn't send your enquiry. Please try again in a few minutes, or email us directly.";
+  }
+  return "We couldn't send your enquiry. Please try again in a few minutes.";
+}
+
 
 export async function POST(req: Request) {
   // 1. Content-Type check
@@ -91,8 +141,7 @@ export async function POST(req: Request) {
   if (!rateLimitResult.allowed) {
     return NextResponse.json(
       {
-        error:
-          "Too many requests. Please wait a few minutes before trying again or message us on WhatsApp.",
+        error: getRateLimitMessage(),
       },
       {
         status: 429,
@@ -169,8 +218,7 @@ export async function POST(req: Request) {
         console.error(`[turnstile] Verification endpoint returned HTTP ${verifyRes.status}`);
         return NextResponse.json(
           {
-            error:
-              "Security verification service temporarily unavailable. Please message us on WhatsApp or try again.",
+            error: getTurnstileUnavailableMessage(),
           },
           { status: 503 }
         );
@@ -189,8 +237,7 @@ export async function POST(req: Request) {
       console.error("[turnstile] Security verification timed out or network error");
       return NextResponse.json(
         {
-          error:
-            "Security verification service timed out. Please try again or message us on WhatsApp.",
+          error: getTurnstileUnavailableMessage(),
         },
         { status: 503 }
       );
@@ -204,8 +251,7 @@ export async function POST(req: Request) {
       console.error("[contact] LEAD_WEBHOOK_URL is not configured in production.");
       return NextResponse.json(
         {
-          error:
-            "Our enquiry service is temporarily unavailable. Please message us on WhatsApp or email.",
+          error: getUnavailableMessage(),
         },
         { status: 503 }
       );
@@ -227,8 +273,7 @@ export async function POST(req: Request) {
       console.error("[contact] Refused non-HTTPS LEAD_WEBHOOK_URL in production.");
       return NextResponse.json(
         {
-          error:
-            "Our enquiry service is temporarily unavailable. Please message us on WhatsApp or email.",
+          error: getUnavailableMessage(),
         },
         { status: 503 }
       );
@@ -240,8 +285,7 @@ export async function POST(req: Request) {
       console.error("[contact] Refused non-HTTPS NOTIFY_WEBHOOK_URL in production.");
       return NextResponse.json(
         {
-          error:
-            "Our enquiry service is temporarily unavailable. Please message us on WhatsApp or email.",
+          error: getUnavailableMessage(),
         },
         { status: 503 }
       );
@@ -311,11 +355,12 @@ export async function POST(req: Request) {
     );
     return NextResponse.json(
       {
-        error: "We couldn't send your enquiry. Please try WhatsApp or email instead.",
+        error: getDeliveryFailedMessage(),
       },
       { status: 502 }
     );
   }
+
 
   console.info(
     `[contact] Webhook delivery succeeded: status=${lastStatus}, attempts=${attempts}, durationMs=${durationMs}`

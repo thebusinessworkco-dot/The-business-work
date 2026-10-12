@@ -69,6 +69,16 @@ Production readiness is verified in two distinct stages:
    - Validates Cloudflare Turnstile key symmetry.
    - Preflight exits non-zero if any required launch gate check fails.
 
+   > **Running against Real Deployment Variables**: By default, preflight reads the local machine environment and `frontend/.env.local`. Before launch, audit your actual production deployment variables using the `--env-file` option with an untracked, gitignored file (e.g. pulled via Vercel CLI):
+   > ```bash
+   > # Pull production environment variables to an untracked file:
+   > vercel env pull .env.production.local --environment=production
+   >
+   > # Run the preflight launch gate against the production environment file:
+   > npm run preflight -- --production --env-file .env.production.local
+   > ```
+
+
 ---
 
 ## 4. Post-Deployment Verification

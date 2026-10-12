@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { getHomeJsonLd, getServiceJsonLd, serializeJsonLd } from "./jsonld";
 import { services } from "@/content/services";
+import { site } from "@/lib/site";
 
 describe("JSON-LD Structured Data", () => {
   it("generates valid home schemas without emitting placeholder contact data", () => {
@@ -9,10 +10,18 @@ describe("JSON-LD Structured Data", () => {
 
     const [website, org, profService] = schemas;
     expect(website["@type"]).toBe("WebSite");
-    expect(org["@type"]).toBe("Organization");
-    expect(profService["@type"]).toBe("ProfessionalService");
+    expect(website.inLanguage).toBe("en-IN");
 
-    // Placeholder guard test: email, phone, address, sameAs must NOT be emitted
+    expect(org["@type"]).toBe("Organization");
+    expect(org.description).toBe(site.description);
+    expect(org.areaServed.name).toBe("India");
+
+    expect(profService["@type"]).toBe("ProfessionalService");
+    expect(profService.description).toBe(site.description);
+    expect(profService.areaServed.name).toBe("India");
+    expect(profService.serviceType).toEqual(services.map((s) => s.title));
+
+    // Placeholder guard test: email, phone, address, sameAs must NOT be emitted while placeholders
     expect(org.email).toBeUndefined();
     expect(org.telephone).toBeUndefined();
     expect(org.address).toBeUndefined();
@@ -36,19 +45,53 @@ describe("JSON-LD Structured Data", () => {
     expect(serialized).toContain("\\u003c");
   });
 
-  it("generates valid service schemas with matching FAQ text", () => {
-    const service = services[0];
-    const [serviceSchema, breadcrumb, faq] = getServiceJsonLd(service);
+  it("contains no banned words or unsupported claims in home or service structured data", () => {
+    const homeJson = JSON.stringify(getHomeJsonLd()).toLowerCase();
+    const banned = ["guarantee", "100%", "instant", "worldwide", "high accuracy", "autonomous", "deterministic", "production ai"];
+    for (const word of banned) {
+      expect(homeJson).not.toContain(word);
+    }
 
-    expect(serviceSchema["@type"]).toBe("Service");
-    expect(serviceSchema.name).toBe(service.title);
+    for (const service of services) {
+      const serviceJson = JSON.stringify(getServiceJsonLd(service)).toLowerCase();
+      for (const word of banned) {
+        expect(serviceJson).not.toContain(word);
+      }
+    }
+  });
 
-    expect(breadcrumb["@type"]).toBe("BreadcrumbList");
-    expect(breadcrumb.itemListElement).toHaveLength(3);
+  it("generates valid service schemas with matching FAQ text and areaServed India", () => {
+    for (const service of services) {
+      const schemas = getServiceJsonLd(service);
+      const serviceSchema = schemas.find((s) => s["@type"] === "Service");
+      const breadcrumb = schemas.find((s) => s["@type"] === "BreadcrumbList");
+      const faq = schemas.find((s) => s["@type"] === "FAQPage");
 
-    expect(faq["@type"]).toBe("FAQPage");
-    expect(faq.mainEntity).toHaveLength(service.faq.length);
-    expect(faq.mainEntity[0].name).toBe(service.faq[0].question);
-    expect(faq.mainEntity[0].acceptedAnswer.text).toBe(service.faq[0].answer);
+      expect(serviceSchema).toBeDefined();
+      if (serviceSchema && serviceSchema["@type"] === "Service") {
+        expect(serviceSchema.name).toBe(service.title);
+        expect(serviceSchema.description).toBe(service.summary);
+        expect(serviceSchema.areaServed.name).toBe("India");
+      }
+
+      expect(breadcrumb).toBeDefined();
+      if (breadcrumb && breadcrumb["@type"] === "BreadcrumbList") {
+        expect(breadcrumb.itemListElement).toHaveLength(3);
+      }
+
+      if (service.faq && service.faq.length > 0) {
+        expect(faq).toBeDefined();
+        if (faq && faq["@type"] === "FAQPage") {
+          expect(faq.mainEntity).toHaveLength(service.faq.length);
+          service.faq.forEach((f, idx) => {
+            expect(faq.mainEntity[idx].name).toBe(f.question);
+            expect(faq.mainEntity[idx].acceptedAnswer.text).toBe(f.answer);
+          });
+        }
+      } else {
+        expect(faq).toBeUndefined();
+      }
+    }
   });
 });
+

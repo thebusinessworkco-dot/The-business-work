@@ -4,9 +4,13 @@ node_modules/
 out/
 .env*
 !.env.example
-frontend/qa/screenshots/
+frontend/qa/*
+!frontend/qa/README.md
 test-results/
 playwright-report/
 *.tsbuildinfo
 next-env.d.ts
 scratch/
+.env.production.local
+.env*.local
+
