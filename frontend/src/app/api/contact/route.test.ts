@@ -177,4 +177,83 @@ describe("Contact API Route (/api/contact)", () => {
     const data = await res.json();
     expect(data.error).toContain("couldn't send your enquiry");
   });
+
+  describe("Same-origin verification", () => {
+    beforeEach(() => {
+      globalThis.fetch = vi.fn().mockImplementation(() => {
+        return Promise.resolve(new Response(JSON.stringify({ ok: true }), { status: 200 }));
+      });
+    });
+
+    it("passes the origin check when Origin equals the Host header", async () => {
+      const req = new Request("http://yourdomain.test/api/contact", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          origin: "http://yourdomain.test",
+          host: "yourdomain.test",
+          "x-forwarded-for": "192.168.1.100",
+        },
+        body: JSON.stringify(validLeadBody),
+      });
+      const res = await POST(req);
+      expect(res.status).toBe(200);
+      const data = await res.json();
+      expect(data.ok).toBe(true);
+    });
+
+    it("returns 403 when Origin is https://evil.example", async () => {
+      const req = new Request("http://yourdomain.test/api/contact", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          origin: "https://evil.example",
+          host: "yourdomain.test",
+          "x-forwarded-for": "192.168.1.101",
+        },
+        body: JSON.stringify(validLeadBody),
+      });
+      const res = await POST(req);
+      expect(res.status).toBe(403);
+      const data = await res.json();
+      expect(data.error).toContain("Forbidden");
+    });
+
+    it("returns 403 for Origin: http://localhost:9999 with Host: yourdomain.test in production mode", async () => {
+      (process.env as Record<string, string | undefined>).NODE_ENV = "production";
+      process.env.NEXT_PUBLIC_SITE_URL = "https://yourdomain.test";
+
+      const req = new Request("http://yourdomain.test/api/contact", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          origin: "http://localhost:9999",
+          host: "yourdomain.test",
+          "x-forwarded-for": "192.168.1.102",
+        },
+        body: JSON.stringify(validLeadBody),
+      });
+      const res = await POST(req);
+      expect(res.status).toBe(403);
+      const data = await res.json();
+      expect(data.error).toContain("Forbidden");
+    });
+
+    it("passes the origin check when no Origin header is present", async () => {
+      const req = new Request("http://yourdomain.test/api/contact", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          host: "yourdomain.test",
+          "x-forwarded-for": "192.168.1.103",
+        },
+        body: JSON.stringify(validLeadBody),
+      });
+      const res = await POST(req);
+      expect(res.status).toBe(200);
+      const data = await res.json();
+      expect(data.ok).toBe(true);
+    });
+  });
 });
+

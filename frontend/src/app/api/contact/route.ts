@@ -68,62 +68,42 @@ export async function POST(req: Request) {
 
   // 2. Same-origin check
   const origin = req.headers.get("origin");
-  const referer = req.headers.get("referer");
-  const isDev = process.env.NODE_ENV !== "production";
-
-  let requestOrigin = origin;
-  if (!requestOrigin && referer) {
+  if (origin) {
+    let originHost: string | null = null;
     try {
-      requestOrigin = new URL(referer).origin;
+      originHost = new URL(origin).host.toLowerCase();
     } catch {
-      requestOrigin = null;
+      return NextResponse.json(
+        { error: "Forbidden: cross-origin requests are not allowed." },
+        { status: 403 }
+      );
     }
-  }
 
-  if (requestOrigin) {
-    const normalizedOrigin = requestOrigin.replace(/\/$/, "").toLowerCase();
-    const isLocalDev =
-      normalizedOrigin.startsWith("http://localhost:") ||
-      normalizedOrigin.startsWith("http://127.0.0.1:") ||
-      normalizedOrigin === "http://localhost" ||
-      normalizedOrigin === "http://127.0.0.1";
+    const forwardedHost = req.headers.get("x-forwarded-host");
+    const rawHost = forwardedHost
+      ? forwardedHost.split(",")[0].trim()
+      : req.headers.get("host") || (req.url ? new URL(req.url).host : null);
+    const requestHost = rawHost ? rawHost.toLowerCase().trim() : null;
 
-
-    if (!isLocalDev) {
-      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "").toLowerCase();
-      let isAllowed = false;
-
-      if (siteUrl) {
-        if (normalizedOrigin === siteUrl) {
-          isAllowed = true;
-        } else {
-          try {
-            const siteUrlObj = new URL(siteUrl);
-            const reqUrlObj = new URL(normalizedOrigin);
-            const siteHost = siteUrlObj.hostname.replace(/^www\./, "");
-            const reqHost = reqUrlObj.hostname.replace(/^www\./, "");
-
-            if (siteHost === reqHost && siteUrlObj.protocol === reqUrlObj.protocol) {
-              isAllowed = true;
-            }
-          } catch {
-            isAllowed = false;
-          }
-        }
-      }
-
-      if (!isAllowed) {
-        return NextResponse.json(
-          { error: "Forbidden: cross-origin requests are not allowed." },
-          { status: 403 }
-        );
+    let siteHost: string | null = null;
+    if (process.env.NEXT_PUBLIC_SITE_URL) {
+      try {
+        siteHost = new URL(process.env.NEXT_PUBLIC_SITE_URL).host.toLowerCase();
+      } catch {
+        siteHost = null;
       }
     }
-  } else if (!isDev) {
-    return NextResponse.json(
-      { error: "Forbidden: request origin cannot be verified." },
-      { status: 403 }
-    );
+
+    const isAllowed =
+      Boolean((requestHost && originHost === requestHost) ||
+      (siteHost && originHost === siteHost));
+
+    if (!isAllowed) {
+      return NextResponse.json(
+        { error: "Forbidden: cross-origin requests are not allowed." },
+        { status: 403 }
+      );
+    }
   }
 
   // 3. Body size limit check on actual bytes read
