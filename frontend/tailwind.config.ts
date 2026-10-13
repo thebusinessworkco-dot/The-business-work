@@ -19,6 +19,14 @@ const config: Config = {
         "accent-ochre-dark": "#8F4524",
         primary: "#181716",
         "on-primary": "#F7F4EE",
+
+        // Semantic section background and on-dark accent tokens
+        "section-cream": "#F7F4EE",
+        "section-sand": "#EFEBE1",
+        "section-ochre": "#F5EBE1",
+        "section-sage": "#E8EDE5",
+        "section-ink": "#181716",
+        "ochre-on-dark": "#E0A27F",
       },
       borderRadius: {
         DEFAULT: "0.25rem",

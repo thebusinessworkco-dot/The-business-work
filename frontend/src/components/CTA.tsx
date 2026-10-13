@@ -7,18 +7,18 @@ import { useContactModal } from "./ContactModal";
 export default function CTA() {
   const { openModal } = useContactModal();
   return (
-    <section id="contact" aria-labelledby="cta-title" className="w-full border-t border-border-sand bg-surface-muted/70 py-28 md:py-36">
+    <section id="contact" aria-labelledby="cta-title" className="w-full bg-section-ink text-section-cream py-28 md:py-36">
       <div className="mx-auto max-w-4xl space-y-8 px-6 text-center">
-        <h2 id="cta-title" className="font-headline text-4xl font-medium tracking-tight text-ink sm:text-5xl lg:text-6xl">
+        <h2 id="cta-title" className="font-headline text-4xl font-medium tracking-tight text-section-cream sm:text-5xl lg:text-6xl">
           Let&apos;s make your business work smarter.
         </h2>
-        <p className="mx-auto max-w-2xl font-body text-base leading-relaxed text-ink-muted sm:text-lg">
+        <p className="mx-auto max-w-2xl font-body text-base leading-relaxed text-section-sand sm:text-lg">
           Tell us how your business works. Share the problem, even if you don&apos;t know which technology you need, and we&apos;ll come back with a suggested approach.
         </p>
         <div className="flex flex-col items-center justify-center gap-4 pt-4 sm:flex-row">
           <button
             onClick={() => openModal(undefined, "cta")}
-            className="group inline-flex w-full items-center justify-center gap-3 rounded bg-ink px-8 py-4 font-headline text-xs font-semibold uppercase tracking-wider text-background transition-colors hover:bg-accent-ochre sm:w-auto"
+            className="group inline-flex w-full items-center justify-center gap-3 rounded bg-section-cream px-8 py-4 font-headline text-xs font-semibold uppercase tracking-wider text-ink transition-colors hover:bg-ochre-on-dark sm:w-auto"
           >
             <span>Send an Enquiry</span>
             <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
@@ -27,16 +27,16 @@ export default function CTA() {
             href={whatsappLink()}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex w-full items-center justify-center gap-3 rounded border border-border-taupe bg-surface-card px-8 py-4 font-headline text-xs font-semibold uppercase tracking-wider text-ink transition-colors hover:border-ink hover:bg-[#EAE4D7] sm:w-auto"
+            className="inline-flex w-full items-center justify-center gap-3 rounded border border-section-cream/60 bg-transparent px-8 py-4 font-headline text-xs font-semibold uppercase tracking-wider text-section-cream transition-colors hover:border-section-cream hover:bg-section-cream/10 sm:w-auto"
           >
             <MessageCircle size={18} aria-hidden />
             <span>Chat on WhatsApp</span>
           </a>
         </div>
-        <p className="pt-6 font-headline text-xs uppercase tracking-wider text-ink-muted">
-          Or write to <a className="text-ink underline decoration-border-taupe underline-offset-4 hover:text-accent-ochre" href={`mailto:${site.email}`}>{site.email}</a>
+        <p className="pt-6 font-headline text-xs uppercase tracking-wider text-section-sand">
+          Or write to <a className="text-section-cream underline decoration-section-cream/60 underline-offset-4 hover:text-ochre-on-dark" href={`mailto:${site.email}`}>{site.email}</a>
         </p>
-        <p className="pt-2 font-body text-xs text-ink-muted">
+        <p className="pt-2 font-body text-xs text-section-sand/80">
           What you should know: Third-party costs (AI model usage, WhatsApp provider charges and hosting) are quoted separately.
         </p>
       </div>

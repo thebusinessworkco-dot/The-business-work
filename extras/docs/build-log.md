@@ -266,4 +266,39 @@ This document logs significant structural, architectural, and operational tasks 
 - Not run and why:
   - None. All required checks, tests, builds, crawlers, and audits ran to completion.
 
+---
+
+## 2026-10-13 — Section Background Colours & Palette Contrast Hardening
+- Scope: Calm warm palette section backgrounds (cream, sand, ochre tint, sage tint, single dark CTA section in ink). Color changes only.
+- Changes made:
+  - `frontend/tailwind.config.ts`: Extended with semantic tokens `section-cream` (`#F7F4EE`), `section-sand` (`#EFEBE1`), `section-ochre` (`#F5EBE1`), `section-sage` (`#E8EDE5`), `section-ink` (`#181716`), and `ochre-on-dark` (`#E0A27F`).
+  - `frontend/scripts/contrast.mjs`: Extended to 40 semantic pairs testing all text, borders, buttons, and backgrounds. All 40 pairs passed WCAG AA/AAA.
+  - `frontend/src/app/globals.css`: Added scoped cream focus ring for `#contact :focus-visible` and `.dark-section :focus-visible`.
+  - Section wrapper updates (home page):
+    - Hero: `section-cream` (`#F7F4EE`)
+    - Services: `section-sand` (`#EFEBE1`)
+    - How We Work (`Process`): `section-cream` (`#F7F4EE`)
+    - Industries: `section-ochre` (`#F5EBE1`)
+    - Demos (`Work`): `section-cream` (`#F7F4EE`) with `surface-card` white cards
+    - Why The Business Work (`Principles`): `section-sage` (`#E8EDE5`) with `surface-card` white cards
+    - Final CTA: `section-ink` (`#181716`) with `section-cream` typography, cream primary button (`hover:bg-ochre-on-dark`), cream ghost secondary button, underlined links, and visible cream focus rings
+    - Footer: `section-sand` (`#EFEBE1`)
+  - Service detail pages (`/services/[slug]`):
+    - Breadcrumbs & Hero area: `section-cream`
+    - Alternating sections: Capabilities (`section-sand`), Use Cases (`section-cream`), How It Works (`section-sand`), Limits (`section-cream`), FAQ (`section-sand`), Other Services (`section-sand`)
+    - Dark CTA block: `section-ink` card with cream typography and button inside cream section
+  - `frontend/src/components/assistant/AssistantWidget.tsx`: Added subtle 1px cream ring (`ring-1 ring-section-cream/35`) to launcher button for delineation over dark ink CTA section.
+  - `extras/docs/design-tokens.md`: Created documenting palette table, section map, contrast ratios, and how-to guide.
+- Validation:
+  - `npm run lint --prefix frontend`: PASS (0 warnings, 0 errors)
+  - `npm run typecheck --prefix frontend`: PASS (0 errors)
+  - `npm run test --prefix frontend`: PASS (97/97 tests passed)
+  - `npm run build --prefix frontend`: PASS (14/14 static and dynamic routes compiled)
+  - `node frontend/scripts/contrast.mjs`: PASS (40/40 pairs passed WCAG AA/AAA)
+  - `npm run test:a11y --prefix frontend`: PASS (17/17 axe & assistant tests passed)
+  - Playwright responsive, cookie-consent, keyboard suites: PASS (29/29 tests passed)
+  - `npm run links:check --prefix frontend -- http://localhost:3000`: PASS (194 links, 0 broken, 0 anchor errors)
+  - `npm run smoke --prefix frontend -- http://localhost:3000 --expect-noindex`: PASS (14/14 endpoints verified)
+
+
 

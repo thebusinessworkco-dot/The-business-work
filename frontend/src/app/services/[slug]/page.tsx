@@ -64,7 +64,7 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
       <JsonLd data={jsonLd} />
       <Header />
 
-      <main id="main" className="w-full pt-28 md:pt-32">
+      <main id="main" className="w-full pt-28 md:pt-32 bg-section-cream">
         {/* Breadcrumb Navigation */}
         <div className="mx-auto max-w-7xl px-6 lg:px-12">
           <nav aria-label="Breadcrumb" className="mb-8 border-b border-border-sand pb-4">
@@ -127,7 +127,7 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
         </section>
 
         {/* Capabilities Section */}
-        <section className="w-full border-t border-border-sand bg-surface-muted/60 py-20">
+        <section className="w-full border-t border-border-sand bg-section-sand py-20">
           <div className="mx-auto max-w-7xl px-6 lg:px-12">
             <div className="mb-12">
               <div className="mb-2 font-headline text-xs font-semibold uppercase tracking-[0.2em] text-accent-ochre">
@@ -152,34 +152,36 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
         </section>
 
         {/* Use Cases Section */}
-        <section className="mx-auto max-w-7xl px-6 py-20 lg:px-12">
-          <div className="mb-12">
-            <div className="mb-2 font-headline text-xs font-semibold uppercase tracking-[0.2em] text-accent-ochre">
-              Real Scenarios
-            </div>
-            <h2 className="font-headline text-3xl font-medium tracking-tight text-ink">
-              Typical Use Cases
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            {service.useCases.map((uc, i) => (
-              <div
-                key={uc}
-                className="rounded-lg border border-border-sand bg-surface-card p-7 transition-colors hover:border-border-taupe"
-              >
-                <div className="mb-3 font-headline text-xs font-semibold uppercase tracking-wider text-ink-muted">
-                  Use Case {String(i + 1).padStart(2, "0")}
-                </div>
-                <h3 className="font-body text-base font-normal leading-relaxed text-ink">
-                  {uc}
-                </h3>
+        <section className="w-full border-t border-border-sand bg-section-cream py-20">
+          <div className="mx-auto max-w-7xl px-6 lg:px-12">
+            <div className="mb-12">
+              <div className="mb-2 font-headline text-xs font-semibold uppercase tracking-[0.2em] text-accent-ochre">
+                Real Scenarios
               </div>
-            ))}
+              <h2 className="font-headline text-3xl font-medium tracking-tight text-ink">
+                Typical Use Cases
+              </h2>
+            </div>
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+              {service.useCases.map((uc, i) => (
+                <div
+                  key={uc}
+                  className="rounded-lg border border-border-sand bg-surface-card p-7 transition-colors hover:border-border-taupe"
+                >
+                  <div className="mb-3 font-headline text-xs font-semibold uppercase tracking-wider text-ink-muted">
+                    Use Case {String(i + 1).padStart(2, "0")}
+                  </div>
+                  <h3 className="font-body text-base font-normal leading-relaxed text-ink">
+                    {uc}
+                  </h3>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
         {/* How It Works Section */}
-        <section className="w-full border-t border-border-sand bg-surface-muted/60 py-20">
+        <section className="w-full border-t border-border-sand bg-section-sand py-20">
           <div className="mx-auto max-w-7xl px-6 lg:px-12">
             <div className="mb-12">
               <div className="mb-2 font-headline text-xs font-semibold uppercase tracking-[0.2em] text-accent-ochre">
@@ -208,29 +210,31 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
         </section>
 
         {/* Limits & What To Know */}
-        <section className="mx-auto max-w-7xl px-6 py-20 lg:px-12">
-          <div className="rounded-lg border border-border-sand bg-surface-card p-8 sm:p-10">
-            <div className="mb-6 flex items-center gap-3">
-              <AlertCircle size={20} className="text-accent-ochre" aria-hidden="true" />
-              <h2 className="font-headline text-2xl font-medium tracking-tight text-ink">
-                What You Should Know &amp; Honest Limits
-              </h2>
+        <section className="w-full border-t border-border-sand bg-section-cream py-20">
+          <div className="mx-auto max-w-7xl px-6 lg:px-12">
+            <div className="rounded-lg border border-border-sand bg-surface-card p-8 sm:p-10">
+              <div className="mb-6 flex items-center gap-3">
+                <AlertCircle size={20} className="text-accent-ochre" aria-hidden="true" />
+                <h2 className="font-headline text-2xl font-medium tracking-tight text-ink">
+                  What You Should Know &amp; Honest Limits
+                </h2>
+              </div>
+              <ul className="space-y-4">
+                {service.limits.map((limit) => (
+                  <li key={limit} className="flex items-start gap-3">
+                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent-ochre" />
+                    <span className="font-body text-sm leading-relaxed text-ink-muted">
+                      {limit}
+                    </span>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <ul className="space-y-4">
-              {service.limits.map((limit) => (
-                <li key={limit} className="flex items-start gap-3">
-                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent-ochre" />
-                  <span className="font-body text-sm leading-relaxed text-ink-muted">
-                    {limit}
-                  </span>
-                </li>
-              ))}
-            </ul>
           </div>
         </section>
 
         {/* FAQ Section */}
-        <section className="w-full border-t border-border-sand bg-surface-muted/60 py-20">
+        <section className="w-full border-t border-border-sand bg-section-sand py-20">
           <div className="mx-auto max-w-4xl px-6">
             <div className="mb-12 text-center">
               <div className="mb-2 font-headline text-xs font-semibold uppercase tracking-[0.2em] text-accent-ochre">
@@ -262,22 +266,27 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
         </section>
 
         {/* CTA Banner */}
-        <section className="mx-auto max-w-7xl px-6 py-20 lg:px-12">
-          <div className="flex flex-col items-start justify-between gap-8 rounded-lg border border-border-sand bg-surface-card p-8 sm:flex-row sm:items-center sm:p-12">
-            <div className="max-w-xl space-y-2">
-              <h2 className="font-headline text-2xl font-medium tracking-tight text-ink sm:text-3xl">
-                Ready to automate your {service.title.toLowerCase()}?
-              </h2>
-              <p className="font-body text-sm leading-relaxed text-ink-muted">
-                Tell us about your daily bottlenecks. We will recommend the simplest suitable approach with a written scope and cost estimate.
-              </p>
+        <section className="w-full border-t border-border-sand bg-section-cream py-20">
+          <div className="mx-auto max-w-7xl px-6 lg:px-12">
+            <div className="dark-section flex flex-col items-start justify-between gap-8 rounded-lg border border-section-ink bg-section-ink p-8 sm:flex-row sm:items-center sm:p-12 text-section-cream">
+              <div className="max-w-xl space-y-2">
+                <h2 className="font-headline text-2xl font-medium tracking-tight text-section-cream sm:text-3xl">
+                  Ready to automate your {service.title.toLowerCase()}?
+                </h2>
+                <p className="font-body text-sm leading-relaxed text-section-sand">
+                  Tell us about your daily bottlenecks. We will recommend the simplest suitable approach with a written scope and cost estimate.
+                </p>
+              </div>
+              <DiscussProjectButton
+                serviceTitle={service.title}
+                className="inline-flex items-center justify-center gap-2.5 rounded bg-section-cream px-7 py-3.5 font-headline text-xs font-semibold uppercase tracking-wider text-ink transition-colors hover:bg-ochre-on-dark"
+              />
             </div>
-            <DiscussProjectButton serviceTitle={service.title} />
           </div>
         </section>
 
         {/* Other Services Section */}
-        <section className="w-full border-t border-border-sand bg-surface-muted/60 py-20">
+        <section className="w-full border-t border-border-sand bg-section-sand py-20">
           <div className="mx-auto max-w-7xl px-6 lg:px-12">
             <div className="mb-12">
               <div className="mb-2 font-headline text-xs font-semibold uppercase tracking-[0.2em] text-accent-ochre">

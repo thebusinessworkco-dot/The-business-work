@@ -5,7 +5,7 @@ import { services } from "@/content/services";
 
 export default function Footer() {
   return (
-    <footer className="w-full border-t border-border-sand bg-background">
+    <footer className="w-full border-t border-border-sand bg-section-sand">
       <div className="mx-auto max-w-7xl px-6 pb-12 pt-16 lg:px-12">
         <div className="grid grid-cols-1 gap-12 border-b border-border-sand pb-16 md:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-4">

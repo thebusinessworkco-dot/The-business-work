@@ -3,7 +3,7 @@ import SectionHeading from "./SectionHeading";
 
 export default function Principles() {
   return (
-    <section id="why-us" aria-labelledby="why-title" className="w-full border-t border-border-sand bg-surface-muted/60 py-24 md:py-32">
+    <section id="why-us" aria-labelledby="why-title" className="w-full border-t border-border-sand bg-section-sage py-24 md:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-12">
         <SectionHeading
           eyebrow="05 / WHY THE BUSINESS WORK"

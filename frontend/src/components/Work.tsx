@@ -128,15 +128,17 @@ function DemoCard({ demo }: { demo: Demo }) {
 
 export default function Work() {
   return (
-    <section id="demos" aria-labelledby="demos-title" className="mx-auto w-full max-w-7xl px-6 py-24 md:py-32 lg:px-12">
-      <SectionHeading
-        eyebrow="04 / DEMOS"
-        title="What we're building and testing."
-        id="demos-title"
-        aside="Each project is labelled with its real status. No client deployments are claimed here yet."
-      />
-      <div className="space-y-12 pt-14">
-        {demos.map((d) => <DemoCard key={d.id} demo={d} />)}
+    <section id="demos" aria-labelledby="demos-title" className="w-full bg-section-cream py-24 md:py-32">
+      <div className="mx-auto max-w-7xl px-6 lg:px-12">
+        <SectionHeading
+          eyebrow="04 / DEMOS"
+          title="What we're building and testing."
+          id="demos-title"
+          aside="Each project is labelled with its real status. No client deployments are claimed here yet."
+        />
+        <div className="space-y-12 pt-14">
+          {demos.map((d) => <DemoCard key={d.id} demo={d} />)}
+        </div>
       </div>
     </section>
   );
