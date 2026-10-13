@@ -281,10 +281,9 @@ export async function POST(req: Request) {
   const payload: Record<string, unknown> = { ...lead };
 
   if (secret) {
-    if (secretMode === "body") {
+    headers["x-webhook-secret"] = secret;
+    if (secretMode === "body" || hook.includes("script.google.com")) {
       payload.secret = secret;
-    } else {
-      headers["x-webhook-secret"] = secret;
     }
   }
 
@@ -301,7 +300,7 @@ export async function POST(req: Request) {
         method: "POST",
         headers,
         body: bodyStr,
-        signal: AbortSignal.timeout(8000),
+        signal: AbortSignal.timeout(12000),
       });
 
       lastStatus = res.status;
