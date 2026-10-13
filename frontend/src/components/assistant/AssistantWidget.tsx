@@ -35,7 +35,7 @@ export default function AssistantWidget() {
     {
       id: "initial",
       sender: "bot",
-      text: "I answer common questions from this website's information. I'm an automated assistant, not a person.",
+      text: "I answer common questions from this website. I am an automated assistant, not a person.",
       chips: INITIAL_CHIPS,
     },
   ]);
@@ -85,7 +85,7 @@ export default function AssistantWidget() {
       {
         id: `init-${Date.now()}`,
         sender: "bot",
-        text: "I answer common questions from this website's information. I'm an automated assistant, not a person.",
+        text: "I answer common questions from this website. I am an automated assistant, not a person.",
         chips: INITIAL_CHIPS,
       },
     ]);
@@ -122,7 +122,7 @@ export default function AssistantWidget() {
           {
             id: `bot-${Date.now()}`,
             sender: "bot",
-            text: "We provide 4 core services tailored to your workflows. Select one to learn more:",
+            text: "We offer 4 simple services. Pick one to read more:",
             chips: [
               "AI Agents & Chatbots",
               "CRM & Sales Automation",
@@ -142,7 +142,7 @@ export default function AssistantWidget() {
           {
             id: `bot-${Date.now()}`,
             sender: "bot",
-            text: "We automate operations across 6 key industries. Select an industry to see details:",
+            text: "We build tools for 6 industries. Pick one to see details:",
             chips: [
               "Healthcare & clinics",
               "Local businesses",
@@ -178,7 +178,7 @@ export default function AssistantWidget() {
         let fallbackText = FALLBACK_ANSWER;
         if (nextFallbackCount > 1) {
           fallbackText =
-            "I still don't have that information. Please send an enquiry through our form below, and our team will get back to you with exact details.";
+            "I still do not have that info. Please send an enquiry, and we will reply.";
         }
 
         setMessages((prev) => [

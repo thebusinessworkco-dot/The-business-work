@@ -37,8 +37,6 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
   const p2 = principles[1];
   const p3 = principles[2];
 
-  const whatsappAvailable = !isPlaceholder("whatsapp");
-
   const entries: AssistantEntry[] = [
     // 1. Identity & Nature of Assistant
     {
@@ -57,7 +55,7 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
         "ai model",
       ],
       answer:
-        "I am an automated assistant for The Business Work. I am not an AI language model and not a person. I provide answers directly from this website's published content to help you learn about our services.",
+        "I am an automated assistant for The Business Work. I am not an AI model and not a person. I give answers directly from this website to help you learn about our services.",
       followUps: ["Our services", "How a project works", "Pricing"],
     },
 
@@ -78,8 +76,7 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
         "kaam kya hai",
       ],
       answer:
-        `${site.name} is an AI automation and digital systems agency based in India. ` +
-        `We build practical AI agents, WhatsApp automation, and CRM workflows around your business operations to reduce repetitive tasks.`,
+        `${site.name} is an agency based in India. We build simple tools for your business. They answer customers on WhatsApp, track leads, and send reminders for you.`,
       followUps: ["Our services", "How a project works", "Contact us"],
     },
 
@@ -99,7 +96,7 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
         "kiska business hai",
       ],
       answer:
-        `The Business Work was founded by ${site.founder}. He builds practical automation and digital systems for businesses in India and worldwide, focusing on daily workflows, clear scope, human oversight, and clean handovers.`,
+        `The Business Work was founded by ${site.founder}. He builds simple tools for businesses in India and beyond. He learns how your work runs and builds a fix with clear scope.`,
       followUps: ["What The Business Work does", "Our services", "Contact us"],
     },
 
@@ -117,11 +114,7 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
         "kya provide karte ho",
       ],
       answer:
-        `We offer exactly 4 core services: ` +
-        `1. ${s1.title}, ` +
-        `2. ${s2.title}, ` +
-        `3. ${s3.title}, and ` +
-        `4. ${s4.title}. Each system is tailored around your workflow.`,
+        `We offer 4 services: 1. ${s1.title}, 2. ${s2.title}, 3. ${s3.title}, and 4. ${s4.title}. Each tool is built around how your business works.`,
       followUps: [s1.title, s2.title, s3.title, s4.title],
     },
     {
@@ -140,8 +133,7 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
         "customer support",
       ],
       answer:
-        `${s1.title}: ${s1.summary} It solves ${s1.solves.toLowerCase()} ` +
-        `Scope depends on your business data and model choice. Model usage carries variable third-party fees.`,
+        `${s1.title}: ${s1.summary} It solves ${s1.solves.toLowerCase()} AI providers charge their own fees. Who pays is agreed in your written proposal.`,
       followUps: ["Custom solutions", "Pricing", "How a project works"],
     },
     {
@@ -159,8 +151,7 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
         "leads",
       ],
       answer:
-        `${s2.title}: ${s2.summary} It solves ${s2.solves.toLowerCase()} ` +
-        `We work with your existing CRM or suggest one fitting your team without pushing any single vendor.`,
+        `${s2.title}: ${s2.summary} It solves ${s2.solves.toLowerCase()} We work with your CRM or suggest one that fits your team and budget.`,
       followUps: ["Our services", "Pricing", "How a project works"],
     },
     {
@@ -179,8 +170,7 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
         "system integration",
       ],
       answer:
-        `${s3.title}: ${s3.summary} It solves ${s3.solves.toLowerCase()} ` +
-        `We prefer simple rule-based automations over AI wherever simpler and more reliable.`,
+        `${s3.title}: ${s3.summary} It solves ${s3.solves.toLowerCase()} We prefer simple rule-based tools over AI whenever they are simpler and more reliable.`,
       followUps: ["Our services", "Pricing", "How a project works"],
     },
     {
@@ -198,8 +188,7 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
         "whatsapp bot chahiye",
       ],
       answer:
-        `${s4.title}: ${s4.summary} It solves ${s4.solves.toLowerCase()} ` +
-        `All messaging features require official Meta approval, approved templates, and customer opt-in.`,
+        `${s4.title}: ${s4.summary} It solves ${s4.solves.toLowerCase()} All messaging features require Meta approval, approved templates, and customer consent.`,
       followUps: ["WhatsApp limits", "Pricing", "How a project works"],
     },
 
@@ -217,7 +206,7 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
         "kuch alag chahiye",
       ],
       answer:
-        "If your operations don't fit into a standard package, we design custom automations linking your specific tools, forms, and databases. We start by mapping your bottleneck.",
+        "If your business does not fit a standard setup, we design custom tools for you. We connect your specific apps, forms, and sheets. We start by finding what slows you down.",
       followUps: ["How a project works", "Pricing", "Contact us"],
     },
 
@@ -240,9 +229,9 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
         "timeline",
       ],
       answer:
-        `Our delivery follows 6 clear steps: ` +
+        `Our work follows 6 simple steps: ` +
         processSteps.map((s, i) => `${i + 1}. ${s.phase} (${s.title})`).join(", ") +
-        `. We build a proof of concept first where helpful, and deploy only after your sign-off.`,
+        `. We show you a demo first, and go live only when you approve it.`,
       followUps: ["Pricing", "Contact us", "Operating principles"],
     },
 
@@ -261,7 +250,7 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
         "schedule",
       ],
       answer:
-        "Project timelines depend on the scope and complexity of your integrations. We define and agree on a written schedule during the planning phase before any development begins.",
+        "Project timelines depend on the tools and steps you need. We agree on a written schedule during planning before any build work starts.",
       followUps: ["How a project works", "Pricing", "Contact us"],
     },
 
@@ -285,7 +274,7 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
         "package",
       ],
       answer:
-        "Project pricing depends on the scope and systems involved. Third-party costs (such as AI model tokens, WhatsApp provider conversation charges, and hosting) are billed separately. Please send an enquiry for a tailored written estimate.",
+        "Project costs depend on what you need. AI and WhatsApp providers charge their own fees. Who pays is agreed in your written proposal. Send an enquiry for a clear written estimate.",
       followUps: ["Contact us", "How a project works"],
     },
 
@@ -302,9 +291,9 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
         "kis type ke business",
       ],
       answer:
-        `We work across 6 key sectors: ` +
+        `We work across 6 key areas: ` +
         industries.map((ind) => ind.name).join(", ") +
-        `. Each workflow is tailored to that sector's operational constraints.`,
+        `. Each system fits the daily needs of that industry.`,
       followUps: ["Healthcare & clinics", "Local businesses", "Sales teams & agencies"],
     },
     {
@@ -321,7 +310,7 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
         "clinic bot",
       ],
       answer:
-        "For clinics and healthcare practices, we build administrative appointment booking and enquiry workflows. Our automations never provide medical, diagnostic, or clinical advice.",
+        "For clinics, we build tools for booking visits and answering questions. Patient privacy is protected. AI helps with booking only and never gives medical advice.",
       followUps: ["Healthcare boundaries", "Clinic appointment demo", "Pricing"],
     },
     {
@@ -329,7 +318,7 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
       title: "Local businesses",
       keywords: ["local business", "salons", "repair", "retail", "shop", "local shops"],
       answer:
-        "For salons, repair services, and local retail, we automate booking requests, customer FAQs, and reminder notifications so you never miss an incoming customer.",
+        "For salons, repair shops, and stores, we automate booking requests and customer questions. You can answer enquiries and follow up on time.",
       followUps: ["Our services", "Pricing", "Contact us"],
     },
     {
@@ -337,7 +326,7 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
       title: "Sales teams & agencies",
       keywords: ["sales teams", "agencies", "lead capture", "b2b", "sales reps", "pipeline tracking"],
       answer:
-        "For sales teams and agencies, we automate lead qualification, CRM ownership assignment, follow-up reminders, and meeting scheduling to reduce repetitive admin.",
+        "For sales teams, we log new leads, check who is ready to buy, and send follow-up reminders. A person can step in at any time.",
       followUps: ["CRM & Sales Automation", "Pricing", "Contact us"],
     },
     {
@@ -345,7 +334,7 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
       title: "E-commerce",
       keywords: ["ecommerce", "e-commerce", "online store", "shopify", "orders", "order tracking"],
       answer:
-        "For e-commerce stores, we automate routine product questions, order status lookups, and customer feedback collection across web and messaging channels.",
+        "For online stores, we answer common order questions and route customer enquiries. Staff can step in for special requests.",
       followUps: ["Our services", "Pricing", "Contact us"],
     },
     {
@@ -353,7 +342,7 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
       title: "Real estate",
       keywords: ["real estate", "property", "site visit", "builders", "brokers", "realtors"],
       answer:
-        "For real estate agencies, we qualify buyer requirements, schedule property site visits, and automatically notify sales agents with lead summaries.",
+        "For real estate firms, we find who is ready to buy. We book visits and alert your sales team with lead details.",
       followUps: ["Our services", "Pricing", "Contact us"],
     },
     {
@@ -361,7 +350,7 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
       title: "Education & coaching",
       keywords: ["education", "coaching", "institutes", "students", "admissions", "courses"],
       answer:
-        "For educational institutions and coaching centers, we automate course enquiries, student intake forms, counseling appointments, and follow-ups.",
+        "For institutes and coaching centres, we answer course questions, log student leads, and schedule counselling visits.",
       followUps: ["Our services", "Pricing", "Contact us"],
     },
 
@@ -371,7 +360,7 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
       title: "Demos & prototypes",
       keywords: ["demos", "work", "examples", "portfolio", "show me demo", "working demo", "prototype"],
       answer:
-        `We have 2 documented demos on the website: ` +
+        `We have 2 demos on our website: ` +
         `1. "${clinicDemo.title}" (Status: ${clinicDemo.status}), and ` +
         `2. "${botDemo.title}" (Status: ${botDemo.status}).`,
       followUps: ["Clinic appointment demo", "Website chatbot demo", "Clients & case studies"],
@@ -391,7 +380,7 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
       ],
       answer:
         `"${clinicDemo.title}" [${clinicDemo.code}] status: ${clinicDemo.status}. ` +
-        `It demonstrates patient booking intake, calendar checking, and notifications. ${clinicDemo.note}`,
+        `It shows patient booking, calendar checks, and team alerts. ${clinicDemo.note}`,
       followUps: ["Website chatbot demo", "Healthcare boundaries", "Contact us"],
     },
     {
@@ -406,7 +395,7 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
       ],
       answer:
         `"${botDemo.title}" [${botDemo.code}] status: ${botDemo.status}. ` +
-        `It is an experimental prototype exploring server-side knowledge retrieval. ${botDemo.note}`,
+        `It is an early test tool that answers questions using approved notes. ${botDemo.note}`,
       followUps: ["Clinic appointment demo", "Clients & case studies", "Contact us"],
     },
 
@@ -424,7 +413,7 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
         "kisko kaam diya hai",
       ],
       answer:
-        "We do not claim completed client deployments or invented case studies on this site. We demonstrate capabilities transparently through documented proofs of concept and in-development demos.",
+        "We do not claim past client work on this site. We show what we can build through working demos and test projects.",
       followUps: ["Demos & prototypes", "How a project works", "Contact us"],
     },
 
@@ -443,7 +432,7 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
         "broadcast",
       ],
       answer:
-        "All WhatsApp automation uses official Meta Cloud APIs. Outgoing business messages strictly require Meta template approval and recipient consent. Unlimited unsolicited messaging is not permitted.",
+        "All WhatsApp tools use official Meta APIs. Messages you start require Meta template approval. People must agree before you message them. Spam is not permitted.",
       followUps: ["WhatsApp & Social Automation", "Pricing", "Contact us"],
     },
 
@@ -462,7 +451,7 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
         "illness",
       ],
       answer:
-        "We cannot provide medical, clinical, or diagnostic advice. The Business Work builds administrative appointment and intake workflows for clinics, not diagnostic or clinical software.",
+        "We do not give medical or clinical advice. We build administrative booking tools for clinics, not medical software.",
       followUps: ["Healthcare & clinics", "Clinic appointment demo", "Contact us"],
     },
 
@@ -473,9 +462,10 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
       keywords: ["principles", "values", "philosophy", "human in the loop", "oversight"],
       answer:
         `We follow 3 principles: ` +
-        `1. ${p1.title}, ` +
-        `2. ${p2.title}, and ` +
-        `3. ${p3.title}. We use AI only where valuable, keep humans in the loop for sensitive actions, and define all costs upfront.`,
+        `1. ${p1.title} ` +
+        `2. ${p2.title} ` +
+        `3. ${p3.title} ` +
+        `We use AI when helpful, keep a person in loop, and share all costs upfront.`,
       followUps: ["Human oversight", "Our services", "How a project works"],
     },
     {
@@ -490,7 +480,7 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
         "staff",
       ],
       answer:
-        "Our systems do not replace your team. Routine queries are automated, while sensitive, high-intent, or complex conversations are smoothly escalated to a designated team member.",
+        "Our tools do not replace your team. Routine questions are answered automatically. A person can step in and take over any chat.",
       followUps: ["Operating principles", "Our services", "Contact us"],
     },
 
@@ -500,7 +490,7 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
       title: "Data and privacy",
       keywords: ["privacy", "data", "security", "store messages", "dpdp", "safe"],
       answer:
-        "This assistant operates completely inside your web browser and stores nothing. When you send an enquiry through our Contact form, your details are handled under our Privacy Policy.",
+        "This assistant runs inside your web browser and saves no data. When you send an enquiry, your details are handled under our Privacy Policy.",
       followUps: ["Contact us", "Operating principles"],
     },
 
@@ -522,7 +512,7 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
         "kaise baat karein",
       ],
       answer:
-        `You can email us at ${site.email}, call or message on WhatsApp at ${site.phone}, or follow us on Instagram @thebusinesswork.co. You can also click 'Send an enquiry' to discuss your project.`,
+        `You can email us at ${site.email}, message on WhatsApp at ${site.phone}, or view our Instagram @thebusinesswork.co. You can also send an enquiry on this site.`,
       followUps: ["Our services", "Pricing", "How a project works"],
     },
 
@@ -538,7 +528,7 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
         "follow",
       ],
       answer:
-        `Follow The Business Work on Instagram at ${site.instagram} for updates on business automation, digital workflows, and practical systems.`,
+        `Follow The Business Work on Instagram at ${site.instagram}. We share updates on simple business tools and digital systems.`,
       followUps: ["How to contact us", "Our services"],
     },
 
@@ -558,7 +548,7 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
         "start",
       ],
       answer:
-        "Hello! I can answer questions about our services, process, industries, and demos. How can I help you today?",
+        "Hello! I can answer questions about our services, process, and demos. How can I help you today?",
       followUps: ["Our services", "How a project works", "Pricing", "Contact us"],
     },
     {
@@ -566,7 +556,7 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
       title: "Thank you",
       keywords: ["thanks", "thank you", "dhanyawad", "shukriya", "great", "helpful"],
       answer:
-        "You're welcome! Let us know if you'd like to discuss a project, or feel free to send an enquiry anytime.",
+        "You are welcome! Let us know if you want to discuss a project, or send an enquiry anytime.",
       followUps: ["Contact us", "Our services"],
     },
     {
@@ -574,7 +564,7 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
       title: "Goodbye",
       keywords: ["bye", "goodbye", "alvida", "see you", "exit"],
       answer:
-        "Goodbye! Have a productive day ahead. Reach out whenever you're ready to automate your business operations.",
+        "Goodbye! Reach out whenever you are ready to make your daily work easier.",
       followUps: ["Contact us"],
     },
   ];

@@ -1,7 +1,7 @@
 import { AssistantEntry, buildAssistantKnowledge } from "./knowledge";
 
 export const FALLBACK_ANSWER =
-  "I don't have that information here. You can send us an enquiry and the team will reply.";
+  "I do not have that info here. You can send an enquiry and we will reply.";
 
 export const DEFAULT_SUGGESTIONS = [
   "Our 4 services",

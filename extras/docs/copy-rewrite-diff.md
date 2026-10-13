@@ -152,5 +152,25 @@ Rule highlights:
 |---|---|---|
 | Fallback messages in `getUnavailableMessage`, `getDeliveryFailedMessage`, etc. | Streamlined into sentences under 15 words while preserving placeholder guards and test assertions. | Short sentences, no jargon. |
 
+## Group E: Assistant Knowledge and Widget
+
+### `frontend/src/lib/assistant/knowledge.ts`
+| Old Text | New Text | Rationale |
+|---|---|---|
+| `I am an automated assistant for The Business Work. I am not an AI language model and not a person. I provide answers directly from this website's published content to help you learn about our services.` | `I am an automated assistant for The Business Work. I am not an AI model and not a person. I give answers directly from this website to help you learn about our services.` | Shortened sentences, simple vocabulary, <= 15 words per sentence. |
+| `We build practical AI agents, WhatsApp automation, and CRM workflows around your business operations to reduce repetitive tasks.` | `We build simple tools for your business. They answer customers on WhatsApp, track leads, and send reminders for you.` | Plain words, active voice, removed "repetitive". |
+| `He builds practical automation and digital systems for businesses in India and worldwide, focusing on daily workflows, clear scope, human oversight, and clean handovers.` | `He builds simple tools for businesses in India and beyond. He learns how your work runs and builds a fix with clear scope.` | Short sentences <= 15 words. |
+| `All WhatsApp automation uses official Meta Cloud APIs. Outgoing business messages strictly require Meta template approval and recipient consent. Unlimited unsolicited messaging is not permitted.` | `All WhatsApp tools use official Meta APIs. Messages you start require Meta template approval. People must agree before you message them. Spam is not permitted.` | 4 short sentences, simple words, no "strictly", clear rules. |
+| `Our systems do not replace your team. Routine queries are automated, while sensitive, high-intent, or complex conversations are smoothly escalated to a designated team member.` | `Our tools do not replace your team. Routine questions are answered automatically. A person can step in and take over any chat.` | 3 short sentences, removed "escalated", plain vocabulary. |
+
+### `frontend/src/lib/assistant/match.ts` & `frontend/src/components/assistant/AssistantWidget.tsx`
+| Old Text | New Text | Rationale |
+|---|---|---|
+| `I don't have that information here. You can send us an enquiry and the team will reply.` | `I do not have that info here. You can send an enquiry and we will reply.` | 2 short sentences, 8 and 9 words. |
+| `I answer common questions from this website's information. I'm an automated assistant, not a person.` | `I answer common questions from this website. I am an automated assistant, not a person.` | 2 short sentences, 8 words each. |
+| `We provide 4 core services tailored to your workflows. Select one to learn more:` | `We offer 4 simple services. Pick one to read more:` | 2 short sentences, 5 and 6 words. |
+| `We automate operations across 6 key industries. Select an industry to see details:` | `We build tools for 6 industries. Pick one to see details:` | 2 short sentences, 6 words each. |
+| `I still don't have that information. Please send an enquiry through our form below, and our team will get back to you with exact details.` | `I still do not have that info. Please send an enquiry, and we will reply.` | 2 short sentences, 8 words each. |
+
 ---
 
