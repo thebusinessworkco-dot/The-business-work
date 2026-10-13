@@ -11,20 +11,19 @@ import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
 import JsonLd from "@/components/JsonLd";
 import { getHomeJsonLd } from "@/lib/jsonld";
+import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: {
-    absolute: "The Business Work | AI Automation & Digital Systems",
+    absolute: "The Business Work | Simple Tools for Your Business",
   },
-  description:
-    "We help small and medium businesses in India and worldwide automate customer enquiries, bookings, lead follow-ups and repetitive admin — using WhatsApp, AI and connected business tools.",
+  description: site.description,
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "The Business Work | AI Automation & Digital Systems",
-    description:
-      "Practical AI agents, WhatsApp automation, and CRM workflows custom-built for businesses in India and worldwide.",
+    title: "The Business Work | Simple Tools for Your Business",
+    description: site.description,
   },
 };
 

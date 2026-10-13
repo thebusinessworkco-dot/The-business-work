@@ -16,9 +16,9 @@ export default function Services() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-12">
         <SectionHeading
           eyebrow="01 / SERVICES"
-          title="Four capabilities. One custom solution."
+          title="What we do for you"
           id="services-title"
-          aside="These are capabilities we combine into custom solutions, not fixed packages. We understand your workflow first, then recommend the simplest suitable system — using AI only where useful and plain rule-based automation where it works better."
+          aside="We do not sell fixed packages. We learn how you work first. Then we build a simple tool that fits your needs."
         />
 
         <ul className="divide-y divide-border-sand">
@@ -119,9 +119,9 @@ export default function Services() {
 
         <div className="mt-8 sm:mt-12 flex flex-col items-start justify-between gap-4 sm:gap-6 border border-border-sand bg-surface-card p-4 sm:p-6 md:p-8 sm:flex-row sm:items-center">
           <div className="max-w-2xl">
-            <div className="mb-2 font-headline text-xs font-semibold uppercase tracking-[0.2em] text-accent-ochre">Custom solutions</div>
+            <div className="mb-2 font-headline text-xs font-semibold uppercase tracking-[0.2em] text-accent-ochre">Custom tools</div>
             <p className="font-body text-sm leading-relaxed text-ink sm:text-base">
-              Not sure which one you need? Describe the problem. We&apos;ll recommend the simplest solution, which may combine WhatsApp, AI, a CRM and a calendar, or be just one small workflow.
+              Not sure what you need? Tell us your problem. We will suggest a simple fix that fits your daily work.
             </p>
           </div>
           <button onClick={() => openModal(undefined, "services")} className="shrink-0 bg-ink px-6 py-3.5 font-headline text-xs font-semibold uppercase tracking-wider text-background transition-colors hover:bg-accent-ochre">

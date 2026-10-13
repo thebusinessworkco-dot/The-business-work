@@ -17,6 +17,7 @@
     "contrast": "node scripts/contrast.mjs",
     "assistant:eval": "node scripts/assistant-eval.mjs",
     "links:check": "node scripts/links-check.mjs",
+    "copy:check": "node scripts/plain-words-check.mjs",
     "env:check": "node scripts/env-check.mjs"
   },
   "dependencies": {

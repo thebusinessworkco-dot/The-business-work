@@ -33,12 +33,12 @@ export default function Founder() {
               {site.founder}
             </h2>
             <p className="max-w-2xl font-body text-sm leading-relaxed text-ink-muted sm:text-base">
-              I&apos;m {site.founder}, founder of {site.name}. I&apos;m
-              building practical automation and digital systems for businesses in
-              India and worldwide. My approach starts with understanding your
-              daily workflow, choosing a useful problem to solve, and building a
-              system around it&mdash;with clear scope, human oversight and a
-              proper handover.
+              I am {site.founder}, founder of {site.name}. I build simple tools
+              for businesses in India and beyond.
+            </p>
+            <p className="max-w-2xl font-body text-sm leading-relaxed text-ink-muted sm:text-base">
+              I learn how your daily work runs, pick one real problem, and build
+              a fix. A person can always step in when needed.
             </p>
             <div className="flex flex-wrap items-center gap-4 pt-2">
               <a
