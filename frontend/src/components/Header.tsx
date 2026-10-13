@@ -17,8 +17,32 @@ const nav = [
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const [visible, setVisible] = useState(true);
+  const lastScrollY = useRef(0);
   const { openModal } = useContactModal();
   const toggleBtnRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      // Always show near top
+      if (currentScrollY <= 30) {
+        setVisible(true);
+      } else if (currentScrollY > lastScrollY.current && currentScrollY > 80) {
+        // Scrolling down -> hide
+        setVisible(false);
+      } else if (currentScrollY < lastScrollY.current) {
+        // Scrolling up -> reveal
+        setVisible(true);
+      }
+
+      lastScrollY.current = currentScrollY;
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -32,8 +56,14 @@ export default function Header() {
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
+  const isVisible = visible || open;
+
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-border-sand bg-background/90 backdrop-blur-md">
+    <header
+      className={`fixed inset-x-0 top-0 z-50 border-b border-border-sand/70 bg-background/80 backdrop-blur-md transition-transform duration-300 ease-in-out ${
+        isVisible ? "translate-y-0" : "-translate-y-full"
+      }`}
+    >
       <div className="mx-auto flex h-16 sm:h-20 max-w-7xl items-center justify-between gap-2 sm:gap-4 md:gap-8 px-4 sm:px-6 lg:px-12">
         <Link href="/" aria-label="The Business Work, home" className="shrink-0 flex items-center">
           <Logo />

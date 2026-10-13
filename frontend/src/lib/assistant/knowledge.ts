@@ -99,7 +99,7 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
         "kiska business hai",
       ],
       answer:
-        `The Business Work was founded by ${site.founder}. He builds practical automation and digital systems for businesses in India, focusing on daily workflows, clear scope, human oversight, and clean handovers.`,
+        `The Business Work was founded by ${site.founder}. He builds practical automation and digital systems for businesses in India and worldwide, focusing on daily workflows, clear scope, human oversight, and clean handovers.`,
       followUps: ["What The Business Work does", "Our services", "Contact us"],
     },
 

@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     template: "%s | The Business Work",
   },
   description:
-    "We help small and medium businesses in India automate customer enquiries, bookings, lead follow-ups and repetitive admin — using WhatsApp, AI and connected business tools.",
+    "We help small and medium businesses in India and worldwide automate customer enquiries, bookings, lead follow-ups and repetitive admin — using WhatsApp, AI and connected business tools.",
   applicationName: site.name,
   openGraph: {
     type: "website",

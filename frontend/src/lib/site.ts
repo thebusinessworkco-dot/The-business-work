@@ -7,7 +7,7 @@ export const site = {
   tagline: "We Make Business Simpler.",
   founder: "Aman Rajbhar",
   description:
-    "The Business Work helps small and medium businesses in India automate customer enquiries, bookings, lead follow-ups and repetitive admin — using WhatsApp, AI and connected business tools.",
+    "The Business Work helps small and medium businesses in India and worldwide automate customer enquiries, bookings, lead follow-ups and repetitive admin — using WhatsApp, AI and connected business tools.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://the-business-work.vercel.app",
   email: "thebusinesswork.co@gmail.com",
   phone: "+91 79720 20292",

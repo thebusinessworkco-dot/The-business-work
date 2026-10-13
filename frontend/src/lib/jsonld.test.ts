@@ -47,7 +47,7 @@ describe("JSON-LD Structured Data", () => {
 
   it("contains no banned words or unsupported claims in home or service structured data", () => {
     const homeJson = JSON.stringify(getHomeJsonLd()).toLowerCase();
-    const banned = ["guarantee", "100%", "instant", "worldwide", "high accuracy", "autonomous", "deterministic", "production ai"];
+    const banned = ["guarantee", "100%", "instant", "high accuracy", "autonomous", "deterministic", "production ai"];
     for (const word of banned) {
       expect(homeJson).not.toContain(word);
     }

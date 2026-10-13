@@ -35,9 +35,10 @@ export default function Founder() {
             <p className="max-w-2xl font-body text-sm leading-relaxed text-ink-muted sm:text-base">
               I&apos;m {site.founder}, founder of {site.name}. I&apos;m
               building practical automation and digital systems for businesses in
-              India. My approach starts with understanding your daily workflow,
-              choosing a useful problem to solve, and building a system around
-              it&mdash;with clear scope, human oversight and a proper handover.
+              India and worldwide. My approach starts with understanding your
+              daily workflow, choosing a useful problem to solve, and building a
+              system around it&mdash;with clear scope, human oversight and a
+              proper handover.
             </p>
             <div className="flex flex-wrap items-center gap-4 pt-2">
               <a
