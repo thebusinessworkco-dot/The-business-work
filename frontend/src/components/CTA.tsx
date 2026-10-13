@@ -10,10 +10,10 @@ export default function CTA() {
     <section id="contact" aria-labelledby="cta-title" className="w-full bg-section-ochre text-section-cream py-28 md:py-36">
       <div className="mx-auto max-w-4xl space-y-8 px-6 text-center">
         <h2 id="cta-title" className="font-headline text-4xl font-medium tracking-tight text-section-cream sm:text-5xl lg:text-6xl">
-          Let&apos;s make your business work smarter.
+          Let&apos;s talk about your business.
         </h2>
         <p className="mx-auto max-w-2xl font-body text-base leading-relaxed text-section-cream sm:text-lg">
-          Tell us how your business works. Share the problem, even if you don&apos;t know which technology you need, and we&apos;ll come back with a suggested approach.
+          Tell us what takes too much of your time. We will suggest a simple fix.
         </p>
         <div className="flex flex-col items-center justify-center gap-4 pt-4 sm:flex-row flex-wrap">
           <button
@@ -46,7 +46,7 @@ export default function CTA() {
           Or write to <a className="text-section-cream underline decoration-section-cream underline-offset-4 hover:text-white" href={`mailto:${site.email}`}>{site.email}</a>
         </p>
         <p className="pt-2 font-body text-xs text-section-cream">
-          What you should know: Third-party costs (AI model usage, WhatsApp provider charges and hosting) are quoted separately.
+          Note: AI and WhatsApp providers charge their own fees. Who pays is agreed in your written proposal.
         </p>
       </div>
     </section>

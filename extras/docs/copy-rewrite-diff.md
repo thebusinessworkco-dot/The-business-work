@@ -129,5 +129,28 @@ Rule highlights:
 | `Humans stay in the loop` / `Sensitive or uncertain situations are escalated to a person...` | `A person can take over any chat.` / `Hard questions pass to a person. Your team always stays in control.` | Target copy, no "escalated", short sentences. |
 | `Honest scope and costs` / `Setup fees, running costs, third-party charges and limits are spelled out...` | `You know the costs and limits before we start.` / `You see the setup costs, running fees, and limits in writing before we begin.` | Target copy, 14 words, plain English. |
 
+## Group D: Contact Form, Modal, Validation and API Messages
+
+### `frontend/src/components/CTA.tsx`
+| Old Text | New Text | Rationale |
+|---|---|---|
+| `Let's make your business work smarter.` | `Let's talk about your business.` | Exact requested section heading. |
+| `Tell us how your business works. Share the problem, even if you don't know which technology you need, and we'll come back with a suggested approach.` | `Tell us what takes too much of your time. We will suggest a simple fix.` | Exact requested body copy in plain words, short sentences. |
+| `What you should know: Third-party costs (AI model usage, WhatsApp provider charges and hosting) are quoted separately.` | `Note: AI and WhatsApp providers charge their own fees. Who pays is agreed in your written proposal.` | Plain language adhering to exact fee rule. |
+
+### `frontend/src/components/ContactModal.tsx`
+| Old Text | New Text | Rationale |
+|---|---|---|
+| `Share a few details and a short description of the problem. We'll reply with next steps.` | `Tell us what takes too much of your time. We will suggest a simple fix.` | Consistent plain target copy. |
+| `Phone / WhatsApp` | `Phone or WhatsApp` | Requested plain label. |
+| `What would you like to improve?` | `What do you need help with?` | Exact requested field label. |
+| `Thanks. Your enquiry has been sent.`<br>`We'll review it and get back to you.` | `Thank you. We got your message.`<br>`We will read it and reply.` | Exact requested success copy in short sentences. |
+| `Something went wrong. Please try again or use WhatsApp.` | `Something went wrong. Please try again.` | Requested plain error message. |
+
+### `frontend/src/app/api/contact/route.ts`
+| Old Text | New Text | Rationale |
+|---|---|---|
+| Fallback messages in `getUnavailableMessage`, `getDeliveryFailedMessage`, etc. | Streamlined into sentences under 15 words while preserving placeholder guards and test assertions. | Short sentences, no jargon. |
+
 ---
 

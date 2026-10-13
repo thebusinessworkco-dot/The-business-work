@@ -246,12 +246,12 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
       const data = await res.json().catch(() => ({}));
       if (!res.ok)
         throw new Error(
-          data.error || "Something went wrong. Please try again or use WhatsApp."
+          data.error || "Something went wrong. Please try again."
         );
       setStatus("success");
       form.reset();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong.");
+      setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
       setStatus("error");
     }
   }
@@ -300,10 +300,10 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
                 className="space-y-4 py-4 text-center"
               >
                 <p className="font-headline text-sm uppercase tracking-wider text-ink">
-                  Thanks. Your enquiry has been sent.
+                  Thank you. We got your message.
                 </p>
                 <p className="font-body text-sm text-ink-muted">
-                  We&apos;ll review it and get back to you.
+                  We will read it and reply.
                 </p>
                 <button
                   type="button"
@@ -316,8 +316,7 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
             ) : (
               <form onSubmit={onSubmit} className="space-y-4" noValidate={false}>
                 <p className="font-body text-sm text-ink-muted">
-                  Share a few details and a short description of the problem.
-                  We&apos;ll reply with next steps.
+                  Tell us what takes too much of your time. We will suggest a simple fix.
                 </p>
 
                 {/* Honeypot: real users never see or fill this */}
@@ -376,7 +375,7 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
                   </div>
                   <div>
                     <label className={labelCls} htmlFor="c-phone">
-                      Phone / WhatsApp
+                      Phone or WhatsApp
                     </label>
                     <input
                       id="c-phone"
@@ -410,7 +409,7 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
                 </div>
                 <div>
                   <label className={labelCls} htmlFor="c-problem">
-                    What would you like to improve?
+                    What do you need help with?
                   </label>
                   <textarea
                     id="c-problem"

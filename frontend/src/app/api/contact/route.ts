@@ -26,17 +26,17 @@ function getUnavailableMessage(): string {
 function getTurnstileUnavailableMessage(): string {
   const hasRealWhatsapp = !isPlaceholder("whatsapp");
   if (hasRealWhatsapp) {
-    return "Security verification service temporarily unavailable. Please try again in a few minutes or message us on WhatsApp.";
+    return "The security check is not working right now. Please try again soon or message us on WhatsApp.";
   }
-  return "Security verification service temporarily unavailable. Please try again in a few minutes.";
+  return "The security check is not working right now. Please try again soon.";
 }
 
 function getRateLimitMessage(): string {
   const hasRealWhatsapp = !isPlaceholder("whatsapp");
   if (hasRealWhatsapp) {
-    return "Too many requests. Please wait a few minutes before trying again or message us on WhatsApp.";
+    return "Too many messages sent. Please wait a few minutes before trying again or message us on WhatsApp.";
   }
-  return "Too many requests. Please wait a few minutes before trying again.";
+  return "Too many messages sent. Please wait a few minutes before trying again.";
 }
 
 function getDeliveryFailedMessage(): string {
