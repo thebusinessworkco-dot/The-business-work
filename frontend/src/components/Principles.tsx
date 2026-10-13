@@ -7,9 +7,9 @@ export default function Principles() {
       <div className="mx-auto max-w-7xl px-6 lg:px-12">
         <SectionHeading
           eyebrow="05 / WHY THE BUSINESS WORK"
-          title="Practical systems, honest scope."
+          title="How we work with you"
           id="why-title"
-          aside="We would rather build a small system that works reliably than a large one that promises too much."
+          aside="We build small tools that work well. We never make promises we cannot keep."
         />
         <div className="grid grid-cols-1 gap-8 pt-12 md:grid-cols-3">
           {principles.map((p) => (

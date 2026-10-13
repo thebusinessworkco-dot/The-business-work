@@ -97,7 +97,7 @@ function DemoCard({ demo }: { demo: Demo }) {
               onClick={() => setTab("flow")}
               onKeyDown={(e) => handleKeyDown(e, "flow")}
             >
-              Flow
+              Steps
             </button>
             <button
               id={`tab-${demo.id}-scope`}
@@ -142,7 +142,7 @@ function DemoCard({ demo }: { demo: Demo }) {
               aria-labelledby={`tab-${demo.id}-scope`}
               className="space-y-4 focus:outline-none"
             >
-              <div className="border-b border-border-sand pb-3 font-headline text-xs uppercase text-ink-muted">What this is, honestly</div>
+              <div className="border-b border-border-sand pb-3 font-headline text-xs uppercase text-ink-muted">About this tool</div>
               <dl className="space-y-3 pt-2">
                 {demo.scope.map((s) => (
                   <div key={s.label} className="rounded border border-border-sand bg-surface-card p-4">
@@ -170,9 +170,9 @@ export default function Work() {
       <div className="mx-auto max-w-7xl px-6 lg:px-12">
         <SectionHeading
           eyebrow="04 / DEMOS"
-          title="What we're building and testing."
+          title="What we are building"
           id="demos-title"
-          aside="Each project is labelled with its real status. No client deployments are claimed here yet."
+          aside="Every project shows its real status. We do not claim past client work."
         />
         <div className="space-y-12 pt-14">
           {demos.map((d) => <DemoCard key={d.id} demo={d} />)}

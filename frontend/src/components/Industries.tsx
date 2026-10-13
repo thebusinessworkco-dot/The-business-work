@@ -7,9 +7,9 @@ export default function Industries() {
       <div className="mx-auto max-w-7xl px-6 lg:px-12">
         <SectionHeading
           eyebrow="03 / INDUSTRIES"
-          title="Where automation fits."
+          title="Who we help"
           id="industries-title"
-          aside="Typical use cases by industry. These describe what we can build, not completed client projects."
+          aside="These show where our tools fit. They describe what we can build for you."
         />
         <ul className="grid grid-cols-1 gap-px bg-border-sand pt-0 md:grid-cols-2 lg:grid-cols-3 [&>li]:bg-surface-card">
           {industries.map((i) => (

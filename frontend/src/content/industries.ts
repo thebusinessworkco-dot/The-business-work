@@ -1,8 +1,26 @@
 export const industries = [
-  { name: "Healthcare & clinics", body: "Appointment enquiries, reminders, FAQs and staff notifications, with patient privacy and consent respected. AI never gives clinical advice." },
-  { name: "Local businesses", body: "Salons, repair services and retail: capture every enquiry, manage bookings and follow up on time." },
-  { name: "Sales teams & agencies", body: "Lead qualification, CRM updates, follow-up reminders, lead assignment and meeting scheduling." },
-  { name: "E-commerce", body: "Product and order FAQs, enquiry routing, lead capture and customer follow-up." },
-  { name: "Real estate", body: "Property enquiries, lead qualification, site-visit scheduling and sales-team alerts." },
-  { name: "Education & coaching", body: "Course enquiries, admission leads, counselling appointments and follow-ups." },
+  {
+    name: "Healthcare & clinics",
+    body: "Appointment questions, visit reminders, and staff alerts with patient privacy respected. AI never gives medical advice.",
+  },
+  {
+    name: "Local businesses",
+    body: "Salons, repairs, and retail stores. Answer enquiries, manage bookings, and follow up with customers.",
+  },
+  {
+    name: "Sales teams & agencies",
+    body: "Check who is ready to buy, update records, and send follow-up reminders to your team.",
+  },
+  {
+    name: "E-commerce",
+    body: "Common order questions, message routing, and polite follow-ups for shoppers.",
+  },
+  {
+    name: "Real estate",
+    body: "Property enquiries, finding ready buyers, scheduling site visits, and alerting your sales team.",
+  },
+  {
+    name: "Education & coaching",
+    body: "Course questions, student leads, counselling visits, and follow-up messages.",
+  },
 ];

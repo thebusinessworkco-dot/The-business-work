@@ -89,5 +89,45 @@ Rule highlights:
 | `Real-World Example` / `Tools & Setup Requirements` | `Real example` / `Tools and setup` | Short everyday words. |
 | `Previous capability` / `Next capability` | `Previous` / `Next` | Concise 1-word button labels. |
 
+## Group C: Process, Industries, Demos, Principles
+
+### `frontend/src/content/process.ts` & `frontend/src/components/Process.tsx`
+| Old Text | New Text | Rationale |
+|---|---|---|
+| `From first conversation to live system.` / `Timelines and costs depend on scope. We agree both in writing before work starts.` | `How a project works` / `We agree on the timeline and costs in writing before we start.` | Exact requested plain section heading, <= 13 words. |
+| `Understand your business` / `We learn how your business runs today and find the main bottleneck or repetitive task worth fixing.` | `We learn how your work runs today.` / `We look at how your business runs today. We find the slow spots and repeat tasks worth fixing.` | Target copy, removed "bottleneck" and "repetitive", short sentences. |
+| `Define the simplest fix` / `We agree on the outcome and acceptance criteria...` | `We agree on a simple plan.` / `We pick the simplest fix. We show you the exact steps and costs before we start.` | Short clear sentences. |
+| `Build and demo` | `We build it.` / `We build your tool. We show you a working demo so you can see it in action.` | Target copy, plain words. |
+| `Test with real scenarios` | `We test it with real cases.` / `We test the tool with real cases. We check what happens if something goes wrong.` | Everyday words, short sentences. |
+| `Go live after approval` / `We deploy only once you approve...` | `We go live when you say yes.` / `We launch only after you approve it. We show your team how to use it.` | Target copy, removed "deploy", clear active phrasing. |
+| `Maintain and refine` | `We help you improve it.` / `We stay in touch to help you. We can make updates when your business grows.` | Target copy, plain words. |
+| `Output` | `What you get` | Everyday words, 3 words. |
+
+### `frontend/src/content/industries.ts` & `frontend/src/components/Industries.tsx`
+| Old Text | New Text | Rationale |
+|---|---|---|
+| `Where automation fits.` / `Typical use cases by industry. These describe what we can build, not completed client projects.` | `Who we help` / `These show where our tools fit. They describe what we can build for you.` | Exact requested plain heading, short sentences <= 10 words. |
+| `Healthcare & clinics` body: `Appointment enquiries, reminders, FAQs and staff notifications, with patient privacy and consent respected. AI never gives clinical advice.` | `Appointment questions, visit reminders, and staff alerts with patient privacy respected. AI never gives medical advice.` | Plain words, keeps medical advice warning. |
+| `Local businesses` body: `Salons, repair services and retail: capture every enquiry, manage bookings and follow up on time.` | `Salons, repairs, and retail stores. Answer enquiries, manage bookings, and follow up with customers.` | Short clear sentences. |
+| `Sales teams & agencies` body: `Lead qualification, CRM updates, follow-up reminders, lead assignment and meeting scheduling.` | `Check who is ready to buy, update records, and send follow-up reminders to your team.` | Replaced "lead qualification" with plain definition, <= 15 words. |
+| `E-commerce`, `Real estate`, `Education & coaching` | Rewritten with everyday words, short sentences, active voice. | Clean, honest presentation. |
+
+### `frontend/src/content/work.ts` & `frontend/src/components/Work.tsx`
+| Old Text | New Text | Rationale |
+|---|---|---|
+| `What we're building and testing.` / `Each project is labelled with its real status. No client deployments are claimed here yet.` | `What we are building` / `Every project shows its real status. We do not claim past client work.` | Exact requested plain section heading, honest, simple words. |
+| `Flow` / `Scope & status` | `Steps` / `Scope & status` | Plain 1-word tab label. |
+| `ILLUSTRATIVE FLOW` / `What this is, honestly` | `HOW THE STEPS RUN` / `About this tool` | Plain everyday labels. |
+| Clinic demo body, flow, scope, and notes | Rewritten in plain English; preserved status label `"In development"`, kept medical advice limit. | Simple, honest prototype explanation. |
+| Website AI Chatbot demo body, flow, scope, notes | Preserved status label `"Proof of concept"`; plain words without jargon. | Clear prototype boundaries. |
+
+### `frontend/src/content/principles.ts` & `frontend/src/components/Principles.tsx`
+| Old Text | New Text | Rationale |
+|---|---|---|
+| `Practical systems, honest scope.` / `We would rather build a small system that works reliably than a large one that promises too much.` | `How we work with you` / `We build small tools that work well. We never make promises we cannot keep.` | Exact requested plain section heading, 2 short sentences. |
+| `AI only where it helps` / `We use AI where it adds real value and plain rule-based automation where it is simpler, cheaper and more predictable.` | `We use AI only when it helps.` / `We use AI when it truly helps. For simple tasks, plain rules are faster and cheaper.` | Target copy, short sentences <= 11 words. |
+| `Humans stay in the loop` / `Sensitive or uncertain situations are escalated to a person...` | `A person can take over any chat.` / `Hard questions pass to a person. Your team always stays in control.` | Target copy, no "escalated", short sentences. |
+| `Honest scope and costs` / `Setup fees, running costs, third-party charges and limits are spelled out...` | `You know the costs and limits before we start.` / `You see the setup costs, running fees, and limits in writing before we begin.` | Target copy, 14 words, plain English. |
+
 ---
 
