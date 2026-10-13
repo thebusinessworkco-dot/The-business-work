@@ -159,7 +159,7 @@ export const services: Service[] = [
       "We connect the tool to your website with a person ready to step in.",
     ],
     limits: [
-      "AI tools can make mistakes. They work best with clear notes.",
+      "AI tools can make mistakes. They need approved notes to answer from.",
       "AI providers charge their own fees. Who pays is agreed in your written proposal.",
       "Healthcare tools handle administrative booking only and never give medical advice.",
     ],

@@ -82,6 +82,18 @@ function splitBodySentences(text) {
     .filter((s) => s.length > 0 && !/^(\d+|Copyright|All rights|Privacy|Terms)$/i.test(s));
 }
 
+// Verb phrase detection regex:
+const VERB_REGEX = /\b(is|are|was|were|be|been|being|have|has|had|having|do|does|did|will|would|shall|should|can|could|may|might|must|build|builds|built|help|helps|helped|solve|solves|solved|connect|connects|connected|work|works|worked|answer|answers|answered|send|sends|sent|keep|keeps|kept|take|takes|took|start|starts|started|give|gives|gave|given|make|makes|made|save|saves|saved|need|needs|needed|test|tests|tested|track|tracks|tracked|ask|asks|asked|pass|passes|passed|choose|chooses|chose|chosen|run|runs|ran|see|sees|saw|seen|book|books|booked|find|finds|found|turn|turns|turned|drop|drops|dropped|stop|stops|stopped|set|sets|route|routes|routed|guide|guides|guided|link|links|linked|learn|learns|learned|get|gets|got|pay|pays|paid|use|uses|used|call|calls|called|offer|offers|offered|show|shows|showed|shown|cut|cuts|handle|handles|handled|put|puts|include|includes|included|require|requires|required|charge|charges|charged|agree|agrees|agreed)\b/i;
+
+function readsLikeSentence(text) {
+  const words = countWords(text);
+  if (words < 4) return false;
+  const startsCap = /^[A-Z0-9"']/.test(text.trim());
+  const endsPunct = /[.?!]["']?$/.test(text.trim());
+  const hasVerb = VERB_REGEX.test(text);
+  return startsCap && (endsPunct || hasVerb);
+}
+
 function parseElements(html) {
   let cleanHtml = html
     .replace(/<head[\s\S]*?<\/head>/gi, " ")
@@ -153,10 +165,12 @@ function parseElements(html) {
           const item = stack[idx];
           stack.splice(idx, 1);
 
-          const isUiBlock = /^h[1-6]$/.test(item.tagName) || item.tagName === "button" || item.tagName === "label" || item.isButtonLink;
-          const isBodyBlock = ["p", "li", "td", "th", "summary", "figcaption"].includes(item.tagName);
+          const isHeading = /^h[1-6]$/.test(item.tagName);
+          const isButtonOrLabel = item.tagName === "button" || item.tagName === "label" || item.isButtonLink;
+          const isLi = item.tagName === "li";
+          const isStandardBody = ["p", "td", "th", "summary", "figcaption"].includes(item.tagName);
 
-          if (isUiBlock || isBodyBlock) {
+          if (isHeading || isButtonOrLabel || isLi || isStandardBody) {
             if (stack.length > 0) {
               stack[stack.length - 1].hasChildBlock = true;
             }
@@ -164,24 +178,49 @@ function parseElements(html) {
 
           const cleaned = cleanText(item.fullText);
           if (cleaned.length > 0) {
-            if (isUiBlock) {
+            const words = countWords(cleaned);
+            const endsWithPunct = /[.?!]["']?$/.test(cleaned);
+
+            // Keep headings, buttons and labels without a full stop as UI text
+            if ((isHeading || isButtonOrLabel) && !endsWithPunct) {
               headingsButtonsLabels.push({
                 element: item.isButtonLink ? "a.button" : item.tagName,
                 text: cleaned,
-                wordCount: countWords(cleaned),
+                wordCount: words,
               });
-            } else if (isBodyBlock) {
+            } else if (isLi && (!endsWithPunct && !readsLikeSentence(cleaned))) {
+              // li without full stop and not reading like a sentence -> UI text
+              headingsButtonsLabels.push({
+                element: "li",
+                text: cleaned,
+                wordCount: words,
+              });
+            } else if (readsLikeSentence(cleaned)) {
+              // Treat any element with 4+ words that reads like a sentence as a BODY sentence (even h2/h3/li)
+              bodyItems.push({
+                element: item.isButtonLink ? "a.button" : item.tagName,
+                text: cleaned,
+              });
+            } else if (isStandardBody) {
               bodyItems.push({
                 element: item.tagName,
                 text: cleaned,
               });
+            } else if (isHeading || isButtonOrLabel) {
+              headingsButtonsLabels.push({
+                element: item.isButtonLink ? "a.button" : item.tagName,
+                text: cleaned,
+                wordCount: words,
+              });
             } else if (item.tagName === "div") {
               const directClean = cleanText(item.directText);
               if (directClean.length > 0 && !item.hasChildBlock) {
-                bodyItems.push({
-                  element: "div",
-                  text: directClean,
-                });
+                if (readsLikeSentence(directClean)) {
+                  bodyItems.push({
+                    element: "div",
+                    text: directClean,
+                  });
+                }
               }
             }
           }
@@ -200,6 +239,7 @@ async function run() {
   let totalOver22Found = 0;
   let totalAvgOver15Found = 0;
   const results = [];
+  const allSentences = [];
 
   for (const page of targetPages) {
     try {
@@ -249,6 +289,12 @@ async function run() {
           const wCount = countWords(s);
           if (wCount === 0) continue;
           bodySentences.push({
+            element: b.element,
+            text: s,
+            words: wCount,
+          });
+          allSentences.push({
+            page: page.name,
             element: b.element,
             text: s,
             words: wCount,
@@ -342,6 +388,14 @@ async function run() {
       });
     }
   }
+
+  allSentences.sort((a, b) => b.words - a.words);
+  console.log("--------------------------------------------------------------------------------");
+  console.log("Longest 10 Real Body Sentences Across Pages:");
+  console.log("--------------------------------------------------------------------------------");
+  allSentences.slice(0, 10).forEach((s, idx) => {
+    console.log(`  ${(idx + 1 + ".").padEnd(4)} [${s.words}w] (${s.page} <${s.element}>) "${s.text}"`);
+  });
 
   console.log("--------------------------------------------------------------------------------");
   console.log("Flesch-Kincaid Grade Level Formula Note:");

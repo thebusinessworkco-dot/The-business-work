@@ -302,3 +302,46 @@ Rule highlights:
 |---|---|---|
 | `India` (generic) | `Boisar, Maharashtra, India` (structured: city: Boisar, region: Maharashtra, country: India) | Replaces placeholder with real business location; updates JSON-LD PostalAddress to locality: Boisar, region: Maharashtra, country: IN. |
 
+---
+
+## Group H: Service Capitalisation, Wording & Honest Copy Check
+
+### Service Page CTA Banner Heading (`frontend/src/app/services/[slug]/page.tsx:268`)
+| Old Text | New Text | Rationale |
+|---|---|---|
+| `Ready to improve your {service.title.toLowerCase()}?`<br><br>*Rendered:*<br>- "Ready to improve your ai agents & chatbots?"<br>- "Ready to improve your crm & sales automation?"<br>- "Ready to improve your business workflow automation?"<br>- "Ready to improve your whatsapp & social automation?" | `Ready to start with {service.title}?`<br><br>*Rendered:*<br>- "Ready to start with AI Agents & Chatbots?"<br>- "Ready to start with CRM & Sales Automation?"<br>- "Ready to start with Business Workflow Automation?"<br>- "Ready to start with WhatsApp & Social Automation?" | Fixed capitalisation bug on all 4 service detail pages. Preserves exact casing of `AI`, `CRM`, `WhatsApp`. Reads cleanly and invitingly across all services. |
+
+### Assistant Knowledge Base Answers (`frontend/src/lib/assistant/knowledge.ts:136, 154, 173, 191`)
+| Old Text | New Text | Rationale |
+|---|---|---|
+| `${s1.title}: ${s1.summary} It solves ${s1.solves.toLowerCase()} AI providers charge their own fees. Who pays is agreed in your written proposal.` | `${s1.title}: ${s1.summary} It solves: ${s1.solves} AI providers charge their own fees. Who pays is agreed in your written proposal.` | Preserves original punctuation and proper capitalisation. |
+| `${s2.title}: ${s2.summary} It solves ${s2.solves.toLowerCase()} We work with your CRM or suggest one that fits your team and budget.` | `${s2.title}: ${s2.summary} It solves: ${s2.solves} We work with your CRM or suggest one that fits your team and budget.` | Preserves acronym casing (`CRM`). |
+| `${s3.title}: ${s3.summary} It solves ${s3.solves.toLowerCase()} We prefer simple rule-based tools over AI whenever they are simpler and more reliable.` | `${s3.title}: ${s3.summary} It solves: ${s3.solves} We prefer simple rule-based tools over AI whenever they are simpler and more reliable.` | Preserves clear sentence formatting. |
+| `${s4.title}: ${s4.summary} It solves ${s4.solves.toLowerCase()} All messaging features require Meta approval, approved templates, and customer consent.`<br><br>*Rendered:*<br>"... It solves slow whatsapp replies, leads lost in direct messages..." | `${s4.title}: ${s4.summary} It solves: ${s4.solves} All messaging features require Meta approval, approved templates, and customer consent.`<br><br>*Rendered:*<br>"... It solves: Slow WhatsApp replies, leads lost in direct messages..." | Removes blanket `.toLowerCase()` that converted "WhatsApp" to lowercase "whatsapp". |
+
+### AI Limits Wording (`frontend/src/content/services.ts:162`)
+| Old Text | New Text | Rationale |
+|---|---|---|
+| `AI tools can make mistakes. They work best with clear notes.` | `AI tools can make mistakes. They need approved notes to answer from.` | Avoids any training promise or model training terminology; emphasizes that tools answer strictly from approved reference notes. |
+
+### Audit of "train" across `frontend/src` (excluding legal files)
+| Search Pattern | Hits Found | Decision |
+|---|---|---|
+| `\btrain\b` / `\btraining\b` / `\btrained\b` | 0 occurrences in `frontend/src` | Verified 0 occurrences. Zero training claims exist in user-facing copy. |
+
+### Honest `copy:check` Sentence Classifier (`frontend/scripts/plain-words-check.mjs`)
+- **Classifier Rule**: Any element with $\ge 4$ words reading like a sentence (starts with capital letter and ends with `.`/`?`, or contains a verb phrase) is treated as a BODY sentence even when an `h2`, `h3`, or `li`. Headings, buttons, and labels without a full stop remain UI text.
+- **Top 10 Longest Real Sentences**:
+  1. `[15w]` (Home `<p>`): "I learn how your daily work runs, pick one real problem, and build a fix."
+  2. `[14w]` (Home `<p>`): "Typing data twice between apps, messy form entries, and time lost on repeat reports."
+  3. `[14w]` (Home `<span>`): "We help you reply to enquiries and collect leads on WhatsApp and social chat."
+  4. `[14w]` (Home `<p>`): "Piles of repeat messages, slow replies at busy times, and manual booking over chat."
+  5. `[14w]` (Home `<p>`): "We help salons, repair shops and stores answer enquiries, take bookings and follow up."
+  6. `[14w]` (Home `<p>`): "You see the setup costs, running fees, and limits in writing before we begin."
+  7. `[14w]` (AI Agents & Chatbots `<h3>`): "We connect the tool to your website with a person ready to step in."
+  8. `[14w]` (AI Agents & Chatbots `<p>`): "The tool passes the chat to a team member so a person can help."
+  9. `[14w]` (AI Agents & Chatbots `<p>`): "We help you reply to enquiries and collect leads on WhatsApp and social chat."
+  10. `[14w]` (CRM & Sales Automation `<span>`): "CRM subscription costs depend on your chosen tool and are agreed in your proposal."
+- **Outcome**: Zero sentences over 15 words; all pages maintain average sentence length $\le 9.6$ words; reading grade levels 3.7–6.1.
+
+

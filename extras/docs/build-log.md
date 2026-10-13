@@ -414,3 +414,23 @@ This document logs significant structural, architectural, and operational tasks 
   - `npm run test:e2e`: PASS (24/24 responsive and cookie tests passed)
   - `npm run preflight -- --production`: PASS (business details, webhook, secret, legal, Turnstile pass; only localhost http site URL flagged)
 
+---
+
+## 2026-10-14 — Service Names Capitalisation, Wording & Copy Check Honesty
+- Scope: Execute final small fixes for "The Business Work" across 4 focused areas:
+  1. Service title lowercasing fix: Updated CTA banner on the 4 service pages (`frontend/src/app/services/[slug]/page.tsx:268`) to `"Ready to start with {service.title}?"`. Removed `.toLowerCase()` on `s.solves` in assistant service answers (`frontend/src/lib/assistant/knowledge.ts:136, 154, 173, 191`) to preserve proper nouns (`WhatsApp`, `CRM`). Audited entire `frontend/src` for title interpolation and casing.
+  2. Training wording: In `frontend/src/content/services.ts:162`, updated AI limits to `"AI tools can make mistakes. They need approved notes to answer from."`. Audited `frontend/src` (excluding legal files) for "train" / "training" — verified 0 occurrences across all user-facing copy.
+  3. `copy:check` honesty: Updated `frontend/scripts/plain-words-check.mjs` to treat any element with 4+ words that reads like a sentence (starts with capital and ends with `.`/`?` or contains a verb phrase) as a BODY sentence even when an `h2`, `h3`, or `li`, while keeping headings, buttons, and labels without a full stop as UI text. Added automated reporting of the 10 longest real sentences across pages.
+  4. Full suite validation: Ran all verification commands from repository root against running server (`http://localhost:3000`).
+- Validation:
+  - `npm run lint`: PASS (0 errors, 0 warnings)
+  - `npm run typecheck`: PASS (0 errors)
+  - `npm run test`: PASS (109/109 tests passed across 11 test files)
+  - `npm run build`: PASS (14/14 static and dynamic routes compiled)
+  - `npm run copy:check`: PASS (0 blacklisted words, 0 sentences > 22w, 0 body sentences > 15w, avg sentence length: Home 8.2w, AI Agents 9.1w, CRM 9.6w, Workflow 9.0w, WhatsApp 9.0w; FK grade levels 3.7–6.1)
+  - `npm run seo:check`: PASS (7/7 schema and HTTPS tests passed + image alt audit passed)
+  - `npm run links:check -- http://localhost:3000`: PASS (240 links checked, 0 broken, 0 anchor errors)
+  - `npm run smoke -- http://localhost:3000 --expect-noindex`: PASS (14/14 endpoints verified)
+  - `npm run test:a11y`: PASS (29/29 accessibility, assistant, and capability dialog tests passed)
+
+

@@ -265,7 +265,7 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
             <div className="dark-section flex flex-col items-start justify-between gap-8 rounded-lg border border-section-ochre bg-section-ochre p-8 sm:flex-row sm:items-center sm:p-12 text-section-cream">
               <div className="max-w-xl space-y-2">
                 <h2 className="font-headline text-2xl font-medium tracking-tight text-section-cream sm:text-3xl">
-                  Ready to improve your {service.title.toLowerCase()}?
+                  Ready to start with {service.title}?
                 </h2>
                 <p className="font-body text-sm leading-relaxed text-section-cream">
                   Tell us what takes too much of your time. We will suggest a simple fix with clear costs before we start.

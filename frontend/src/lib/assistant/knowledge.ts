@@ -133,7 +133,7 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
         "customer support",
       ],
       answer:
-        `${s1.title}: ${s1.summary} It solves ${s1.solves.toLowerCase()} AI providers charge their own fees. Who pays is agreed in your written proposal.`,
+        `${s1.title}: ${s1.summary} It solves: ${s1.solves} AI providers charge their own fees. Who pays is agreed in your written proposal.`,
       followUps: ["Custom solutions", "Pricing", "How a project works"],
     },
     {
@@ -151,7 +151,7 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
         "leads",
       ],
       answer:
-        `${s2.title}: ${s2.summary} It solves ${s2.solves.toLowerCase()} We work with your CRM or suggest one that fits your team and budget.`,
+        `${s2.title}: ${s2.summary} It solves: ${s2.solves} We work with your CRM or suggest one that fits your team and budget.`,
       followUps: ["Our services", "Pricing", "How a project works"],
     },
     {
@@ -170,7 +170,7 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
         "system integration",
       ],
       answer:
-        `${s3.title}: ${s3.summary} It solves ${s3.solves.toLowerCase()} We prefer simple rule-based tools over AI whenever they are simpler and more reliable.`,
+        `${s3.title}: ${s3.summary} It solves: ${s3.solves} We prefer simple rule-based tools over AI whenever they are simpler and more reliable.`,
       followUps: ["Our services", "Pricing", "How a project works"],
     },
     {
@@ -188,7 +188,7 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
         "whatsapp bot chahiye",
       ],
       answer:
-        `${s4.title}: ${s4.summary} It solves ${s4.solves.toLowerCase()} All messaging features require Meta approval, approved templates, and customer consent.`,
+        `${s4.title}: ${s4.summary} It solves: ${s4.solves} All messaging features require Meta approval, approved templates, and customer consent.`,
       followUps: ["WhatsApp limits", "Pricing", "How a project works"],
     },
 
