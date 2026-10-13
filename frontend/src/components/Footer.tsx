@@ -12,7 +12,7 @@ export default function Footer() {
           <div className="space-y-4">
             <Logo small fill="#F7F4EE" className="!text-section-cream" />
             <p className="max-w-sm font-body text-sm leading-relaxed text-on-ink-muted">
-              AI automation and connected digital systems, built around how your business actually works.
+              Simple tools for your business, built around how your daily work runs.
             </p>
             <a
               className="inline-block font-headline text-xs uppercase tracking-wider text-section-cream underline decoration-section-cream/60 underline-offset-4 hover:text-ochre-on-dark"

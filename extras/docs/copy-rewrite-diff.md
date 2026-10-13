@@ -172,5 +172,25 @@ Rule highlights:
 | `We automate operations across 6 key industries. Select an industry to see details:` | `We build tools for 6 industries. Pick one to see details:` | 2 short sentences, 6 words each. |
 | `I still don't have that information. Please send an enquiry through our form below, and our team will get back to you with exact details.` | `I still do not have that info. Please send an enquiry, and we will reply.` | 2 short sentences, 8 words each. |
 
+## Group F: Cookie Banner, Header, Footer, 404, Accessibility Labels
+
+### `frontend/src/components/CookieConsent.tsx`
+| Old Text | New Text | Rationale |
+|---|---|---|
+| `Cookie & Analytics Consent` | `Counting visits` | Plain everyday 2-word title. |
+| `We use optional Google Analytics to understand aggregated site visits. No tracking cookies are set unless you accept. Read our Privacy Policy.` | `We use a tool that counts visits. You can say yes or no. Read our Privacy Policy.` | Target requested copy in plain English, short sentences. |
+
+### `frontend/src/components/Footer.tsx`
+| Old Text | New Text | Rationale |
+|---|---|---|
+| `AI automation and connected digital systems, built around how your business actually works.` | `Simple tools for your business, built around how your daily work runs.` | Plain words, replaces jargon, 12 words. |
+| `Contact & Connect` | `Contact` | Simple 1-word heading. |
+
+### `frontend/src/app/not-found.tsx`
+| Old Text | New Text | Rationale |
+|---|---|---|
+| `Return to Home` / `Explore Services` | `Back to home` / `See services` | Short everyday words, <= 3 words per button. |
+| `Or browse our services directly:` | `Or read about our services:` | Plain words. |
+
 ---
 

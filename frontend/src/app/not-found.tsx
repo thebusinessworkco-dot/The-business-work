@@ -31,19 +31,19 @@ export default function NotFound() {
             href="/"
             className="inline-flex items-center justify-center rounded bg-ink px-6 py-3 font-headline text-xs font-semibold uppercase tracking-wider text-background transition-colors hover:bg-accent-ochre"
           >
-            Return to Home
+            Back to home
           </Link>
           <Link
             href="/#services"
             className="inline-flex items-center justify-center rounded border border-border-taupe bg-surface-card px-6 py-3 font-headline text-xs font-semibold uppercase tracking-wider text-ink transition-colors hover:border-ink hover:bg-[#EFEAE0]"
           >
-            Explore Services
+            See services
           </Link>
         </div>
 
         <div className="mt-16 w-full border-t border-border-sand pt-12 text-left">
           <div className="mb-6 font-headline text-xs uppercase tracking-wider text-ink-muted">
-            Or browse our services directly:
+            Or read about our services:
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {services.map((s) => (

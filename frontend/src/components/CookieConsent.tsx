@@ -55,11 +55,11 @@ export default function CookieConsent() {
             <div className="flex items-center gap-2">
               <div className="h-2 w-2 bg-accent-ochre" aria-hidden="true" />
               <h2 className="font-headline text-xs font-semibold uppercase tracking-wider text-ink">
-                Cookie & Analytics Consent
+                Counting visits
               </h2>
             </div>
             <p className="font-body text-xs leading-relaxed text-ink-muted">
-              We use optional Google Analytics to understand aggregated site visits. No tracking cookies are set unless you accept. Read our{" "}
+              We use a tool that counts visits. You can say yes or no. Read our{" "}
               <Link
                 href="/privacy"
                 className="text-ink underline decoration-border-taupe underline-offset-2 hover:text-accent-ochre"
