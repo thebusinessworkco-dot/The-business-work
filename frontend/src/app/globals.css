@@ -7,6 +7,8 @@
   body { overscroll-behavior: none; }
   :focus-visible { outline: 2px solid #181716; outline-offset: 2px; }
   #contact :focus-visible,
+  #how-we-work :focus-visible,
+  footer :focus-visible,
   .dark-section :focus-visible { outline: 2px solid #F7F4EE; outline-offset: 2px; }
 }
 

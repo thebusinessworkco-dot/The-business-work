@@ -382,7 +382,7 @@ export default function AssistantWidget() {
         aria-expanded={isOpen}
         aria-controls="assistant-panel"
         aria-label={isOpen ? "Close website assistant" : "Open website assistant"}
-        className="group flex min-h-[48px] min-w-[48px] sm:min-h-[52px] sm:min-w-[52px] items-center justify-center gap-2 rounded-lg bg-ink p-2.5 sm:px-4 sm:py-3 shadow-xl ring-1 ring-section-cream/35 transition-all hover:bg-accent-ochre focus:outline-none focus:ring-2 focus:ring-ink focus:ring-offset-2"
+        className="group flex min-h-[48px] min-w-[48px] sm:min-h-[52px] sm:min-w-[52px] items-center justify-center gap-2 rounded-lg bg-ink p-2.5 sm:px-4 sm:py-3 shadow-xl ring-2 ring-section-cream transition-all hover:bg-accent-ochre focus:outline-none focus:ring-2 focus:ring-section-cream focus:ring-offset-2 focus:ring-offset-ink"
       >
         <span className="relative flex items-center justify-center">
           <svg

@@ -130,7 +130,7 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
         <section className="w-full border-t border-border-sand bg-section-sand py-20">
           <div className="mx-auto max-w-7xl px-6 lg:px-12">
             <div className="mb-12">
-              <div className="mb-2 font-headline text-xs font-semibold uppercase tracking-[0.2em] text-accent-ochre">
+              <div className="mb-2 font-headline text-xs font-semibold uppercase tracking-[0.2em] text-accent-ochre-dark">
                 What We Deliver
               </div>
               <h2 className="font-headline text-3xl font-medium tracking-tight text-ink">
@@ -143,7 +143,7 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
                   key={c}
                   className="flex items-start gap-3 rounded border border-border-sand bg-surface-card p-6"
                 >
-                  <CheckCircle2 size={18} className="mt-0.5 shrink-0 text-accent-ochre" aria-hidden="true" />
+                  <CheckCircle2 size={18} className="mt-0.5 shrink-0 text-accent-ochre-dark" aria-hidden="true" />
                   <span className="font-body text-sm font-medium text-ink">{c}</span>
                 </li>
               ))}
@@ -152,10 +152,10 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
         </section>
 
         {/* Use Cases Section */}
-        <section className="w-full border-t border-border-sand bg-section-cream py-20">
+        <section className="w-full border-t border-border-sand bg-section-clay py-20">
           <div className="mx-auto max-w-7xl px-6 lg:px-12">
             <div className="mb-12">
-              <div className="mb-2 font-headline text-xs font-semibold uppercase tracking-[0.2em] text-accent-ochre">
+              <div className="mb-2 font-headline text-xs font-semibold uppercase tracking-[0.2em] text-accent-ochre-dark">
                 Real Scenarios
               </div>
               <h2 className="font-headline text-3xl font-medium tracking-tight text-ink">
@@ -181,10 +181,10 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
         </section>
 
         {/* How It Works Section */}
-        <section className="w-full border-t border-border-sand bg-section-sand py-20">
+        <section className="w-full border-t border-border-sand bg-section-sage py-20">
           <div className="mx-auto max-w-7xl px-6 lg:px-12">
             <div className="mb-12">
-              <div className="mb-2 font-headline text-xs font-semibold uppercase tracking-[0.2em] text-accent-ochre">
+              <div className="mb-2 font-headline text-xs font-semibold uppercase tracking-[0.2em] text-accent-ochre-dark">
                 Implementation Steps
               </div>
               <h2 className="font-headline text-3xl font-medium tracking-tight text-ink">
@@ -197,7 +197,7 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
                   key={step}
                   className="flex flex-col justify-between rounded border border-border-sand bg-surface-card p-6"
                 >
-                  <div className="mb-4 font-headline text-xs font-semibold uppercase tracking-wider text-accent-ochre">
+                  <div className="mb-4 font-headline text-xs font-semibold uppercase tracking-wider text-accent-ochre-dark">
                     Step {String(i + 1).padStart(2, "0")}
                   </div>
                   <h3 className="font-body text-sm leading-relaxed text-ink">
@@ -237,7 +237,7 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
         <section className="w-full border-t border-border-sand bg-section-sand py-20">
           <div className="mx-auto max-w-4xl px-6">
             <div className="mb-12 text-center">
-              <div className="mb-2 font-headline text-xs font-semibold uppercase tracking-[0.2em] text-accent-ochre">
+              <div className="mb-2 font-headline text-xs font-semibold uppercase tracking-[0.2em] text-accent-ochre-dark">
                 Questions &amp; Answers
               </div>
               <h2 className="font-headline text-3xl font-medium tracking-tight text-ink">
@@ -268,28 +268,28 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
         {/* CTA Banner */}
         <section className="w-full border-t border-border-sand bg-section-cream py-20">
           <div className="mx-auto max-w-7xl px-6 lg:px-12">
-            <div className="dark-section flex flex-col items-start justify-between gap-8 rounded-lg border border-section-ink bg-section-ink p-8 sm:flex-row sm:items-center sm:p-12 text-section-cream">
+            <div className="dark-section flex flex-col items-start justify-between gap-8 rounded-lg border border-section-ochre bg-section-ochre p-8 sm:flex-row sm:items-center sm:p-12 text-section-cream">
               <div className="max-w-xl space-y-2">
                 <h2 className="font-headline text-2xl font-medium tracking-tight text-section-cream sm:text-3xl">
                   Ready to automate your {service.title.toLowerCase()}?
                 </h2>
-                <p className="font-body text-sm leading-relaxed text-section-sand">
+                <p className="font-body text-sm leading-relaxed text-section-cream">
                   Tell us about your daily bottlenecks. We will recommend the simplest suitable approach with a written scope and cost estimate.
                 </p>
               </div>
               <DiscussProjectButton
                 serviceTitle={service.title}
-                className="inline-flex items-center justify-center gap-2.5 rounded bg-section-cream px-7 py-3.5 font-headline text-xs font-semibold uppercase tracking-wider text-ink transition-colors hover:bg-ochre-on-dark"
+                className="inline-flex items-center justify-center gap-2.5 rounded bg-section-cream px-7 py-3.5 font-headline text-xs font-semibold uppercase tracking-wider text-ink transition-colors hover:bg-ink hover:text-section-cream"
               />
             </div>
           </div>
         </section>
 
         {/* Other Services Section */}
-        <section className="w-full border-t border-border-sand bg-section-sand py-20">
+        <section className="w-full border-t border-border-sand bg-section-sage py-20">
           <div className="mx-auto max-w-7xl px-6 lg:px-12">
             <div className="mb-12">
-              <div className="mb-2 font-headline text-xs font-semibold uppercase tracking-[0.2em] text-accent-ochre">
+              <div className="mb-2 font-headline text-xs font-semibold uppercase tracking-[0.2em] text-accent-ochre-dark">
                 Explore More
               </div>
               <h2 className="font-headline text-3xl font-medium tracking-tight text-ink">
@@ -304,10 +304,10 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
                   className="group flex flex-col justify-between rounded-lg border border-border-sand bg-surface-card p-7 transition-all hover:border-ink hover:bg-[#EFEAE0]"
                 >
                   <div>
-                    <div className="mb-3 font-headline text-xs uppercase tracking-wider text-accent-ochre">
+                    <div className="mb-3 font-headline text-xs uppercase tracking-wider text-accent-ochre-dark">
                       {other.tag}
                     </div>
-                    <h3 className="mb-3 font-headline text-xl font-medium text-ink transition-colors group-hover:text-accent-ochre">
+                    <h3 className="mb-3 font-headline text-xl font-medium text-ink transition-colors group-hover:text-accent-ochre-dark">
                       {other.title}
                     </h3>
                     <p className="font-body text-sm leading-relaxed text-ink-muted">

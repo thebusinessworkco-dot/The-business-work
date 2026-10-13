@@ -46,8 +46,8 @@ export default function Services() {
                     </span>
                     <span className="lg:col-span-4">
                       <span className="flex items-center gap-3">
-                        <Icon size={20} className="text-accent-ochre" aria-hidden />
-                        <span className="font-headline text-xl font-medium text-ink transition-colors group-hover:text-accent-ochre">{s.title}</span>
+                        <Icon size={20} className="text-accent-ochre-dark" aria-hidden />
+                        <span className="font-headline text-xl font-medium text-ink transition-colors group-hover:text-accent-ochre-dark">{s.title}</span>
                       </span>
                       <span className="mt-2 inline-block rounded border border-border-sand bg-surface-card px-2.5 py-0.5 font-headline text-[10px] uppercase tracking-wider text-ink-muted">
                         {s.tag}

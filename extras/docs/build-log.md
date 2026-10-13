@@ -300,5 +300,46 @@ This document logs significant structural, architectural, and operational tasks 
   - `npm run links:check --prefix frontend -- http://localhost:3000`: PASS (194 links, 0 broken, 0 anchor errors)
   - `npm run smoke --prefix frontend -- http://localhost:3000 --expect-noindex`: PASS (14/14 endpoints verified)
 
+---
 
+## 2026-10-13 — Bolder Section Colours & Earthy Theme Contrast Hardening
+- Scope: Give every section of the site a clearly different, solid, earthy background colour (cream, deep sand, pine green, clay, sage, solid ochre, dark ink) with clear visual demarcation between sections. Color changes only.
+- Changes made:
+  - `frontend/tailwind.config.ts`: Replaced previous light section tint tokens with solid earthy tokens:
+    - Section backgrounds: `section-cream` (`#F7F4EE`), `section-sand` (`#E8DDC8`), `section-pine` (`#283730`), `section-clay` (`#EFD7C3`), `section-sage` (`#D9E3D6`), `section-ochre` (`#A3512B`), `section-ink` (`#181716`).
+    - Semantic text/accents: `on-pine` (`#F7F4EE`), `on-pine-muted` (`#C2CEC6`), `on-ochre` (`#F7F4EE`), `on-ochre-muted` (`#F7F4EE`), `on-ink` (`#F7F4EE`), `on-ink-muted` (`#C7C2B8`), `ochre-on-dark` (`#E3A27E`), `accent-ochre-dark` (`#7A3A1C`).
+  - `frontend/scripts/contrast.mjs`: Extended to 58 semantic pairs testing all text tokens, borders, buttons, cards, assistant launcher boundaries, and badges across their respective section backgrounds. All 58 pairs verified passing WCAG AA/AAA standards. Clay was calibrated to `#EFD7C3` to ensure muted text reaches $\ge 4.5:1$ (4.52:1).
+  - `frontend/src/app/globals.css`: Added scoped cream focus ring (`outline: 2px solid #F7F4EE; outline-offset: 2px;`) for dark and ochre sections (`#contact :focus-visible`, `#how-we-work :focus-visible`, `footer :focus-visible`, `.dark-section :focus-visible`).
+  - `frontend/src/components/SectionHeading.tsx`: Added `dark?: boolean` prop; default eyebrow uses `text-accent-ochre-dark` on light sections ($\ge 5.59:1$) and `text-ochre-on-dark` on dark sections (5.80:1).
+  - Home Page Section Wrappers (`frontend/src/components/*`):
+    - Hero: `section-cream` (`#F7F4EE`), ink typography.
+    - Services: `section-sand` (`#E8DDC8`), ink text, white rows/cards.
+    - How We Work (`Process`): `section-pine` (`#283730` DARK), cream typography, `ochre-on-dark` step markers, `on-pine-muted` body, hairline dividers `border-section-cream/25` (grid cells preserved, no white cards).
+    - Industries: `section-clay` (`#EFD7C3`), ink typography, white cards with `border-sand`.
+    - Demos (`Work`): `section-sage` (`#D9E3D6`), ink typography, white demo cards.
+    - Why The Business Work (`Principles`): `section-cream` (`#F7F4EE`), ink typography, white principle cards.
+    - Final CTA: `section-ochre` (`#A3512B` SOLID), cream typography, cream primary button with ink hover, cream WhatsApp ghost button, underlined cream email link.
+    - Footer: `section-ink` (`#181716` DARK), cream logo (`fill="#F7F4EE"`), `on-ink-muted` text, cream headings, underlined navigation and legal links.
+  - Service detail pages (`/services/[slug]`):
+    - Hero area: `section-cream`
+    - Capabilities: `section-sand` with white cards
+    - Use Cases: `section-clay` with white cards
+    - How It Works: `section-sage` with white step cards
+    - Limitations: `section-cream` with white warning cards
+    - FAQ: `section-sand` with white cards
+    - CTA Banner: `section-ochre` banner card with cream copy and cream button
+    - Other Services: `section-sage` with white cards
+  - `frontend/src/components/assistant/AssistantWidget.tsx`: Added `ring-2 ring-section-cream` to floating launcher button to ensure a solid $\ge 3:1$ visual boundary over all sections (including dark pine, dark ink, and solid ochre).
+  - `frontend/tests/section-colours.spec.ts`: Added Playwright test asserting all 8 home page sections match their computed token background colors and verifying adjacent sections have distinct background colors.
+  - `extras/docs/design-tokens.md`: Updated with full 8-section palette table, service page map, 58-row contrast table, and how-to guide for changing section colours.
+- Validation:
+  - `npm run lint --prefix frontend`: PASS (0 warnings, 0 errors)
+  - `npm run typecheck --prefix frontend`: PASS (0 errors)
+  - `npm run test --prefix frontend`: PASS (97/97 tests passed)
+  - `npm run build --prefix frontend`: PASS (14/14 static and dynamic routes compiled)
+  - `node frontend/scripts/contrast.mjs`: PASS (58/58 pairs passed WCAG AA/AAA)
+  - `npm run test:a11y --prefix frontend`: PASS (17/17 axe & assistant tests passed)
+  - Playwright responsive & section-colours suites: PASS (25/25 tests passed)
+  - `npm run links:check --prefix frontend -- http://localhost:3000`: PASS (194 links checked, 0 broken, 0 anchor errors)
+  - `npm run smoke --prefix frontend -- http://localhost:3000 --expect-noindex`: PASS (14/14 endpoints verified)
 

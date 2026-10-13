@@ -128,7 +128,7 @@ function DemoCard({ demo }: { demo: Demo }) {
 
 export default function Work() {
   return (
-    <section id="demos" aria-labelledby="demos-title" className="w-full bg-section-cream py-24 md:py-32">
+    <section id="demos" aria-labelledby="demos-title" className="w-full border-y border-border-sand bg-section-sage py-24 md:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-12">
         <SectionHeading
           eyebrow="04 / DEMOS"
