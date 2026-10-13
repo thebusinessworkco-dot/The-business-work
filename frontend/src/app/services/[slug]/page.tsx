@@ -121,7 +121,7 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
                 {service.solves}
               </p>
               <div className="border-t border-border-sand pt-4 font-headline text-xs uppercase tracking-wider text-ink-faint">
-                Custom-built around your existing setup
+                Built around how you work today
               </div>
             </div>
           </div>
@@ -132,10 +132,10 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
           <div className="mx-auto max-w-7xl px-6 lg:px-12">
             <div className="mb-12">
               <div className="mb-2 font-headline text-xs font-semibold uppercase tracking-[0.2em] text-accent-ochre-dark">
-                What We Deliver
+                What we build
               </div>
               <h2 className="font-headline text-3xl font-medium tracking-tight text-ink">
-                Core Capabilities
+                What this service includes
               </h2>
             </div>
             <ServiceCapabilities
@@ -150,10 +150,10 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
           <div className="mx-auto max-w-7xl px-6 lg:px-12">
             <div className="mb-12">
               <div className="mb-2 font-headline text-xs font-semibold uppercase tracking-[0.2em] text-accent-ochre-dark">
-                Real Scenarios
+                Real examples
               </div>
               <h2 className="font-headline text-3xl font-medium tracking-tight text-ink">
-                Typical Use Cases
+                Where this helps
               </h2>
             </div>
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -163,7 +163,7 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
                   className="rounded-lg border border-border-sand bg-surface-card p-7 transition-colors hover:border-border-taupe"
                 >
                   <div className="mb-3 font-headline text-xs font-semibold uppercase tracking-wider text-ink-muted">
-                    Use Case {String(i + 1).padStart(2, "0")}
+                    Example {String(i + 1).padStart(2, "0")}
                   </div>
                   <h3 className="font-body text-base font-normal leading-relaxed text-ink">
                     {uc}
@@ -179,10 +179,10 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
           <div className="mx-auto max-w-7xl px-6 lg:px-12">
             <div className="mb-12">
               <div className="mb-2 font-headline text-xs font-semibold uppercase tracking-[0.2em] text-accent-ochre-dark">
-                Implementation Steps
+                Simple steps
               </div>
               <h2 className="font-headline text-3xl font-medium tracking-tight text-ink">
-                How It Works
+                How we build it
               </h2>
             </div>
             <ol className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -210,7 +210,7 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
               <div className="mb-6 flex items-center gap-3">
                 <AlertCircle size={20} className="text-accent-ochre" aria-hidden="true" />
                 <h2 className="font-headline text-2xl font-medium tracking-tight text-ink">
-                  What You Should Know &amp; Honest Limits
+                  Things to know before we start
                 </h2>
               </div>
               <ul className="space-y-4">
@@ -232,10 +232,10 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
           <div className="mx-auto max-w-4xl px-6">
             <div className="mb-12 text-center">
               <div className="mb-2 font-headline text-xs font-semibold uppercase tracking-[0.2em] text-accent-ochre-dark">
-                Questions &amp; Answers
+                Clear answers
               </div>
               <h2 className="font-headline text-3xl font-medium tracking-tight text-ink">
-                Frequently Asked Questions
+                Common questions
               </h2>
             </div>
             <div className="space-y-4">
@@ -265,10 +265,10 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
             <div className="dark-section flex flex-col items-start justify-between gap-8 rounded-lg border border-section-ochre bg-section-ochre p-8 sm:flex-row sm:items-center sm:p-12 text-section-cream">
               <div className="max-w-xl space-y-2">
                 <h2 className="font-headline text-2xl font-medium tracking-tight text-section-cream sm:text-3xl">
-                  Ready to automate your {service.title.toLowerCase()}?
+                  Ready to improve your {service.title.toLowerCase()}?
                 </h2>
                 <p className="font-body text-sm leading-relaxed text-section-cream">
-                  Tell us about your daily bottlenecks. We will recommend the simplest suitable approach with a written scope and cost estimate.
+                  Tell us what takes too much of your time. We will suggest a simple fix with clear costs before we start.
                 </p>
               </div>
               <DiscussProjectButton
@@ -284,10 +284,10 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
           <div className="mx-auto max-w-7xl px-6 lg:px-12">
             <div className="mb-12">
               <div className="mb-2 font-headline text-xs font-semibold uppercase tracking-[0.2em] text-accent-ochre-dark">
-                Explore More
+                Other tools
               </div>
               <h2 className="font-headline text-3xl font-medium tracking-tight text-ink">
-                Other Services
+                Other services we offer
               </h2>
             </div>
             <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
@@ -309,7 +309,7 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
                     </p>
                   </div>
                   <div className="mt-6 flex items-center gap-2 font-headline text-xs uppercase tracking-wider text-ink">
-                    <span>Learn More</span>
+                    <span>Read more</span>
                     <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
                   </div>
                 </Link>

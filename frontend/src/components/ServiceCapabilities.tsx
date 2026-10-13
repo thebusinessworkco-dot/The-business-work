@@ -122,7 +122,7 @@ export default function ServiceCapabilities({
             className="group flex h-full w-full flex-col justify-between rounded border border-border-sand bg-surface-card p-6 text-left transition-all hover:border-ink hover:bg-[#EFEAE0] focus-visible:outline-2 focus-visible:outline-ink cursor-pointer"
             aria-haspopup="dialog"
             aria-expanded={activeIndex === index}
-            aria-label={`View explanation for ${c.name}`}
+            aria-label={`Read details about ${c.name}`}
           >
             <div>
               <div className="flex items-start gap-3">
@@ -137,7 +137,7 @@ export default function ServiceCapabilities({
               </div>
             </div>
             <div className="mt-4 flex items-center gap-1.5 font-headline text-[11px] font-semibold uppercase tracking-wider text-accent-ochre-dark group-hover:text-ink">
-              <span>Click to learn more</span>
+              <span>Click to read more</span>
               <ArrowRight
                 size={12}
                 className="transition-transform group-hover:translate-x-0.5"
@@ -168,7 +168,7 @@ export default function ServiceCapabilities({
               ref={closeBtnRef}
               type="button"
               onClick={closeDetail}
-              aria-label="Close capability details"
+              aria-label="Close details"
               className="absolute top-4 right-4 sm:top-6 sm:right-6 rounded p-2 text-ink-muted hover:text-ink hover:bg-surface-card transition-colors focus-visible:outline-2 focus-visible:outline-ink"
             >
               <X size={20} aria-hidden="true" />
@@ -180,7 +180,7 @@ export default function ServiceCapabilities({
                 <span>{serviceTitle}</span>
                 <span className="text-border-taupe">·</span>
                 <span>
-                  Capability {activeIndex !== null ? activeIndex + 1 : 1} of 6
+                  Part {activeIndex !== null ? activeIndex + 1 : 1} of 6
                 </span>
               </div>
               <h3
@@ -196,7 +196,7 @@ export default function ServiceCapabilities({
               {/* 1. What */}
               <div className="space-y-1">
                 <div className="font-headline text-xs font-semibold uppercase tracking-wider text-accent-ochre-dark">
-                  What It Is
+                  What it is
                 </div>
                 <p className="font-body text-sm leading-relaxed text-ink">
                   {activeCapability.details.what}
@@ -206,7 +206,7 @@ export default function ServiceCapabilities({
               {/* 2. Problem */}
               <div className="space-y-1">
                 <div className="font-headline text-xs font-semibold uppercase tracking-wider text-accent-ochre-dark">
-                  Problem It Solves
+                  Problem it solves
                 </div>
                 <p className="font-body text-sm leading-relaxed text-ink">
                   {activeCapability.details.problem}
@@ -216,7 +216,7 @@ export default function ServiceCapabilities({
               {/* 3. Steps */}
               <div className="space-y-1.5">
                 <div className="font-headline text-xs font-semibold uppercase tracking-wider text-accent-ochre-dark">
-                  How It Works in Simple Steps
+                  How it works in 3 steps
                 </div>
                 <ol className="space-y-2 pt-1">
                   {activeCapability.details.steps.map((step, idx) => (
@@ -235,7 +235,7 @@ export default function ServiceCapabilities({
               {/* 4. Example */}
               <div className="space-y-1">
                 <div className="font-headline text-xs font-semibold uppercase tracking-wider text-accent-ochre-dark">
-                  Real-World Example
+                  Real example
                 </div>
                 <div className="rounded border border-border-sand bg-surface-card p-4 font-body text-sm leading-relaxed text-ink">
                   <span className="font-semibold text-ink">Example: </span>
@@ -246,7 +246,7 @@ export default function ServiceCapabilities({
               {/* 5. Benefit */}
               <div className="space-y-1">
                 <div className="font-headline text-xs font-semibold uppercase tracking-wider text-accent-ochre-dark">
-                  How It Helps Your Business
+                  How it helps your business
                 </div>
                 <p className="font-body text-sm leading-relaxed text-ink">
                   {activeCapability.details.benefit}
@@ -256,7 +256,7 @@ export default function ServiceCapabilities({
               {/* 6. Tools */}
               <div className="space-y-1 border-t border-border-sand pt-4">
                 <div className="font-headline text-xs font-semibold uppercase tracking-wider text-accent-ochre-dark">
-                  Tools &amp; Setup Requirements
+                  Tools and setup
                 </div>
                 <p className="font-body text-xs leading-relaxed text-ink-muted">
                   {activeCapability.details.tools}
@@ -270,7 +270,7 @@ export default function ServiceCapabilities({
                 <button
                   type="button"
                   onClick={handlePrev}
-                  aria-label="Previous capability"
+                  aria-label="Previous"
                   className="inline-flex items-center gap-1.5 rounded border border-border-sand bg-surface-card px-3 py-2 font-headline text-xs font-semibold uppercase tracking-wider text-ink transition-colors hover:border-ink hover:bg-background focus-visible:outline-2 focus-visible:outline-ink"
                 >
                   <ArrowLeft size={13} aria-hidden="true" />
@@ -279,7 +279,7 @@ export default function ServiceCapabilities({
                 <button
                   type="button"
                   onClick={handleNext}
-                  aria-label="Next capability"
+                  aria-label="Next"
                   className="inline-flex items-center gap-1.5 rounded border border-border-sand bg-surface-card px-3 py-2 font-headline text-xs font-semibold uppercase tracking-wider text-ink transition-colors hover:border-ink hover:bg-background focus-visible:outline-2 focus-visible:outline-ink"
                 >
                   <span>Next</span>
