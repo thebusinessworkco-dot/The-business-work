@@ -166,7 +166,7 @@ function DemoCard({ demo }: { demo: Demo }) {
 
 export default function Work() {
   return (
-    <section id="demos" aria-labelledby="demos-title" className="w-full border-y border-border-sand bg-section-sage py-8 sm:py-10 md:py-12">
+    <section id="demos" aria-labelledby="demos-title" className="w-full border-y border-border-sand bg-section-sage py-16 md:py-20">
       <div className="mx-auto max-w-7xl px-6 lg:px-12">
         <SectionHeading
           eyebrow="04 / DEMOS"
@@ -174,7 +174,7 @@ export default function Work() {
           id="demos-title"
           aside="Every project shows its real status. We do not claim past client work."
         />
-        <div className="space-y-6 sm:space-y-8 pt-6 sm:pt-8">
+        <div className="space-y-8 sm:space-y-10 pt-10 sm:pt-12">
           {demos.map((d) => <DemoCard key={d.id} demo={d} />)}
         </div>
       </div>

@@ -3,7 +3,7 @@ import SectionHeading from "./SectionHeading";
 
 export default function Industries() {
   return (
-    <section id="industries" aria-labelledby="industries-title" className="w-full border-y border-border-sand bg-section-clay py-8 sm:py-10 md:py-12">
+    <section id="industries" aria-labelledby="industries-title" className="w-full border-y border-border-sand bg-section-clay py-16 md:py-20">
       <div className="mx-auto max-w-7xl px-6 lg:px-12">
         <SectionHeading
           eyebrow="03 / INDUSTRIES"

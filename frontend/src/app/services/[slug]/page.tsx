@@ -94,7 +94,7 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
         </div>
 
         {/* Hero Section */}
-        <section className="mx-auto max-w-7xl px-6 pb-8 sm:pb-10 lg:px-12">
+        <section className="mx-auto max-w-7xl px-6 pb-12 sm:pb-14 lg:px-12">
           <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-12">
             <div className="space-y-6 lg:col-span-8">
               <div className="inline-flex items-center gap-2.5 rounded border border-border-sand bg-surface-card px-3 py-1 font-headline text-xs font-semibold uppercase tracking-wider text-accent-ochre">
@@ -128,9 +128,9 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
         </section>
 
         {/* Capabilities Section */}
-        <section className="w-full border-t border-border-sand bg-section-sand py-8 sm:py-10 md:py-12">
+        <section className="w-full border-t border-border-sand bg-section-sand py-16 md:py-20">
           <div className="mx-auto max-w-7xl px-6 lg:px-12">
-            <div className="mb-6 sm:mb-8">
+            <div className="mb-8 sm:mb-10">
               <div className="mb-2 font-headline text-xs font-semibold uppercase tracking-[0.2em] text-accent-ochre-dark">
                 What we build
               </div>
@@ -146,9 +146,9 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
         </section>
 
         {/* Use Cases Section */}
-        <section className="w-full border-t border-border-sand bg-section-clay py-8 sm:py-10 md:py-12">
+        <section className="w-full border-t border-border-sand bg-section-clay py-16 md:py-20">
           <div className="mx-auto max-w-7xl px-6 lg:px-12">
-            <div className="mb-6 sm:mb-8">
+            <div className="mb-8 sm:mb-10">
               <div className="mb-2 font-headline text-xs font-semibold uppercase tracking-[0.2em] text-accent-ochre-dark">
                 Real examples
               </div>
@@ -175,9 +175,9 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
         </section>
 
         {/* How It Works Section */}
-        <section className="w-full border-t border-border-sand bg-section-sage py-8 sm:py-10 md:py-12">
+        <section className="w-full border-t border-border-sand bg-section-sage py-16 md:py-20">
           <div className="mx-auto max-w-7xl px-6 lg:px-12">
-            <div className="mb-6 sm:mb-8">
+            <div className="mb-8 sm:mb-10">
               <div className="mb-2 font-headline text-xs font-semibold uppercase tracking-[0.2em] text-accent-ochre-dark">
                 Simple steps
               </div>
@@ -204,7 +204,7 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
         </section>
 
         {/* Limits & What To Know */}
-        <section className="w-full border-t border-border-sand bg-section-cream py-8 sm:py-10 md:py-12">
+        <section className="w-full border-t border-border-sand bg-section-cream py-16 md:py-20">
           <div className="mx-auto max-w-7xl px-6 lg:px-12">
             <div className="rounded-lg border border-border-sand bg-surface-card p-8 sm:p-10">
               <div className="mb-6 flex items-center gap-3">
@@ -228,9 +228,9 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
         </section>
 
         {/* FAQ Section */}
-        <section className="w-full border-t border-border-sand bg-section-sand py-8 sm:py-10 md:py-12">
+        <section className="w-full border-t border-border-sand bg-section-sand py-16 md:py-20">
           <div className="mx-auto max-w-4xl px-6">
-            <div className="mb-6 sm:mb-8 text-center">
+            <div className="mb-8 sm:mb-10 text-center">
               <div className="mb-2 font-headline text-xs font-semibold uppercase tracking-[0.2em] text-accent-ochre-dark">
                 Clear answers
               </div>
@@ -260,7 +260,7 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
         </section>
 
         {/* CTA Banner */}
-        <section className="w-full border-t border-border-sand bg-section-cream py-8 sm:py-10 md:py-12">
+        <section className="w-full border-t border-border-sand bg-section-cream py-16 md:py-20">
           <div className="mx-auto max-w-7xl px-6 lg:px-12">
             <div className="dark-section flex flex-col items-start justify-between gap-8 rounded-lg border border-section-ochre bg-section-ochre p-8 sm:flex-row sm:items-center sm:p-12 text-section-cream">
               <div className="max-w-xl space-y-2">
@@ -280,9 +280,9 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
         </section>
 
         {/* Other Services Section */}
-        <section className="w-full border-t border-border-sand bg-section-sage py-8 sm:py-10 md:py-12">
+        <section className="w-full border-t border-border-sand bg-section-sage py-16 md:py-20">
           <div className="mx-auto max-w-7xl px-6 lg:px-12">
-            <div className="mb-6 sm:mb-8">
+            <div className="mb-8 sm:mb-10">
               <div className="mb-2 font-headline text-xs font-semibold uppercase tracking-[0.2em] text-accent-ochre-dark">
                 Other tools
               </div>

@@ -8,7 +8,7 @@ export default function Founder() {
     <section
       id="founder"
       aria-labelledby="founder-title"
-      className="w-full border-t border-border-sand bg-section-cream py-8 sm:py-10 md:py-12"
+      className="w-full border-t border-border-sand bg-section-cream py-16 md:py-20"
     >
       <div className="mx-auto max-w-7xl px-6 lg:px-12">
         <div className="grid grid-cols-1 items-start gap-10 md:grid-cols-12">
