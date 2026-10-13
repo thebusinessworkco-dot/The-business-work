@@ -2,283 +2,335 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>THE BUSINESS WORK — Official Vector Logo Deliverables</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>THE BUSINESS WORK — Official Vector Logo Deliverables & Split System</title>
   <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      margin: 0;
-      padding: 48px 24px;
-      font-family: 'Space Grotesk', system-ui, sans-serif;
-      background: #EFEBE1;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      background: #F0EDE5;
       color: #181716;
+      padding: 40px 20px;
+      line-height: 1.5;
     }
-    .header {
-      text-align: center;
-      margin-bottom: 36px;
-    }
-    .header h1 {
-      margin: 0 0 8px;
-      font-size: 22px;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-    }
-    .header p {
-      margin: 0;
-      font-size: 13px;
-      color: #646059;
-      letter-spacing: 0.05em;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 32px;
-      max-width: 1100px;
+    .container {
+      max-width: 1200px;
       margin: 0 auto;
     }
-    .card {
-      padding: 48px 36px;
-      border-radius: 12px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 32px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+    .header {
+      margin-bottom: 36px;
+      text-align: center;
     }
-    .card.cream {
-      background: #F7F4EE;
-      border: 1px solid #E4DFD5;
-      color: #181716;
+    .header h1 {
+      font-size: 28px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      font-weight: 800;
     }
-    .card.dark {
-      background: #181716;
-      border: 1px solid #2B2926;
-      color: #F7F4EE;
+    .header p {
+      color: #646059;
+      font-size: 15px;
     }
     .badge {
+      display: inline-block;
       font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.2em;
+      font-weight: 700;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       padding: 4px 10px;
       border-radius: 4px;
+      margin-bottom: 16px;
+      background: rgba(24, 23, 22, 0.08);
     }
-    .card.cream .badge {
-      background: #EFEBE1;
-      color: #646059;
+    .badge-ochre {
+      background: #A3512B;
+      color: #FFFFFF;
+    }
+    .section-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin: 40px 0 16px 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(520px, 1fr));
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+    @media (max-width: 600px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+    .card {
+      border-radius: 12px;
+      padding: 32px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .card.cream {
+      background: #F7F4EE;
+      color: #181716;
+      border-color: #E4DFD5;
+    }
+    .card.dark {
+      background: #181716;
+      color: #F7F4EE;
+      border-color: #2D2B29;
     }
     .card.dark .badge {
-      background: #252422;
-      color: #A3512B;
+      background: rgba(247, 244, 238, 0.15);
+      color: #F7F4EE;
     }
     .logo-wrapper {
-      width: 100%;
+      padding: 24px;
+      border-radius: 8px;
+      border: 1px dashed rgba(100, 96, 89, 0.25);
       display: flex;
+      align-items: center;
       justify-content: center;
+      min-height: 120px;
+      background: rgba(255, 255, 255, 0.4);
     }
-    .icon-strip {
+    .card.dark .logo-wrapper {
+      background: rgba(0, 0, 0, 0.3);
+      border-color: rgba(247, 244, 238, 0.2);
+    }
+    .file-tag {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 12px;
+      color: #646059;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0,0,0,0.03);
+      padding: 6px 10px;
+      border-radius: 4px;
+    }
+    .card.dark .file-tag {
+      color: #B5B0A6;
+      background: rgba(255,255,255,0.05);
+    }
+    .file-tag a {
+      color: #A3512B;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .file-tag a:hover {
+      text-decoration: underline;
+    }
+    .card.dark .file-tag a {
+      color: #E88E62;
+    }
+    .sizes-row {
       display: flex;
       align-items: center;
       gap: 24px;
-      padding-top: 16px;
-      border-top: 1px solid rgba(128,128,128,0.15);
-      width: 100%;
+      flex-wrap: wrap;
       justify-content: center;
+      padding: 16px;
     }
-    .icon-label {
-      font-size: 10px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      opacity: 0.5;
+    .size-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .size-label {
+      font-size: 11px;
+      font-family: ui-monospace, monospace;
+      color: #8C867A;
+    }
+    .instructions {
+      background: #FFFFFF;
+      border-radius: 12px;
+      padding: 28px;
+      border: 1px solid #E4DFD5;
+      margin-top: 40px;
+    }
+    .instructions h3 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .instructions pre {
+      background: #181716;
+      color: #F7F4EE;
+      padding: 14px 18px;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-size: 13px;
+      margin: 10px 0;
     }
   </style>
 </head>
 <body>
-  <div class="header">
-    <h1>THE BUSINESS WORK (TBW)</h1>
-    <p>AI Automation & Digital Systems Agency — Official SVG Logo System</p>
-  </div>
+  <div class="container">
+    <div class="header">
+      <span class="badge badge-ochre">Official Vector Brand Assets</span>
+      <h1>The Business Work</h1>
+      <p>Clean Vector Logo System: Full Lockup + Left Mark + Right Wordmark</p>
+    </div>
 
-  <div class="grid">
-    <!-- Light/Cream Background (#F7F4EE) -->
-    <div class="card cream">
-      <div class="badge">Light Theme (#F7F4EE) — Primary Logo</div>
-
-      <!-- Horizontal Full Logo -->
-      <div class="logo-wrapper">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 350 48" width="350" height="48" fill="none">
-          <defs>
-            <style>
-              @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&display=swap');
-              .tbw-text-light {
-                font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
-                font-weight: 700;
-                font-size: 18px;
-                letter-spacing: 0.18em;
-                fill: #181716;
-              }
-            </style>
-          </defs>
-
-          <!-- TBW Monogram (40x40 bounded within 48x48) -->
-          <g id="tbw-symbol" transform="translate(4, 4)">
-            <!-- Letter T: Top beam & stem -->
-            <path d="M 2 6 H 20" stroke="#181716" stroke-width="3.5" stroke-linecap="round" />
-            <path d="M 11 6 V 18" stroke="#181716" stroke-width="3.5" stroke-linecap="round" />
-
-            <!-- Letter W: Dual foundational valleys -->
-            <path d="M 2 21 L 6.5 34 L 11 25 L 15.5 34 L 20 21" stroke="#181716" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-
-            <!-- Letter B: Dual continuous loops -->
-            <path d="M 25 6 V 34" stroke="#181716" stroke-width="3.5" stroke-linecap="round" />
-            <path d="M 25 6 H 34 C 37.5 6 40 8.5 40 12 C 40 15.5 37.5 18 34 18 H 25" stroke="#181716" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M 25 18 H 35 C 39 18 41.5 20.8 41.5 25 C 41.5 29.2 39 34 35 34 H 25" stroke="#181716" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
-
-            <!-- Accent Ochre: Precision Automation Node -->
-            <circle cx="25" cy="6" r="3" fill="#A3512B" />
-          </g>
-
-          <!-- Wordmark -->
-          <text x="60" y="27" dominant-baseline="central" class="tbw-text-light">
-            THE BUSINESS WORK
-          </text>
-        </svg>
+    <!-- 1. FULL LOGO -->
+    <div class="section-title">
+      <span>1. Full Logo Lockup (Combined Mark + Text)</span>
+    </div>
+    <div class="grid">
+      <!-- Light -->
+      <div class="card cream">
+        <div class="badge">Light Theme (#F7F4EE)</div>
+        <div class="logo-wrapper">
+          <img src="/the-business-work.svg" alt="The Business Work Logo" style="width: 100%; max-width: 440px; height: auto;" />
+        </div>
+        <div class="file-tag">
+          <span>File: <code>public/the-business-work.svg</code> (or <code>tbw-logo.svg</code>)</span>
+          <a href="/the-business-work.svg" target="_blank" download>Open / Download</a>
+        </div>
       </div>
 
-      <!-- Icon Variations -->
-      <div class="icon-strip">
-        <span class="icon-label">Favicon / App Icon:</span>
-        <!-- 48px -->
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
-          <g transform="translate(4, 4)">
-            <path d="M 2 6 H 20" stroke="#181716" stroke-width="3.5" stroke-linecap="round" />
-            <path d="M 11 6 V 18" stroke="#181716" stroke-width="3.5" stroke-linecap="round" />
-            <path d="M 2 21 L 6.5 34 L 11 25 L 15.5 34 L 20 21" stroke="#181716" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M 25 6 V 34" stroke="#181716" stroke-width="3.5" stroke-linecap="round" />
-            <path d="M 25 6 H 34 C 37.5 6 40 8.5 40 12 C 40 15.5 37.5 18 34 18 H 25" stroke="#181716" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M 25 18 H 35 C 39 18 41.5 20.8 41.5 25 C 41.5 29.2 39 34 35 34 H 25" stroke="#181716" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
-            <circle cx="25" cy="6" r="3" fill="#A3512B" />
-          </g>
-        </svg>
-
-        <!-- 32px -->
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="32" height="32" fill="none">
-          <g transform="translate(4, 4)">
-            <path d="M 2 6 H 20" stroke="#181716" stroke-width="3.5" stroke-linecap="round" />
-            <path d="M 11 6 V 18" stroke="#181716" stroke-width="3.5" stroke-linecap="round" />
-            <path d="M 2 21 L 6.5 34 L 11 25 L 15.5 34 L 20 21" stroke="#181716" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M 25 6 V 34" stroke="#181716" stroke-width="3.5" stroke-linecap="round" />
-            <path d="M 25 6 H 34 C 37.5 6 40 8.5 40 12 C 40 15.5 37.5 18 34 18 H 25" stroke="#181716" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M 25 18 H 35 C 39 18 41.5 20.8 41.5 25 C 41.5 29.2 39 34 35 34 H 25" stroke="#181716" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
-            <circle cx="25" cy="6" r="3" fill="#A3512B" />
-          </g>
-        </svg>
-
-        <!-- 24px -->
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="24" height="24" fill="none">
-          <g transform="translate(4, 4)">
-            <path d="M 2 6 H 20" stroke="#181716" stroke-width="3.5" stroke-linecap="round" />
-            <path d="M 11 6 V 18" stroke="#181716" stroke-width="3.5" stroke-linecap="round" />
-            <path d="M 2 21 L 6.5 34 L 11 25 L 15.5 34 L 20 21" stroke="#181716" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M 25 6 V 34" stroke="#181716" stroke-width="3.5" stroke-linecap="round" />
-            <path d="M 25 6 H 34 C 37.5 6 40 8.5 40 12 C 40 15.5 37.5 18 34 18 H 25" stroke="#181716" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M 25 18 H 35 C 39 18 41.5 20.8 41.5 25 C 41.5 29.2 39 34 35 34 H 25" stroke="#181716" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
-            <circle cx="25" cy="6" r="3" fill="#A3512B" />
-          </g>
-        </svg>
+      <!-- Dark -->
+      <div class="card dark">
+        <div class="badge">Dark Theme (#181716)</div>
+        <div class="logo-wrapper">
+          <img src="/the-business-work-white.svg" alt="The Business Work Logo White" style="width: 100%; max-width: 440px; height: auto;" />
+        </div>
+        <div class="file-tag">
+          <span>File: <code>public/the-business-work-white.svg</code> (or <code>tbw-logo-dark.svg</code>)</span>
+          <a href="/the-business-work-white.svg" target="_blank" download>Open / Download</a>
+        </div>
       </div>
     </div>
 
-    <!-- Dark Background (#181716) -->
-    <div class="card dark">
-      <div class="badge">Dark Theme (#181716) — Inverted Logo</div>
-
-      <!-- Horizontal Full Logo -->
-      <div class="logo-wrapper">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 350 48" width="350" height="48" fill="none">
-          <defs>
-            <style>
-              @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&display=swap');
-              .tbw-text-dark {
-                font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
-                font-weight: 700;
-                font-size: 18px;
-                letter-spacing: 0.18em;
-                fill: #F7F4EE;
-              }
-            </style>
-          </defs>
-
-          <!-- TBW Monogram in Cream with Ochre Node -->
-          <g id="tbw-symbol-dark" transform="translate(4, 4)">
-            <!-- Letter T -->
-            <path d="M 2 6 H 20" stroke="#F7F4EE" stroke-width="3.5" stroke-linecap="round" />
-            <path d="M 11 6 V 18" stroke="#F7F4EE" stroke-width="3.5" stroke-linecap="round" />
-
-            <!-- Letter W -->
-            <path d="M 2 21 L 6.5 34 L 11 25 L 15.5 34 L 20 21" stroke="#F7F4EE" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-
-            <!-- Letter B -->
-            <path d="M 25 6 V 34" stroke="#F7F4EE" stroke-width="3.5" stroke-linecap="round" />
-            <path d="M 25 6 H 34 C 37.5 6 40 8.5 40 12 C 40 15.5 37.5 18 34 18 H 25" stroke="#F7F4EE" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M 25 18 H 35 C 39 18 41.5 20.8 41.5 25 C 41.5 29.2 39 34 35 34 H 25" stroke="#F7F4EE" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
-
-            <!-- Accent Ochre Node -->
-            <circle cx="25" cy="6" r="3" fill="#A3512B" />
-          </g>
-
-          <!-- Wordmark -->
-          <text x="60" y="27" dominant-baseline="central" class="tbw-text-dark">
-            THE BUSINESS WORK
-          </text>
-        </svg>
+    <!-- 2. SPLIT PART 1: LEFT MARK / ICON ONLY -->
+    <div class="section-title">
+      <span>2. Split Part 1: Left Logo Mark (Emblem / Icon Only)</span>
+    </div>
+    <p style="color: #646059; margin-bottom: 16px; font-size: 14px;">
+      Use for App Icons, Favicon, Social Avatars, Mobile Launchers, Assistant Widgets, and compact headers.
+    </p>
+    <div class="grid">
+      <!-- Light Mark -->
+      <div class="card cream">
+        <div class="badge">Light Theme Mark</div>
+        <div class="logo-wrapper sizes-row">
+          <div class="size-box">
+            <img src="/the-business-work-mark.svg" alt="Mark 96px" style="width: 96px; height: 96px;" />
+            <span class="size-label">96px</span>
+          </div>
+          <div class="size-box">
+            <img src="/the-business-work-mark.svg" alt="Mark 64px" style="width: 64px; height: 64px;" />
+            <span class="size-label">64px</span>
+          </div>
+          <div class="size-box">
+            <img src="/the-business-work-mark.svg" alt="Mark 44px" style="width: 44px; height: 44px;" />
+            <span class="size-label">44px</span>
+          </div>
+          <div class="size-box">
+            <img src="/the-business-work-mark.svg" alt="Mark 32px" style="width: 32px; height: 32px;" />
+            <span class="size-label">32px</span>
+          </div>
+          <div class="size-box">
+            <img src="/the-business-work-mark.svg" alt="Mark 20px" style="width: 20px; height: 20px;" />
+            <span class="size-label">20px</span>
+          </div>
+        </div>
+        <div class="file-tag">
+          <span>File: <code>public/the-business-work-mark.svg</code> (or <code>tbw-icon.svg</code>)</span>
+          <a href="/the-business-work-mark.svg" target="_blank" download>Open / Download</a>
+        </div>
       </div>
 
-      <!-- Icon Variations -->
-      <div class="icon-strip">
-        <span class="icon-label">Favicon / App Icon:</span>
-        <!-- 48px -->
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
-          <g transform="translate(4, 4)">
-            <path d="M 2 6 H 20" stroke="#F7F4EE" stroke-width="3.5" stroke-linecap="round" />
-            <path d="M 11 6 V 18" stroke="#F7F4EE" stroke-width="3.5" stroke-linecap="round" />
-            <path d="M 2 21 L 6.5 34 L 11 25 L 15.5 34 L 20 21" stroke="#F7F4EE" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M 25 6 V 34" stroke="#F7F4EE" stroke-width="3.5" stroke-linecap="round" />
-            <path d="M 25 6 H 34 C 37.5 6 40 8.5 40 12 C 40 15.5 37.5 18 34 18 H 25" stroke="#F7F4EE" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M 25 18 H 35 C 39 18 41.5 20.8 41.5 25 C 41.5 29.2 39 34 35 34 H 25" stroke="#F7F4EE" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
-            <circle cx="25" cy="6" r="3" fill="#A3512B" />
-          </g>
-        </svg>
-
-        <!-- 32px -->
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="32" height="32" fill="none">
-          <g transform="translate(4, 4)">
-            <path d="M 2 6 H 20" stroke="#F7F4EE" stroke-width="3.5" stroke-linecap="round" />
-            <path d="M 11 6 V 18" stroke="#F7F4EE" stroke-width="3.5" stroke-linecap="round" />
-            <path d="M 2 21 L 6.5 34 L 11 25 L 15.5 34 L 20 21" stroke="#F7F4EE" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M 25 6 V 34" stroke="#F7F4EE" stroke-width="3.5" stroke-linecap="round" />
-            <path d="M 25 6 H 34 C 37.5 6 40 8.5 40 12 C 40 15.5 37.5 18 34 18 H 25" stroke="#F7F4EE" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M 25 18 H 35 C 39 18 41.5 20.8 41.5 25 C 41.5 29.2 39 34 35 34 H 25" stroke="#F7F4EE" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
-            <circle cx="25" cy="6" r="3" fill="#A3512B" />
-          </g>
-        </svg>
-
-        <!-- 24px -->
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="24" height="24" fill="none">
-          <g transform="translate(4, 4)">
-            <path d="M 2 6 H 20" stroke="#F7F4EE" stroke-width="3.5" stroke-linecap="round" />
-            <path d="M 11 6 V 18" stroke="#F7F4EE" stroke-width="3.5" stroke-linecap="round" />
-            <path d="M 2 21 L 6.5 34 L 11 25 L 15.5 34 L 20 21" stroke="#F7F4EE" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M 25 6 V 34" stroke="#F7F4EE" stroke-width="3.5" stroke-linecap="round" />
-            <path d="M 25 6 H 34 C 37.5 6 40 8.5 40 12 C 40 15.5 37.5 18 34 18 H 25" stroke="#F7F4EE" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M 25 18 H 35 C 39 18 41.5 20.8 41.5 25 C 41.5 29.2 39 34 35 34 H 25" stroke="#F7F4EE" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
-            <circle cx="25" cy="6" r="3" fill="#A3512B" />
-          </g>
-        </svg>
+      <!-- Dark Mark -->
+      <div class="card dark">
+        <div class="badge">Dark Theme Mark</div>
+        <div class="logo-wrapper sizes-row">
+          <div class="size-box">
+            <img src="/the-business-work-mark-white.svg" alt="Mark White 96px" style="width: 96px; height: 96px;" />
+            <span class="size-label">96px</span>
+          </div>
+          <div class="size-box">
+            <img src="/the-business-work-mark-white.svg" alt="Mark White 64px" style="width: 64px; height: 64px;" />
+            <span class="size-label">64px</span>
+          </div>
+          <div class="size-box">
+            <img src="/the-business-work-mark-white.svg" alt="Mark White 44px" style="width: 44px; height: 44px;" />
+            <span class="size-label">44px</span>
+          </div>
+          <div class="size-box">
+            <img src="/the-business-work-mark-white.svg" alt="Mark White 32px" style="width: 32px; height: 32px;" />
+            <span class="size-label">32px</span>
+          </div>
+          <div class="size-box">
+            <img src="/the-business-work-mark-white.svg" alt="Mark White 20px" style="width: 20px; height: 20px;" />
+            <span class="size-label">20px</span>
+          </div>
+        </div>
+        <div class="file-tag">
+          <span>File: <code>public/the-business-work-mark-white.svg</code> (or <code>tbw-icon-dark.svg</code>)</span>
+          <a href="/the-business-work-mark-white.svg" target="_blank" download>Open / Download</a>
+        </div>
       </div>
+    </div>
+
+    <!-- 3. SPLIT PART 2: RIGHT TEXT / WORDMARK ONLY -->
+    <div class="section-title">
+      <span>3. Split Part 2: Right Text (Wordmark Only)</span>
+    </div>
+    <p style="color: #646059; margin-bottom: 16px; font-size: 14px;">
+      Use for wide banners, navigation headers where the icon is separate, footer wordmarks, or legal headings.
+    </p>
+    <div class="grid">
+      <!-- Light Text -->
+      <div class="card cream">
+        <div class="badge">Light Theme Text</div>
+        <div class="logo-wrapper">
+          <img src="/the-business-work-text.svg" alt="The Business Work Text" style="width: 100%; max-width: 400px; height: auto;" />
+        </div>
+        <div class="file-tag">
+          <span>File: <code>public/the-business-work-text.svg</code> (or <code>tbw-text.svg</code>)</span>
+          <a href="/the-business-work-text.svg" target="_blank" download>Open / Download</a>
+        </div>
+      </div>
+
+      <!-- Dark Text -->
+      <div class="card dark">
+        <div class="badge">Dark Theme Text</div>
+        <div class="logo-wrapper">
+          <img src="/the-business-work-text-white.svg" alt="The Business Work Text White" style="width: 100%; max-width: 400px; height: auto;" />
+        </div>
+        <div class="file-tag">
+          <span>File: <code>public/the-business-work-text-white.svg</code> (or <code>tbw-text-dark.svg</code>)</span>
+          <a href="/the-business-work-text-white.svg" target="_blank" download>Open / Download</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. CODE USAGE IN REACT / NEXT.JS -->
+    <div class="instructions">
+      <h3>How to Use in React / Next.js Components</h3>
+      <p style="color: #646059; font-size: 14px;">The <code>&lt;Logo /&gt;</code> component in <code>src/components/Logo.tsx</code> supports all variants with responsive sizes and custom colors:</p>
+      <pre><code>// 1. Full logo (Header, Footer)
+import Logo from "@/components/Logo";
+&lt;Logo /&gt;
+&lt;Logo small /&gt;
+
+// 2. Left mark / emblem only (Square icon)
+&lt;Logo variant="mark" className="w-8 h-8" /&gt;
+// Or using helper:
+import { LogoMark } from "@/components/Logo";
+&lt;LogoMark className="w-10 h-10 text-ink" /&gt;
+
+// 3. Right text / wordmark only
+&lt;Logo variant="text" className="w-48 h-auto" /&gt;
+// Or using helper:
+import { LogoText } from "@/components/Logo";
+&lt;LogoText className="w-52 h-auto text-ink" /&gt;</code></pre>
     </div>
   </div>
 </body>

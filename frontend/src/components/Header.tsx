@@ -34,7 +34,9 @@ export default function Header() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-border-sand bg-background/90 backdrop-blur-md">
       <div className="mx-auto flex h-16 sm:h-20 max-w-7xl items-center justify-between gap-2 sm:gap-4 md:gap-8 px-4 sm:px-6 lg:px-12">
-        <Link href="/" aria-label="The Business Work, home" className="shrink-0"><Logo /></Link>
+        <Link href="/" aria-label="The Business Work, home" className="shrink-0 flex items-center">
+          <Logo />
+        </Link>
 
         <nav aria-label="Primary" className="hidden items-center gap-8 md:flex">
           {nav.map((n) => (
@@ -44,18 +46,20 @@ export default function Header() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+        <div className="relative z-20 flex items-center gap-2 sm:gap-3 shrink-0">
           <button
+            type="button"
             onClick={() => openModal(undefined, "header")}
             aria-label="Discuss Your Project"
-            className="inline-flex items-center justify-center rounded-full border border-border-taupe bg-surface-card px-3 sm:px-5 py-1.5 sm:py-2.5 font-headline text-[10px] sm:text-xs font-medium uppercase tracking-wider text-ink transition-all hover:border-ink hover:bg-[#F2ECE0] whitespace-nowrap"
+            className="inline-flex min-h-[38px] sm:min-h-[44px] items-center justify-center rounded-full border border-border-taupe bg-surface-card px-3 sm:px-5 py-1.5 sm:py-2.5 font-headline text-[10px] sm:text-xs font-medium uppercase tracking-wider text-ink transition-all hover:border-ink hover:bg-[#F2ECE0] whitespace-nowrap active:scale-[0.98]"
           >
             <span className="hidden sm:inline">Discuss Your Project</span>
             <span className="sm:hidden">Discuss</span>
           </button>
           <button
+            type="button"
             ref={toggleBtnRef}
-            className="inline-flex h-11 w-11 items-center justify-center rounded border border-border-taupe bg-surface-card text-ink transition-colors hover:border-ink md:hidden shrink-0"
+            className="inline-flex h-11 w-11 items-center justify-center rounded border border-border-taupe bg-surface-card text-ink transition-colors hover:border-ink md:hidden shrink-0 active:scale-[0.98]"
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
             aria-controls="mobile-nav"
@@ -79,8 +83,9 @@ export default function Header() {
           </ul>
           <div className="pt-4">
             <button
+              type="button"
               onClick={() => { setOpen(false); openModal(); }}
-              className="w-full bg-ink py-3 font-headline text-xs font-semibold uppercase tracking-wider text-background transition-colors hover:bg-accent-ochre"
+              className="w-full bg-ink py-3 font-headline text-xs font-semibold uppercase tracking-wider text-background transition-colors hover:bg-accent-ochre active:scale-[0.99]"
             >
               Discuss Your Project
             </button>

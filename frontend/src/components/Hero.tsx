@@ -12,15 +12,7 @@ const rows = [
 export default function Hero() {
   const { openModal } = useContactModal();
   return (
-    <section aria-labelledby="hero-title" className="mx-auto w-full max-w-7xl px-6 pb-20 pt-14 md:pb-28 md:pt-20 lg:px-12">
-      <div className="mb-12 flex flex-col justify-between gap-4 border-b border-border-sand pb-6 sm:flex-row sm:items-center">
-        <div className="inline-flex items-center gap-2.5">
-          <span className="h-2 w-2 rounded-[2px] bg-accent-ochre" />
-          <span className="font-headline text-[11px] font-semibold uppercase tracking-[0.22em] text-ink-muted">AI Automation &amp; Digital Systems</span>
-        </div>
-        <div className="font-headline text-[11px] uppercase tracking-wider text-ink-muted">Custom-built · Based in India</div>
-      </div>
-
+    <section aria-labelledby="hero-title" className="mx-auto w-full max-w-7xl px-6 pt-8 pb-16 sm:pt-12 sm:pb-20 md:pt-16 md:pb-24 lg:pt-20 lg:pb-28 lg:px-12">
       <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-14">
         <div className="space-y-8 lg:col-span-7">
           <h1 id="hero-title" className="text-balance font-headline text-4xl font-medium leading-[1.08] tracking-tight text-ink sm:text-5xl lg:text-[62px]">
