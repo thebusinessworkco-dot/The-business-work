@@ -3,7 +3,7 @@ import SectionHeading from "./SectionHeading";
 
 export default function Process() {
   return (
-    <section id="how-we-work" aria-labelledby="process-title" className="w-full bg-section-pine py-24 md:py-32">
+    <section id="how-we-work" aria-labelledby="process-title" className="w-full bg-section-pine py-8 sm:py-10 md:py-12">
       <div className="mx-auto max-w-7xl px-6 lg:px-12">
         <SectionHeading
           dark
@@ -14,7 +14,7 @@ export default function Process() {
         />
         <ol className="grid grid-cols-1 border-b border-section-cream/25 md:grid-cols-2 lg:grid-cols-3">
           {processSteps.map((s, i) => (
-            <li key={s.phase} className="flex flex-col justify-between border-section-cream/25 py-10 md:border-r md:px-8 md:[&:nth-child(2n)]:border-r-0 lg:[&:nth-child(2n)]:border-r lg:[&:nth-child(3n)]:border-r-0 [&:not(:last-child)]:border-b lg:[&:nth-child(n+4)]:border-b-0 lg:[&:nth-child(-n+3)]:border-b">
+            <li key={s.phase} className="flex flex-col justify-between border-section-cream/25 py-7 sm:py-8 md:border-r md:px-8 md:[&:nth-child(2n)]:border-r-0 lg:[&:nth-child(2n)]:border-r lg:[&:nth-child(3n)]:border-r-0 [&:not(:last-child)]:border-b lg:[&:nth-child(n+4)]:border-b-0 lg:[&:nth-child(-n+3)]:border-b">
               <div>
                 <div className="mb-8 font-headline text-xs font-semibold uppercase tracking-wider text-ochre-on-dark">
                   STEP {String(i + 1).padStart(2, "0")} {"//"} {s.phase}

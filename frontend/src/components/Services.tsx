@@ -12,7 +12,7 @@ export default function Services() {
   const { openModal } = useContactModal();
 
   return (
-    <section id="services" aria-labelledby="services-title" className="w-full border-y border-border-sand bg-section-sand py-12 sm:py-20 md:py-32">
+    <section id="services" aria-labelledby="services-title" className="w-full border-y border-border-sand bg-section-sand py-8 sm:py-10 md:py-12">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-12">
         <SectionHeading
           eyebrow="01 / SERVICES"
@@ -117,7 +117,7 @@ export default function Services() {
           })}
         </ul>
 
-        <div className="mt-8 sm:mt-12 flex flex-col items-start justify-between gap-4 sm:gap-6 border border-border-sand bg-surface-card p-4 sm:p-6 md:p-8 sm:flex-row sm:items-center">
+        <div className="mt-6 sm:mt-8 flex flex-col items-start justify-between gap-4 sm:gap-6 border border-border-sand bg-surface-card p-4 sm:p-6 md:p-8 sm:flex-row sm:items-center">
           <div className="max-w-2xl">
             <div className="mb-2 font-headline text-xs font-semibold uppercase tracking-[0.2em] text-accent-ochre">Custom tools</div>
             <p className="font-body text-sm leading-relaxed text-ink sm:text-base">

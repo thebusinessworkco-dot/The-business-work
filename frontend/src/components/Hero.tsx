@@ -13,7 +13,7 @@ export default function Hero() {
   const { openModal } = useContactModal();
   return (
     <section aria-labelledby="hero-title" className="w-full bg-section-cream">
-      <div className="mx-auto max-w-7xl px-6 pt-8 pb-16 sm:pt-12 sm:pb-20 md:pt-16 md:pb-24 lg:pt-20 lg:pb-28 lg:px-12">
+      <div className="mx-auto max-w-7xl px-6 pt-6 pb-8 sm:pt-8 sm:pb-10 md:pt-10 md:pb-12 lg:pt-12 lg:pb-12 lg:px-12">
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-14">
         <div className="space-y-8 lg:col-span-7">
           <h1 id="hero-title" className="text-balance font-headline text-4xl font-medium leading-[1.08] tracking-tight text-ink sm:text-5xl lg:text-[62px]">

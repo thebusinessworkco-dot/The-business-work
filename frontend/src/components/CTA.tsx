@@ -7,7 +7,7 @@ import { useContactModal } from "./ContactModal";
 export default function CTA() {
   const { openModal } = useContactModal();
   return (
-    <section id="contact" aria-labelledby="cta-title" className="w-full bg-section-ochre text-section-cream py-28 md:py-36">
+    <section id="contact" aria-labelledby="cta-title" className="w-full bg-section-ochre text-section-cream py-10 sm:py-12 md:py-16">
       <div className="mx-auto max-w-4xl space-y-8 px-6 text-center">
         <h2 id="cta-title" className="font-headline text-4xl font-medium tracking-tight text-section-cream sm:text-5xl lg:text-6xl">
           Let&apos;s talk about your business.
