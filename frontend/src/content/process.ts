@@ -8,7 +8,7 @@ export const processSteps = [
   {
     phase: "Plan",
     title: "We agree on a simple plan.",
-    body: "We pick the simplest fix. We show you the exact steps and costs before we start.",
+    body: "We pick the simplest fix. We show you the steps and costs in writing before we start.",
     output: "Written plan and cost",
   },
   {
@@ -32,7 +32,7 @@ export const processSteps = [
   {
     phase: "Support",
     title: "We help you improve it.",
-    body: "We stay in touch to help you. We can make updates when your business grows.",
+    body: "After launch, support is optional. We agree it in writing.",
     output: "Ongoing help (optional)",
   },
 ];

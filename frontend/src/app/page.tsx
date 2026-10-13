@@ -15,14 +15,14 @@ import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: {
-    absolute: "The Business Work | Simple Tools for Your Business",
+    absolute: "The Business Work | AI & WhatsApp Tools for Business",
   },
   description: site.description,
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "The Business Work | Simple Tools for Your Business",
+    title: "The Business Work | AI & WhatsApp Tools for Business",
     description: site.description,
   },
 };

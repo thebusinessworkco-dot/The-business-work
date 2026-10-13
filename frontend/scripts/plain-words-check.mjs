@@ -59,14 +59,14 @@ function fetchHtml(pagePath) {
 }
 
 function stripHtml(html) {
-  // Remove script and style elements
-  let text = html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, " ");
-  text = text.replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, " ");
-  text = text.replace(/<svg\b[^<]*(?:(?!<\/svg>)<[^<]*)*<\/svg>/gi, " ");
-  // Remove HTML comments
-  text = text.replace(/<!--[\s\S]*?-->/g, " ");
-  // Remove HTML tags
-  text = text.replace(/<[^>]+>/g, " ");
+  // Remove script, style, and svg elements
+  let text = html
+    .replace(/<script[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style[\s\S]*?<\/style>/gi, " ")
+    .replace(/<svg[\s\S]*?<\/svg>/gi, " ")
+    .replace(/<!--[\s\S]*?-->/g, " ")
+    .replace(/<[^>]+>/g, " ");
+
   // Decode basic HTML entities
   text = text
     .replace(/&amp;/g, "&")
@@ -120,12 +120,13 @@ async function run() {
         }
       }
 
-      // Check workflow usage (allowed in service title / category name)
-      // Strip allowed phrases first before checking workflow
+      // Check workflow usage (allowed in service title / capability titles under Business Workflow Automation)
       const withoutAllowed = lower
         .replace(/business workflow automation/g, " ")
-        .replace(/business-workflow-automation/g, " ");
-      if (/\bworkflow\b/.test(withoutAllowed)) {
+        .replace(/business-workflow-automation/g, " ")
+        .replace(/n8n, make\.com and zapier workflow automation/g, " ")
+        .replace(/approval workflows with human review/g, " ");
+      if (/\bworkflows?\b/.test(withoutAllowed)) {
         blacklistedHits.push("workflow (outside service title)");
       }
 

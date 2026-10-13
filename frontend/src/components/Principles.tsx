@@ -9,7 +9,7 @@ export default function Principles() {
           eyebrow="05 / WHY THE BUSINESS WORK"
           title="How we work with you"
           id="why-title"
-          aside="We build small tools that work well. We never make promises we cannot keep."
+          aside="We build small tools that work well. We do not promise sales or growth."
         />
         <div className="grid grid-cols-1 gap-8 pt-12 md:grid-cols-3">
           {principles.map((p) => (

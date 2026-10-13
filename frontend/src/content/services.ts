@@ -143,7 +143,7 @@ export const services: Service[] = [
     depends:
       "Your business data, chosen AI model, connections, and budget. Fees and third-party costs are agreed in the written proposal.",
     intro:
-      "We build AI tools that answer customer questions and collect leads. We set up tools for your website using your approved notes. A person can step in at any time.",
+      "We build AI tools that answer customer questions and collect leads. We set up tools for your website using your approved notes. We add a clear way for a person to step in.",
     useCases: [
       "Answer customer questions on a website or chat channel.",
       "Ask potential buyers about their needs and budget.",
@@ -154,12 +154,12 @@ export const services: Service[] = [
     ],
     howItWorks: [
       "We review your guides, FAQs, and common questions to gather facts.",
-      "We set up the AI tool so it answers from approved content.",
+      "We set up the AI tool to use your approved notes.",
       "We test the tool with real questions to check its replies.",
       "We connect the tool to your website with a person ready to step in.",
     ],
     limits: [
-      "AI tools need clear notes and can make mistakes if facts are missing.",
+      "AI tools can make mistakes. They work best with clear notes.",
       "AI providers charge their own fees. Who pays is agreed in your written proposal.",
       "Healthcare tools handle administrative booking only and never give medical advice.",
     ],
@@ -167,7 +167,7 @@ export const services: Service[] = [
       {
         question: "Can the AI chatbot make mistakes?",
         answer:
-          "Yes. We test tools with approved notes, but AI can still make mistakes. A person can step in at any time.",
+          "Yes. We test tools with approved notes, but AI can still make mistakes. We add a clear way for a person to step in.",
       },
       {
         question: "What happens when a customer has a complex problem?",
@@ -606,7 +606,7 @@ export const services: Service[] = [
       {
         question: "Can a person take over an ongoing chat?",
         answer:
-          "Yes. A team member can step in at any time when a customer needs help.",
+          "Yes. We add a clear way for a person to step in.",
       },
     ],
   },

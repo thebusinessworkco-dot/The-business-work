@@ -122,7 +122,7 @@ export default function ServiceCapabilities({
             className="group flex h-full w-full flex-col justify-between rounded border border-border-sand bg-surface-card p-6 text-left transition-all hover:border-ink hover:bg-[#EFEAE0] focus-visible:outline-2 focus-visible:outline-ink cursor-pointer"
             aria-haspopup="dialog"
             aria-expanded={activeIndex === index}
-            aria-label={`Read details about ${c.name}`}
+            aria-label={`View explanation for ${c.name}`}
           >
             <div>
               <div className="flex items-start gap-3">
@@ -168,7 +168,7 @@ export default function ServiceCapabilities({
               ref={closeBtnRef}
               type="button"
               onClick={closeDetail}
-              aria-label="Close details"
+              aria-label="Close capability details"
               className="absolute top-4 right-4 sm:top-6 sm:right-6 rounded p-2 text-ink-muted hover:text-ink hover:bg-surface-card transition-colors focus-visible:outline-2 focus-visible:outline-ink"
             >
               <X size={20} aria-hidden="true" />
@@ -270,7 +270,7 @@ export default function ServiceCapabilities({
                 <button
                   type="button"
                   onClick={handlePrev}
-                  aria-label="Previous"
+                  aria-label="Previous capability"
                   className="inline-flex items-center gap-1.5 rounded border border-border-sand bg-surface-card px-3 py-2 font-headline text-xs font-semibold uppercase tracking-wider text-ink transition-colors hover:border-ink hover:bg-background focus-visible:outline-2 focus-visible:outline-ink"
                 >
                   <ArrowLeft size={13} aria-hidden="true" />
@@ -279,7 +279,7 @@ export default function ServiceCapabilities({
                 <button
                   type="button"
                   onClick={handleNext}
-                  aria-label="Next"
+                  aria-label="Next capability"
                   className="inline-flex items-center gap-1.5 rounded border border-border-sand bg-surface-card px-3 py-2 font-headline text-xs font-semibold uppercase tracking-wider text-ink transition-colors hover:border-ink hover:bg-background focus-visible:outline-2 focus-visible:outline-ink"
                 >
                   <span>Next</span>

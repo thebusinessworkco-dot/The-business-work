@@ -30,7 +30,7 @@ const allowIndexing = isIndexingAllowed();
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "The Business Work | Simple Tools for Your Business",
+    default: "The Business Work | AI & WhatsApp Tools for Business",
     template: "%s | The Business Work",
   },
   description: site.description,

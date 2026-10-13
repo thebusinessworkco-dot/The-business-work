@@ -7,7 +7,7 @@ export const principles = [
   {
     label: "02 // A PERSON STEPS IN",
     title: "A person can take over any chat.",
-    body: "Hard questions pass to a person. Your team always stays in control.",
+    body: "Hard questions pass to a person. We add a clear way for a person to step in.",
   },
   {
     label: "03 // CLEAR COSTS",

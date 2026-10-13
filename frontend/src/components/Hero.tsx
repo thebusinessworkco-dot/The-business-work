@@ -23,7 +23,7 @@ export default function Hero() {
             We build simple tools for your business. They answer customers on WhatsApp, keep a list of your leads, and send reminders for you.
           </p>
           <p className="max-w-[620px] font-body text-sm leading-relaxed text-ink-muted">
-            They fit your daily work. A person can step in at any time.
+            They fit your daily work. We add a clear way for a person to step in.
           </p>
           <div className="flex flex-wrap items-center gap-3 sm:gap-4 pt-2">
             <button
@@ -37,11 +37,11 @@ export default function Hero() {
               href="#services"
               className="inline-flex items-center justify-center rounded-full border border-border-taupe bg-surface-card px-6 sm:px-7 py-3.5 font-headline text-xs font-medium uppercase tracking-wider text-ink transition-all hover:border-ink hover:bg-[#EFEAE0]"
             >
-              Explore Services
+              See services
             </a>
           </div>
           <div className="flex flex-wrap items-center gap-6 border-t border-border-sand pt-6 font-headline text-[12px] uppercase tracking-wider text-ink-muted">
-            <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-accent-ochre" />Built around your daily work</span>
+            <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-accent-ochre" />Made for your business</span>
             <span className="hidden text-border-taupe sm:inline">•</span>
             <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-ink" />A person can step in</span>
           </div>
@@ -54,7 +54,7 @@ export default function Hero() {
                 <div className="h-2 w-2 bg-ink" />
                 <span className="font-headline text-xs font-semibold uppercase tracking-[0.16em] text-ink">How Your Tools Connect</span>
               </div>
-              <span className="rounded border border-border-sand bg-surface-muted px-2 py-0.5 font-headline text-[10px] uppercase tracking-wider text-ink-muted">Illustrative</span>
+              <span className="rounded border border-border-sand bg-surface-muted px-2 py-0.5 font-headline text-[10px] uppercase tracking-wider text-ink-muted">Example</span>
             </div>
             <div className="space-y-4">
               {rows.map((r) => (
@@ -71,8 +71,8 @@ export default function Hero() {
               ))}
             </div>
             <div className="mt-6 flex flex-wrap items-center justify-between gap-2 border-t border-border-sand pt-4 font-headline text-[11px] uppercase tracking-wider text-ink-muted">
-              <span className="flex items-center gap-1.5"><CheckCircle2 size={14} className="text-accent-ochre" />Less Repeat Work</span>
-              <span className="flex items-center gap-1.5"><ShieldCheck size={14} className="text-ink" />A Person Can Step In</span>
+              <span className="flex items-center gap-1.5"><CheckCircle2 size={14} className="text-accent-ochre" />Less repeat work</span>
+              <span className="flex items-center gap-1.5"><ShieldCheck size={14} className="text-ink" />A person can step in</span>
             </div>
           </div>
         </div>

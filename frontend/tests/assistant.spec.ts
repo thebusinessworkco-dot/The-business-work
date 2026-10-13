@@ -131,7 +131,7 @@ test.describe("Website Assistant Widget", () => {
 
     // Bot responds with pricing answer
     await expect(
-      panel.getByText(/Project pricing depends on the scope and systems involved/i)
+      panel.getByText(/Project costs depend on what you need/i)
     ).toBeVisible();
   });
 
@@ -151,7 +151,7 @@ test.describe("Website Assistant Widget", () => {
     await panel.getByRole("button", { name: "Send", exact: true }).click();
 
     // Verify pricing answer appears
-    const answer = panel.getByText(/Project pricing depends on the scope and systems involved/i);
+    const answer = panel.getByText(/Project costs depend on what you need/i);
     await expect(answer).toBeVisible();
 
     // Screenshot answer desktop
@@ -183,7 +183,7 @@ test.describe("Website Assistant Widget", () => {
 
     // Verify fallback message appears
     const fallbackText = panel.getByText(
-      /I don't have that information here\. You can send us an enquiry/i
+      /I do not have that info here\. You can send an enquiry/i
     );
     await expect(fallbackText).toBeVisible();
 
@@ -256,7 +256,7 @@ test.describe("Website Assistant Widget", () => {
     await panel.getByRole("button", { name: "Send", exact: true }).click();
 
     await expect(
-      panel.getByText(/Project pricing depends on the scope and systems involved/i)
+      panel.getByText(/Project costs depend on what you need/i)
     ).toBeVisible();
 
     // Assert that during these interactions, ZERO network requests were triggered

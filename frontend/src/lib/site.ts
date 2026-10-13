@@ -7,7 +7,7 @@ export const site = {
   tagline: "We Make Business Simpler.",
   founder: "Aman Rajbhar",
   description:
-    "We build simple tools for your business. They answer customers on WhatsApp, track leads, and send reminders for you.",
+    "We build AI chatbots, WhatsApp tools and lead tracking for businesses in India. Simple tools that save you time.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://the-business-work.vercel.app",
   email: "thebusinesswork.co@gmail.com",
   phone: "+91 79720 20292",

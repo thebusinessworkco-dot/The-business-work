@@ -341,5 +341,49 @@ This document logs significant structural, architectural, and operational tasks 
   - `npm run test:a11y --prefix frontend`: PASS (17/17 axe & assistant tests passed)
   - Playwright responsive & section-colours suites: PASS (25/25 tests passed)
   - `npm run links:check --prefix frontend -- http://localhost:3000`: PASS (194 links checked, 0 broken, 0 anchor errors)
-  - `npm run smoke --prefix frontend -- http://localhost:3000 --expect-noindex`: PASS (14/14 endpoints verified)
+  - `npm run smoke --prefix frontend -- http://localhost:3000 --expect-noindex`: PASS (14/14 endpoints verified)---
 
+## 2026-10-14 — Plain English Rewrite: Final Fixes and Proof (F1–F6)
+- Scope: Execute final fix and proof for the plain English rewrite across all visible copy on the site (Next.js 14, TypeScript, Tailwind). Change words only: legal pages untouched, no layout, colour, class, or structure changes. Child-level wording (short sentences, everyday words, Indian English spelling).
+- Changes made:
+  - F1 (SEO text & title lengths): Updated `frontend/src/lib/site.ts` description (112 chars <= 155 chars) to `"We build AI chatbots, WhatsApp tools and lead tracking for businesses in India. Simple tools that save you time."`. Set default and home title in `layout.tsx` and `page.tsx` (56 chars <= 60 chars) to `"The Business Work | AI & WhatsApp Tools for Business"`. Verified `og:title` and character counts across `/` and all 4 service routes via running production server.
+  - F2 (Claims softened): Softened claims across `Hero.tsx`, `Founder.tsx`, `process.ts`, `principles.ts`, `Principles.tsx`, `services.ts`, and `knowledge.ts`:
+    - "Working tools" -> "Made for your business"
+    - "A person can step in at any time" / "Your team always stays in control" -> "We add a clear way for a person to step in."
+    - "exact steps and cost(s)" -> "the steps and costs in writing before we start"
+    - "We stay in touch to help you. We can make updates when your business grows." -> "After launch, support is optional. We agree it in writing."
+    - "We never make promises we cannot keep." -> "We do not promise sales or growth."
+    - "AI tools need clear notes and can make mistakes if facts are missing." -> "AI tools can make mistakes. They work best with clear notes."
+    - "We set up the AI tool so it answers from approved content." -> "We set up the AI tool to use your approved notes."
+    - Founder bio & assistant knowledge: "India and beyond" / "worldwide" -> "India"; removed "always". Checked `git log -p -- frontend/src/components/Founder.tsx` and listed founder bio details and dropped discovery call for owner confirmation.
+    - Scanned `frontend/src` for banned claim words (`always`, `at any time`, `any time`, `never miss`, `exact`, `worldwide`, `beyond`, `guarantee`, `working tools`, `around the clock`, `day and night`, `24/7`) and documented decisions.
+  - F3 (Clarity & Casing):
+    - Industries cards: Updated all 6 cards to active voice with "We help..." as subject while preserving `"AI never gives medical advice."` in the healthcare card.
+    - Demo tab: Changed "Scope & status" -> "Status".
+    - Buttons: Unified casing to "See services" across `Hero.tsx` and `not-found.tsx`.
+    - Simplified technical labels where meaning allowed (e.g., hero side card, tabs, chips).
+  - F4 (Non-text changes audit):
+    - Audited git diff against pre-rewrite commit `9e76e9b`.
+    - Restored `aria-label` attributes in `ServiceCapabilities.tsx` (`aria-label={`View explanation for ${c.name}`}`, `"Close capability details"`, `"Previous capability"`, `"Next capability"`) to preserve accessibility and test selectors.
+    - Confirmed exports, types, ids, slugs, entry ids, routes, and layout classes are unchanged.
+  - F5 (Complete diff file):
+    - Populated `extras/docs/copy-rewrite-diff.md` with complete, untruncated before/after text across every section, service capability, dialog, assistant entry, and utility string.
+    - Added "Owner decisions" section documenting Founder bio, dropped discovery call, and pre-launch legal placeholders.
+  - F6 (Proof & Validation):
+    - Compiled all evidence and test outputs into `extras/docs/copy-final-report.md`.
+    - Documented child test assessment for each home section and service page.
+    - Documented 30 before/after examples.
+- Validation:
+  - `npm run lint`: PASS (0 errors, 0 warnings)
+  - `npm run typecheck`: PASS (0 errors)
+  - `npm run test`: PASS (105/105 tests passed across 10 test files)
+  - `npm run build`: PASS (14/14 static and dynamic routes compiled)
+  - `npm run copy:check`: PASS (0 blacklisted words across all routes, 0 sentences > 15 words)
+  - `npm run seo:check`: PASS (6/6 schema and HTTPS tests passed + image alt audit passed)
+  - `npm run env:check`: PASS (14/14 environment variable parity)
+  - `npm run links:check -- http://localhost:3000`: PASS (240 links checked, 0 broken, 0 anchor errors)
+  - `npm run smoke -- http://localhost:3000 --expect-noindex`: PASS (14/14 endpoints verified)
+  - `npm run test:a11y`: PASS (29/29 accessibility and assistant tests passed)
+  - `npx playwright test tests/responsive.spec.ts tests/cookie-consent.spec.ts`: PASS (24/24 tests passed, verified no horizontal overflow at 360px)
+  - `npm run legal:check`: PASS (audited 26 expected [[TO CONFIRM]] placeholders)
+  - `npm run preflight -- --production`: Reported expected launch gate failure due to pre-launch placeholders.

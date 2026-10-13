@@ -1,26 +1,26 @@
 export const industries = [
   {
     name: "Healthcare & clinics",
-    body: "Appointment questions, visit reminders, and staff alerts with patient privacy respected. AI never gives medical advice.",
+    body: "We help clinics handle booking questions, send reminders, and alert staff. AI never gives medical advice.",
   },
   {
     name: "Local businesses",
-    body: "Salons, repairs, and retail stores. Answer enquiries, manage bookings, and follow up with customers.",
+    body: "We help salons, repair shops and stores answer enquiries, take bookings and follow up.",
   },
   {
     name: "Sales teams & agencies",
-    body: "Check who is ready to buy, update records, and send follow-up reminders to your team.",
+    body: "We help sales teams see who is ready to buy and send reminders.",
   },
   {
     name: "E-commerce",
-    body: "Common order questions, message routing, and polite follow-ups for shoppers.",
+    body: "We help online shops answer order questions and send friendly follow-ups to shoppers.",
   },
   {
     name: "Real estate",
-    body: "Property enquiries, finding ready buyers, scheduling site visits, and alerting your sales team.",
+    body: "We help real estate teams answer property enquiries, book visits, and alert staff.",
   },
   {
     name: "Education & coaching",
-    body: "Course questions, student leads, counselling visits, and follow-up messages.",
+    body: "We help coaching centres answer course questions, book counselling visits, and follow up.",
   },
 ];

@@ -96,7 +96,7 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
         "kiska business hai",
       ],
       answer:
-        `The Business Work was founded by ${site.founder}. He builds simple tools for businesses in India and beyond. He learns how your work runs and builds a fix with clear scope.`,
+        `The Business Work was founded by ${site.founder}. He builds simple tools for businesses in India. He learns how your work runs and builds a fix with clear scope.`,
       followUps: ["What The Business Work does", "Our services", "Contact us"],
     },
 
@@ -326,7 +326,7 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
       title: "Sales teams & agencies",
       keywords: ["sales teams", "agencies", "lead capture", "b2b", "sales reps", "pipeline tracking"],
       answer:
-        "For sales teams, we log new leads, check who is ready to buy, and send follow-up reminders. A person can step in at any time.",
+        "For sales teams, we log new leads, check who is ready to buy, and send follow-up reminders. We add a clear way for a person to step in.",
       followUps: ["CRM & Sales Automation", "Pricing", "Contact us"],
     },
     {

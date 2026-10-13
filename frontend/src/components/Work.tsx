@@ -110,7 +110,7 @@ function DemoCard({ demo }: { demo: Demo }) {
               onClick={() => setTab("scope")}
               onKeyDown={(e) => handleKeyDown(e, "scope")}
             >
-              Scope &amp; status
+              Status
             </button>
           </div>
         </div>
