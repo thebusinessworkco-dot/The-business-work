@@ -20,7 +20,7 @@ export default function Hero() {
             We Make Business Simpler.
           </h1>
           <p className="max-w-[620px] font-body text-base leading-relaxed text-ink-muted sm:text-lg">
-            We build simple tools for your business. They answer customers on WhatsApp, keep a list of your leads, and send reminders for you.
+            We build simple tools for your business. They reply to customers on WhatsApp. They save your leads and send reminders.
           </p>
           <p className="max-w-[620px] font-body text-sm leading-relaxed text-ink-muted">
             They fit your daily work. We add a clear way for a person to step in.

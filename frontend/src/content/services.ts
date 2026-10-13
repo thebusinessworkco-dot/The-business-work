@@ -299,7 +299,7 @@ export const services: Service[] = [
       "We map your sales steps from first contact to closing a deal.",
       "We set up your CRM stages, fields, and lead assignment rules.",
       "We build automated follow-up steps and meeting booking links.",
-      "We show your team how to use the system and provide guide notes.",
+      "We give you simple guide notes on how to use the system.",
     ],
     limits: [
       "A CRM needs your team to use it daily to keep records fresh.",
@@ -604,7 +604,7 @@ export const services: Service[] = [
           "Platform fees and Meta conversation charges are agreed in your written proposal.",
       },
       {
-        question: "Can a person take over an ongoing chat?",
+        question: "Can a person step in during a chat?",
         answer:
           "Yes. We add a clear way for a person to step in.",
       },

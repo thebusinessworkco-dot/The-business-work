@@ -6,7 +6,7 @@ export const principles = [
   },
   {
     label: "02 // A PERSON STEPS IN",
-    title: "A person can take over any chat.",
+    title: "A person can step in.",
     body: "Hard questions pass to a person. We add a clear way for a person to step in.",
   },
   {

@@ -55,5 +55,5 @@ npm run seo:check
 
 ---
 
-## Deployment Notice
-For Vercel production hosting, set the **Root Directory** in project settings to `frontend`. See [`extras/docs/deploy.md`](extras/docs/deploy.md) for full instructions.
+## Deployment & Go-Live Notice
+For Vercel production hosting, set the **Root Directory** in project settings to `frontend`. See [`extras/docs/go-live-steps.md`](extras/docs/go-live-steps.md) for the 9-step go-live checklist, and [`extras/docs/deploy.md`](extras/docs/deploy.md) for hosting architecture.

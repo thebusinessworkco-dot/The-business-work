@@ -4,7 +4,7 @@
 **Date:** 2026-10-14  
 **Scope:** Complete plain-English rewrite of all user-facing copy across the website.  
 **Audience:** Adult business owners, including English as a second language readers in India and beyond.  
-**Tone:** Respectful, professional, plain English (reading level 4th–5th grade, ~10-year-old child comprehension). Indian English spelling (-ise, enquiry).
+**Tone:** Respectful, professional, plain English (measured reading level: Flesch-Kincaid Grade 4.3 on Home, Grades 2.9–3.8 on service pages, and 5.7 on 404, with an average body sentence length of 5.4–6.3 words, well within the target ~10-year-old child comprehension). Indian English spelling (-ise, enquiry).
 
 ---
 

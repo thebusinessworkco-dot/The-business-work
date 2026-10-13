@@ -12,6 +12,7 @@ import Footer from "@/components/Footer";
 import JsonLd from "@/components/JsonLd";
 import { getHomeJsonLd } from "@/lib/jsonld";
 import { site } from "@/lib/site";
+import { services } from "@/content/services";
 
 export const metadata: Metadata = {
   title: {
@@ -30,13 +31,24 @@ export const metadata: Metadata = {
 export default function Home() {
   const jsonLd = getHomeJsonLd();
 
+  const homeServices = services.map((s) => ({
+    id: s.id,
+    index: s.index,
+    title: s.title,
+    tag: s.tag,
+    summary: s.summary,
+    solves: s.solves,
+    capabilities: s.capabilities.map((c) => ({ name: c.name })),
+    depends: s.depends,
+  }));
+
   return (
     <>
       <JsonLd data={jsonLd} />
       <Header />
       <main id="main" className="w-full pt-16 sm:pt-20">
         <Hero />
-        <Services />
+        <Services items={homeServices} />
         <Process />
         <Industries />
         <Work />

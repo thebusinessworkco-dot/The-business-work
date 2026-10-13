@@ -5,10 +5,7 @@ import dynamic from "next/dynamic";
 import { site, isIndexingAllowed, getCleanSiteUrl } from "@/lib/site";
 import { ContactModalProvider } from "@/components/ContactModal";
 import CookieConsent from "@/components/CookieConsent";
-
-const AssistantWidget = dynamic(() => import("@/components/assistant/AssistantWidget"), {
-  ssr: false,
-});
+import AssistantLauncher from "@/components/assistant/AssistantLauncher";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -143,7 +140,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </a>
         <ContactModalProvider>
           {children}
-          {process.env.NEXT_PUBLIC_ASSISTANT_ENABLED !== "false" && <AssistantWidget />}
+          <AssistantLauncher />
         </ContactModalProvider>
         <CookieConsent />
       </body>

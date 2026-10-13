@@ -480,7 +480,7 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
         "staff",
       ],
       answer:
-        "Our tools do not replace your team. Routine questions are answered automatically. A person can step in and take over any chat.",
+        "Our tools do not replace your team. Routine questions are answered automatically. We add a clear way for a person to step in.",
       followUps: ["Operating principles", "Our services", "Contact us"],
     },
 

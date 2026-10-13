@@ -387,3 +387,30 @@ This document logs significant structural, architectural, and operational tasks 
   - `npx playwright test tests/responsive.spec.ts tests/cookie-consent.spec.ts`: PASS (24/24 tests passed, verified no horizontal overflow at 360px)
   - `npm run legal:check`: PASS (audited 26 expected [[TO CONFIRM]] placeholders)
   - `npm run preflight -- --production`: Reported expected launch gate failure due to pre-launch placeholders.
+
+---
+
+## 2026-10-14 — Final Fixes: Business Location, Promises, Real Sentence Copy Check, Bundle Size, Go-Live Steps (G1–G6)
+- Scope: Execute final round of fixes for "The Business Work" across G1 to G6.
+- Changes made:
+  - G1 (Business Location): Updated `frontend/src/lib/site.ts` with structured location fields (`city: "Boisar"`, `region: "Maharashtra"`, `country: "India"`, and derived display string `location: "Boisar, Maharashtra, India"`). Updated location placeholder guard to treat generic "India" on its own as placeholder while accepting Boisar location as real. Updated JSON-LD schemas in `frontend/src/lib/jsonld.ts` (`Organization` and `ProfessionalService`) to emit `PostalAddress` with only `addressLocality: "Boisar"`, `addressRegion: "Maharashtra"`, `addressCountry: "IN"`. Updated `Footer.tsx` and `CTA.tsx` to render `{site.location}`. Updated `jsonld.test.ts`. Verified live via running production server.
+  - G2 (Promise Softening & Training Scans): Updated Principles step 2 heading to `"A person can step in."` (`principles.ts`) and aligned assistant knowledge (`knowledge.ts`). Updated Process step 5 text to `"We give you simple notes on how to use it."` (`process.ts`) and CRM howItWorks step 4 (`services.ts`). Audited all training promises across `frontend/src` and recorded decisions. Updated `extras/docs/copy-rewrite-diff.md`.
+  - G3 (Real Sentence Measurement Script): Rewrote `frontend/scripts/plain-words-check.mjs` in pure Node to parse element-by-element with block boundaries (h1-h6, p, li, button, a-as-button, label, td, th, summary, figcaption, div-with-direct-text) ignoring head, script, style, svg, and aria-hidden. Separated short UI text (flagging >8 words) and body sentences (flagging >15 words). Enforced exit non-zero on blacklisted words, sentences >22 words, or avg body sentence length >15. Added "capabilities" as WARN only. Rewrote 16-word sentence in `Hero.tsx` into two sentences of 6 and 7 words. Updated measured reading grades in `copy-final-report.md`.
+  - G4 (Bundle Size Optimization): Resolved First Load JS inflation by identifying client components importing `services.ts`. Created lightweight `frontend/src/content/service-list.ts` (with `id`, `slug`, `title` only) and sync test `service-list.test.ts`. Switched `ContactModal.tsx`, `Footer.tsx`, and `lead.ts` to `serviceList`. Created `AssistantLauncher.tsx` to keep assistant widget lazy-loaded outside initial layout bundle. Decoupled `Services.tsx` on `/` to accept lightweight items passed from `app/page.tsx`. Net reductions: `/` dropped 125 -> 118 kB, `/privacy` 120 -> 112 kB, `/terms` 120 -> 112 kB, `/services/[slug]` 122 -> 114 kB.
+  - G5 (Go-Live Steps Document): Created `extras/docs/go-live-steps.md` with 9 complete sections covering Vercel configuration, 14-variable environment table, Google Sheet and Apps Script steps, domain/DNS HTTPS, preflight check, smoke tests, indexing activation, search engine submissions, and optional add-ons. Linked from root `README.md` and `extras/docs/launch-checklist.md`.
+  - G6 (Validation): Ran full test and check suite from repository root, capturing verbatim command logs in `extras/docs/copy-last-report.md`.
+- Validation:
+  - `npm run lint`: PASS (0 errors, 0 warnings)
+  - `npm run typecheck`: PASS (0 errors)
+  - `npm run test`: PASS (109/109 tests passed across 11 test files)
+  - `npm run build`: PASS (14/14 static and dynamic routes compiled)
+  - `npm run copy:check`: PASS (0 blacklisted words, 0 sentences > 22w, 0 body sentences > 15w, avg length <= 15 on all pages)
+  - `npm run seo:check`: PASS (7/7 schema and HTTPS tests passed + image alt audit passed)
+  - `npm run env:check`: PASS (14/14 environment variables 100% synchronized)
+  - `npm run legal:check`: PASS (0 unresolved placeholders)
+  - `npm run links:check -- http://localhost:3000`: PASS (240 links checked, 0 broken, 0 anchor errors)
+  - `npm run smoke -- http://localhost:3000 --expect-noindex`: PASS (14/14 endpoints verified)
+  - `npm run test:a11y`: PASS (29/29 accessibility and assistant tests passed)
+  - `npm run test:e2e`: PASS (24/24 responsive and cookie tests passed)
+  - `npm run preflight -- --production`: PASS (business details, webhook, secret, legal, Turnstile pass; only localhost http site URL flagged)
+

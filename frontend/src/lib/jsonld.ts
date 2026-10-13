@@ -32,6 +32,7 @@ export type HomeJsonLd = [
     address?: {
       "@type": "PostalAddress";
       addressCountry: string;
+      addressRegion: string;
       addressLocality: string;
     };
     sameAs?: string[];
@@ -47,6 +48,14 @@ export type HomeJsonLd = [
       name: string;
     };
     serviceType: string[];
+    address?: {
+      "@type": "PostalAddress";
+      addressCountry: string;
+      addressRegion: string;
+      addressLocality: string;
+    };
+    telephone?: string;
+    email?: string;
   }
 ];
 
@@ -116,6 +125,15 @@ export function getHomeJsonLd(): HomeJsonLd {
     },
   };
 
+  const postalAddress = !isPlaceholder("location", site.location)
+    ? {
+        "@type": "PostalAddress" as const,
+        addressLocality: site.city,
+        addressRegion: site.region,
+        addressCountry: "IN",
+      }
+    : undefined;
+
   // Only emit contact details if they are verified non-placeholder values
   if (!isPlaceholder("email", site.email)) {
     organization.email = site.email;
@@ -123,12 +141,8 @@ export function getHomeJsonLd(): HomeJsonLd {
   if (!isPlaceholder("phone", site.phone)) {
     organization.telephone = site.phone;
   }
-  if (!isPlaceholder("location", site.location)) {
-    organization.address = {
-      "@type": "PostalAddress",
-      addressCountry: "IN",
-      addressLocality: site.location,
-    };
+  if (postalAddress) {
+    organization.address = postalAddress;
   }
   if (!isPlaceholder("social") && site.social.length > 0) {
     organization.sameAs = site.social.map((s) => s.href);
@@ -154,6 +168,16 @@ export function getHomeJsonLd(): HomeJsonLd {
     },
     serviceType: services.map((s) => s.title),
   };
+
+  if (!isPlaceholder("email", site.email)) {
+    professionalService.email = site.email;
+  }
+  if (!isPlaceholder("phone", site.phone)) {
+    professionalService.telephone = site.phone;
+  }
+  if (postalAddress) {
+    professionalService.address = postalAddress;
+  }
 
   return [website, organization, professionalService];
 }

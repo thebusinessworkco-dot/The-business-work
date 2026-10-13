@@ -10,6 +10,7 @@
     "typecheck": "npm --prefix frontend run typecheck",
     "test": "npm --prefix frontend run test --",
     "test:a11y": "npm --prefix frontend run test:a11y --",
+    "test:e2e": "npm --prefix frontend run test:e2e --",
     "legal:check": "npm --prefix frontend run legal:check",
     "preflight": "npm --prefix frontend run preflight --",
     "smoke": "npm --prefix frontend run smoke --",
@@ -18,6 +19,7 @@
     "lint": "npm --prefix frontend run lint",
     "assistant:eval": "npm --prefix frontend run assistant:eval --",
     "links:check": "npm --prefix frontend run links:check --",
+    "copy:check": "npm --prefix frontend run copy:check --",
     "env:check": "npm --prefix frontend run env:check"
   }
 }

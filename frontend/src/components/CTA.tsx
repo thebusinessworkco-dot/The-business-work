@@ -43,7 +43,7 @@ export default function CTA() {
           </a>
         </div>
         <p className="pt-6 font-headline text-xs uppercase tracking-wider text-section-cream">
-          Or write to <a className="text-section-cream underline decoration-section-cream underline-offset-4 hover:text-white" href={`mailto:${site.email}`}>{site.email}</a>
+          Or write to <a className="text-section-cream underline decoration-section-cream underline-offset-4 hover:text-white" href={`mailto:${site.email}`}>{site.email}</a> · {site.location}
         </p>
         <p className="pt-2 font-body text-xs text-section-cream">
           Note: AI and WhatsApp providers charge their own fees. Who pays is agreed in your written proposal.

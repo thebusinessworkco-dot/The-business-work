@@ -26,7 +26,7 @@ export const processSteps = [
   {
     phase: "Go live",
     title: "We go live when you say yes.",
-    body: "We launch only after you approve it. We show your team how to use it.",
+    body: "We launch only after you approve it. We give you simple notes on how to use it.",
     output: "Guides and handover",
   },
   {

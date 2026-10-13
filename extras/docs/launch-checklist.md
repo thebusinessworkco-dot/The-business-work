@@ -3,6 +3,8 @@
 This document tracks the readiness of **The Business Work (TBW)** website for public production launch across 20 critical engineering, design, legal, and operational dimensions.
 
 > **Launch Gate**: `npm run preflight -- --production` serves as the explicit deployment launch gate. CI typecheck, lint, unit tests, and build are maintained separately. Preflight enforces that production domain HTTPS is configured, business details are populated, lead webhook is active, legal placeholders are resolved, and Turnstile keys are symmetrical. It reads the local environment by default, or an untracked production environment file when passed `--env-file <path>`.
+>
+> **Step-by-Step Guide**: For the practical Vercel, DNS, and webhook launch procedure, see [Go-Live Steps](go-live-steps.md).
 
 
 ---

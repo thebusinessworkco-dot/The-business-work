@@ -15,7 +15,10 @@ export const site = {
   whatsappNumber: "917972020292", // digits only, with country code, no "+"
   whatsappHref: "https://wa.me/917972020292",
   instagram: "https://instagram.com/thebusinesswork.co",
-  location: "India", // No verified office address — keep general
+  city: "Boisar",
+  region: "Maharashtra",
+  country: "India",
+  location: "Boisar, Maharashtra, India",
   social: [
     { label: "Instagram", href: "https://instagram.com/thebusinesswork.co" },
   ] as readonly { label: string; href: string }[],
@@ -51,7 +54,7 @@ export function isPlaceholderUrl(url?: string): boolean {
 export function isPlaceholderLocation(location?: string): boolean {
   if (!location) return true;
   const lower = location.trim().toLowerCase();
-  return lower === "india" || lower === "placeholder";
+  return lower === "india" || lower === "placeholder" || lower.includes("[[");
 }
 
 export function isPlaceholder(

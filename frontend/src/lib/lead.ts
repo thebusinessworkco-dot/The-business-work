@@ -1,4 +1,4 @@
-import { services } from "@/content/services";
+import { serviceList } from "@/content/service-list";
 
 export interface Lead {
   name: string;
@@ -33,7 +33,7 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const URL_REGEX = /(?:https?:\/\/|www\.)[^\s]+/gi;
 
 const validServiceTitles = new Set([
-  ...services.map((s) => s.title),
+  ...serviceList.map((s) => s.title),
   "Not sure yet / custom solution",
 ]);
 

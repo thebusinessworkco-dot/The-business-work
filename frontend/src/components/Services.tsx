@@ -2,12 +2,29 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Plus } from "lucide-react";
-import { services } from "@/content/services";
+import { ArrowRight, Plus, Bot, Workflow, TrendingUp, MessageCircle, type LucideIcon } from "lucide-react";
 import SectionHeading from "./SectionHeading";
 import { useContactModal } from "./ContactModal";
 
-export default function Services() {
+export interface HomeServiceItem {
+  id: string;
+  index: string;
+  title: string;
+  tag: string;
+  summary: string;
+  solves: string;
+  capabilities: { name: string }[];
+  depends: string;
+}
+
+const SERVICE_ICONS: Record<string, LucideIcon> = {
+  "ai-agents-chatbots": Bot,
+  "crm-sales-automation": Workflow,
+  "business-workflow-automation": TrendingUp,
+  "whatsapp-social-automation": MessageCircle,
+};
+
+export default function Services({ items = [] }: { items?: HomeServiceItem[] }) {
   const [openId, setOpenId] = useState<string | null>(null);
   const { openModal } = useContactModal();
 
@@ -22,9 +39,9 @@ export default function Services() {
         />
 
         <ul className="divide-y divide-border-sand">
-          {services.map((s) => {
+          {items.map((s) => {
             const isOpen = openId === s.id;
-            const Icon = s.icon;
+            const Icon = SERVICE_ICONS[s.id] || Bot;
             return (
               <li
                 key={s.id}

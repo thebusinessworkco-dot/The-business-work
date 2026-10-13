@@ -125,7 +125,7 @@ Rule highlights:
 | `Define the simplest fix` / `We agree on the outcome and acceptance criteria...` | `We agree on a simple plan.` / `We pick the simplest fix. We show you the steps and costs in writing before we start.` | Short clear sentences, softened "exact" per F2. |
 | `Build and demo` / `We build the system, using a demo or proof of concept first where it makes sense.` | `We build it.` / `We build your tool. We show you a working demo so you can see it in action.` | Target copy, plain words. |
 | `Test with real scenarios` / `We test with realistic cases and edge cases, including what happens when something fails.` | `We test it with real cases.` / `We test the tool with real cases. We check what happens if something goes wrong.` | Everyday words, short sentences. |
-| `Go live after approval` / `We deploy only once you approve the behaviour, then document the workflow and hand it over.` | `We go live when you say yes.` / `We launch only after you approve it. We show your team how to use it.` | Target copy, removed "deploy", clear active phrasing. |
+| `Go live after approval` / `We deploy only once you approve the behaviour, then document the workflow and hand it over.` | `We go live when you say yes.` / `We launch only after you approve it. We give you simple notes on how to use it.` | Target copy, removed "deploy", replaced training promise with notes handover. |
 | `Maintain and refine` / `Optional ongoing support, monitoring and improvements under an agreed arrangement.` | `We help you improve it.` / `After launch, support is optional. We agree it in writing.` | Target copy, softened support promise per F2. |
 | `Output` | `What you get` | Everyday words, 3 words. |
 | `Problem & goal summary` | `Goal summary` | Plain 2 words. |
@@ -179,7 +179,7 @@ Rule highlights:
 |---|---|---|
 | `Practical systems, honest scope.` / `We would rather build a small system that works reliably than a large one that promises too much.` | `How we work with you` / `We build small tools that work well. We do not promise sales or growth.` | Exact requested plain section heading, softened promises statement per F2. |
 | `AI only where it helps` / `We use AI where it adds real value and plain rule-based automation where it is simpler, cheaper and more predictable.` | `We use AI only when it helps.` / `We use AI when it truly helps. For simple tasks, plain rules are faster and cheaper.` | Target copy, short sentences <= 11 words. |
-| `Humans stay in the loop` / `Sensitive or uncertain situations are escalated to a person...` | `A person can take over any chat.` / `Hard questions pass to a person. We add a clear way for a person to step in.` | Target copy, softened handoff claim per F2. |
+| `Humans stay in the loop` / `Sensitive or uncertain situations are escalated to a person...` | `A person can step in.` / `Hard questions pass to a person. We add a clear way for a person to step in.` | Target copy, aligned heading with softened handoff claim per G2. |
 | `Honest scope and costs` / `Setup fees, running costs, third-party charges and limits are spelled out...` | `You know the costs and limits before we start.` / `You see the setup costs, running fees, and limits in writing before we begin.` | Target copy, 14 words, plain English. |
 
 ---
@@ -275,3 +275,30 @@ Rule highlights:
    - Retained explicit clarification that AI can make mistakes and works best with approved notes.
    - Clarified that ongoing support after launch is optional and agreed in writing.
    - Retained explicit prohibition on medical advice across healthcare cards and demo disclosures.
+
+---
+
+## Group G: Final Promise Alignments & Location Updates (G1, G2, G3)
+
+### Principles Step 2 (`frontend/src/content/principles.ts` & `frontend/src/lib/assistant/knowledge.ts`)
+| Old Text | New Text | Rationale |
+|---|---|---|
+| `A person can take over any chat.` | `A person can step in.` | Softens absolute take-over claim; aligns with plain company voice. |
+| `We add a clear way for a person to take over if needed.` | `We add a clear way for a person to step in.` | Eliminates "take over" phrase across assistant knowledge and UI. |
+
+### Process Step 5 & Training Promises (`frontend/src/content/process.ts` & `frontend/src/content/services.ts`)
+| Old Text | New Text | Rationale |
+|---|---|---|
+| `We launch only after you approve it. We show your team how to use it.` | `We launch only after you approve it. We give you simple notes on how to use it.` | Replaces hands-on training promise with deliverable simple notes. |
+| `We show your team how to use the system.` (CRM howItWorks 4) | `We give you simple guide notes on how to use the system.` | Replaces training promise in CRM service detail page. |
+
+### Hero Body Sentence (`frontend/src/components/Hero.tsx`)
+| Old Text | New Text | Rationale |
+|---|---|---|
+| `They answer customers on WhatsApp, keep a list of your leads, and send reminders for you.` (16 words) | `They reply to customers on WhatsApp. They save your leads and send reminders.` (6 words + 7 words) | Broken into two short sentences under 8 words each to satisfy element-based sentence check. |
+
+### Business Location (`frontend/src/lib/site.ts`, `Footer.tsx`, `CTA.tsx`, `jsonld.ts`)
+| Old Text | New Text | Rationale |
+|---|---|---|
+| `India` (generic) | `Boisar, Maharashtra, India` (structured: city: Boisar, region: Maharashtra, country: India) | Replaces placeholder with real business location; updates JSON-LD PostalAddress to locality: Boisar, region: Maharashtra, country: IN. |
+

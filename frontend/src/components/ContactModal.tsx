@@ -2,7 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
-import { services } from "@/content/services";
+import { serviceList } from "@/content/service-list";
 import { whatsappLink, isPlaceholder } from "@/lib/site";
 
 type Ctx = {
@@ -401,7 +401,7 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
                     onChange={(e) => setService(e.target.value)}
                     className={inputCls}
                   >
-                    {services.map((s) => (
+                    {serviceList.map((s) => (
                       <option key={s.id}>{s.title}</option>
                     ))}
                     <option>Not sure yet / custom solution</option>

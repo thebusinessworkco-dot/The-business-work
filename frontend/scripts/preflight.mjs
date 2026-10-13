@@ -63,7 +63,7 @@ function isPlaceholderPhone(phone) {
 function isPlaceholderLocation(location) {
   if (!location) return true;
   const lower = location.trim().toLowerCase();
-  return lower === "india" || lower === "placeholder";
+  return lower === "india" || lower === "placeholder" || lower.includes("[[");
 }
 
 // Read site.ts

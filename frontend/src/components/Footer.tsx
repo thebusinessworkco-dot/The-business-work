@@ -2,7 +2,7 @@ import Link from "next/link";
 import { MessageCircle, Instagram } from "lucide-react";
 import Logo from "./Logo";
 import { site, whatsappLink } from "@/lib/site";
-import { services } from "@/content/services";
+import { serviceList } from "@/content/service-list";
 
 export default function Footer() {
   return (
@@ -46,10 +46,10 @@ export default function Footer() {
           <div className="space-y-4">
             <div className="font-headline text-xs uppercase tracking-wider text-section-cream">Services</div>
             <nav aria-label="Footer Services" className="flex flex-col space-y-2.5">
-              {services.map((s) => (
+              {serviceList.map((s) => (
                 <Link
                   key={s.id}
-                  href={`/services/${s.id}`}
+                  href={`/services/${s.slug}`}
                   className="font-body text-sm text-on-ink-muted underline decoration-section-cream/30 underline-offset-4 transition-colors hover:text-section-cream hover:decoration-section-cream"
                 >
                   {s.title}
@@ -71,6 +71,7 @@ export default function Footer() {
                   {site.email}
                 </a>
               </div>
+              <div>{site.location}</div>
             </div>
             <div className="flex flex-wrap gap-2 pt-1">
               <a

@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { getHomeJsonLd, getServiceJsonLd, serializeJsonLd } from "./jsonld";
 import { services } from "@/content/services";
-import { site } from "@/lib/site";
+import { site, isPlaceholderLocation, isPlaceholder } from "@/lib/site";
 
 describe("JSON-LD Structured Data", () => {
   it("generates valid home schemas without emitting placeholder contact data", () => {
@@ -21,10 +21,21 @@ describe("JSON-LD Structured Data", () => {
     expect(profService.areaServed.name).toBe("India");
     expect(profService.serviceType).toEqual(services.map((s) => s.title));
 
-    // Verified contact details are emitted; unconfirmed address & sameAs remain undefined
+    // Verified contact details are emitted; real address is emitted with exactly 3 fields
     expect(org.email).toBe(site.email);
     expect(org.telephone).toBe(site.phone);
-    expect(org.address).toBeUndefined();
+    expect(org.address).toEqual({
+      "@type": "PostalAddress",
+      addressLocality: "Boisar",
+      addressRegion: "Maharashtra",
+      addressCountry: "IN",
+    });
+    expect(profService.address).toEqual({
+      "@type": "PostalAddress",
+      addressLocality: "Boisar",
+      addressRegion: "Maharashtra",
+      addressCountry: "IN",
+    });
     expect(org.sameAs).toEqual(["https://instagram.com/thebusinesswork.co"]);
 
     // No fake rating fields
@@ -93,6 +104,19 @@ describe("JSON-LD Structured Data", () => {
         expect(faq).toBeUndefined();
       }
     }
+  });
+
+  it("handles location placeholder guard: treats 'India' as placeholder and real location as valid", () => {
+    expect(isPlaceholderLocation("India")).toBe(true);
+    expect(isPlaceholderLocation("india")).toBe(true);
+    expect(isPlaceholderLocation("")).toBe(true);
+    expect(isPlaceholderLocation(undefined)).toBe(true);
+    expect(isPlaceholderLocation("placeholder")).toBe(true);
+    expect(isPlaceholderLocation("[[TO CONFIRM: Location]]")).toBe(true);
+
+    expect(isPlaceholderLocation("Boisar, Maharashtra, India")).toBe(false);
+    expect(isPlaceholder("location", "Boisar, Maharashtra, India")).toBe(false);
+    expect(isPlaceholder("location", "India")).toBe(true);
   });
 });
 
