@@ -6,6 +6,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import JsonLd from "@/components/JsonLd";
 import DiscussProjectButton from "@/components/DiscussProjectButton";
+import ServiceCapabilities from "@/components/ServiceCapabilities";
 import { services } from "@/content/services";
 import { getServiceJsonLd } from "@/lib/jsonld";
 import { site, getCleanSiteUrl } from "@/lib/site";
@@ -137,17 +138,10 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
                 Core Capabilities
               </h2>
             </div>
-            <ul className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {service.capabilities.map((c) => (
-                <li
-                  key={c}
-                  className="flex items-start gap-3 rounded border border-border-sand bg-surface-card p-6"
-                >
-                  <CheckCircle2 size={18} className="mt-0.5 shrink-0 text-accent-ochre-dark" aria-hidden="true" />
-                  <span className="font-body text-sm font-medium text-ink">{c}</span>
-                </li>
-              ))}
-            </ul>
+            <ServiceCapabilities
+              capabilities={service.capabilities}
+              serviceTitle={service.title}
+            />
           </div>
         </section>
 

@@ -11,7 +11,7 @@
     "test": "vitest run",
     "seo:check": "vitest run src/lib/jsonld.test.ts src/lib/https.test.ts && node scripts/images-check.mjs",
     "legal:check": "node scripts/legal-check.mjs",
-    "test:a11y": "playwright test tests/a11y.spec.ts tests/assistant.spec.ts",
+    "test:a11y": "playwright test tests/a11y.spec.ts tests/assistant.spec.ts tests/capabilities.spec.ts",
     "preflight": "node scripts/preflight.mjs",
     "smoke": "node scripts/smoke.mjs",
     "contrast": "node scripts/contrast.mjs",

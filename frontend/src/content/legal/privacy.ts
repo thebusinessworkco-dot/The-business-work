@@ -64,7 +64,7 @@ export const privacySections: LegalSection[] = [
     ],
     list: [
       "Hosting & Infrastructure: Vercel hosts our website application and API endpoints under their standard cloud service terms.",
-      "Enquiry Processing & Storage: If a webhook endpoint is configured, enquiry data is forwarded to our configured automation platform (such as an n8n or Make workflow) to store enquiries and alert our team.",
+      "Enquiry Processing & Storage: If a webhook endpoint is configured, enquiry data is forwarded to our configured automation platform (such as an n8n or Make.com workflow) to store enquiries and alert our team.",
       "Abuse Prevention: Our servers use in-memory or optional Redis-based rate limiting to temporarily track submission frequency by IP address.",
       "Spam Protection: If Cloudflare Turnstile is enabled, a privacy-preserving verification widget runs when you open the contact form. Cloudflare processes interaction signals to verify human presence without invasive profiling.",
       "Analytics: Google Analytics 4 (only if enabled via configuration) is used for aggregated traffic measurement.",

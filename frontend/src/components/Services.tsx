@@ -92,7 +92,7 @@ export default function Services() {
                         <div>
                           <div className="mb-2 font-headline text-xs uppercase tracking-wider text-ink-muted">Capabilities</div>
                           <ul className="list-disc space-y-1 pl-4 font-body text-sm leading-relaxed text-ink">
-                            {s.capabilities.map((c) => <li key={c}>{c}</li>)}
+                            {s.capabilities.map((c) => <li key={c.name}>{c.name}</li>)}
                           </ul>
                         </div>
                         <div>
