@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, MessageCircle } from "lucide-react";
+import { ArrowRight, MessageCircle, Instagram } from "lucide-react";
 import { site, whatsappLink } from "@/lib/site";
 import { useContactModal } from "./ContactModal";
 
@@ -15,7 +15,7 @@ export default function CTA() {
         <p className="mx-auto max-w-2xl font-body text-base leading-relaxed text-section-cream sm:text-lg">
           Tell us how your business works. Share the problem, even if you don&apos;t know which technology you need, and we&apos;ll come back with a suggested approach.
         </p>
-        <div className="flex flex-col items-center justify-center gap-4 pt-4 sm:flex-row">
+        <div className="flex flex-col items-center justify-center gap-4 pt-4 sm:flex-row flex-wrap">
           <button
             onClick={() => openModal(undefined, "cta")}
             className="group inline-flex w-full items-center justify-center gap-3 rounded bg-section-cream px-8 py-4 font-headline text-xs font-semibold uppercase tracking-wider text-ink transition-colors hover:bg-ink hover:text-section-cream sm:w-auto"
@@ -29,8 +29,17 @@ export default function CTA() {
             rel="noopener noreferrer"
             className="inline-flex w-full items-center justify-center gap-3 rounded border border-section-cream bg-transparent px-8 py-4 font-headline text-xs font-semibold uppercase tracking-wider text-section-cream transition-colors hover:bg-section-cream hover:text-ink sm:w-auto"
           >
-            <MessageCircle size={18} aria-hidden />
+            <MessageCircle size={18} aria-hidden="true" />
             <span>Chat on WhatsApp</span>
+          </a>
+          <a
+            href={site.instagram}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex w-full items-center justify-center gap-3 rounded border border-section-cream bg-transparent px-8 py-4 font-headline text-xs font-semibold uppercase tracking-wider text-section-cream transition-colors hover:bg-section-cream hover:text-ink sm:w-auto"
+          >
+            <Instagram size={18} aria-hidden="true" />
+            <span>Follow on Instagram</span>
           </a>
         </div>
         <p className="pt-6 font-headline text-xs uppercase tracking-wider text-section-cream">

@@ -1,21 +1,21 @@
 import type { LegalSection } from "./types";
 
-export const lastUpdated = "2026-10-12";
+export const lastUpdated = "2026-10-13";
 
 export const privacySections: LegalSection[] = [
   {
     id: "who-we-are",
     heading: "1. Who We Are and How to Contact Us",
     paragraphs: [
-      "The Business Work is an AI automation and digital systems agency based in India. We design and build practical AI agents, WhatsApp workflows, CRM pipelines, and custom software integrations for businesses.",
+      "The Business Work is a digital automation and systems practice based in India, founded by Aman Rajbhar. We design and build practical AI agents, WhatsApp workflows, CRM pipelines, and custom software integrations for small and medium businesses.",
       "If you have questions about this Privacy Policy or wish to exercise your rights regarding your personal data, you can contact us at:",
     ],
     list: [
-      "Official Name: The Business Work",
-      "Legal Entity Details: [[TO CONFIRM: registered business entity type, registration number, and GSTIN if applicable]]",
-      "Registered Address: [[TO CONFIRM: complete registered office address, city, state, PIN code, India]]",
-      "Email: [[TO CONFIRM: official contact and privacy email address, e.g. privacy@yourdomain]]",
-      "Phone / WhatsApp: [[TO CONFIRM: official business contact phone number]]",
+      "Brand name: The Business Work",
+      "Founder: Aman Rajbhar",
+      "Email: thebusinesswork.co@gmail.com",
+      "Phone / WhatsApp: +91 79720 20292",
+      "Website: https://the-business-work.vercel.app",
     ],
   },
   {
@@ -36,7 +36,7 @@ export const privacySections: LegalSection[] = [
   },
   {
     id: "purpose-and-basis",
-    heading: "3. Why We Use Your Data and Lawful Basis",
+    heading: "3. Why We Use Your Data",
     paragraphs: [
       "We process your personal information strictly for legitimate commercial and operational purposes:",
     ],
@@ -48,11 +48,11 @@ export const privacySections: LegalSection[] = [
     ],
   },
   {
-    id: "dpdp-alignment",
-    heading: "4. Alignment with Indian Data Protection Laws",
+    id: "data-protection",
+    heading: "4. Data Protection Practices",
     paragraphs: [
-      "We handle personal data in accordance with applicable laws in India, including the Digital Personal Data Protection Act, 2023 (DPDP Act 2023). Under these principles, we provide prior notice of the data collected, process data strictly for the specified purpose, obtain verifiable consent before processing your contact submission, and respect your right to withdraw consent.",
-      "[[TO CONFIRM: lawyer to confirm applicable statutory notices and rules under the DPDP Act 2023]].",
+      "We handle personal data in accordance with applicable Indian laws. We provide prior notice of the data collected, process data strictly for the specified purpose, obtain verifiable consent before processing your contact submission, and respect your right to withdraw consent.",
+      "We will update our practices as data protection rules in India continue to evolve. If specific compliance requirements change, we will update this policy accordingly.",
     ],
   },
   {
@@ -63,10 +63,11 @@ export const privacySections: LegalSection[] = [
       "To operate our website and manage enquiries reliably, we share data solely with trusted third-party service providers who assist our operations:",
     ],
     list: [
-      "Hosting & Infrastructure: Providers who host our website application and API endpoints under standard cloud service terms.",
-      "Enquiry Processing & Storage: Secure automation and spreadsheet tools (such as our configured lead webhook endpoint, Google Workspace, or automation platforms) used to store enquiries and alert our team.",
-      "Abuse Prevention: Cloud infrastructure providers (such as optional Redis cache services) used strictly for temporary IP rate limiting.",
-      "Analytics: Google Analytics (only if enabled via configuration), used for aggregated traffic measurement.",
+      "Hosting & Infrastructure: Vercel hosts our website application and API endpoints under their standard cloud service terms.",
+      "Enquiry Processing & Storage: If a webhook endpoint is configured, enquiry data is forwarded to our configured automation platform (such as an n8n or Make workflow) to store enquiries and alert our team.",
+      "Abuse Prevention: Our servers use in-memory or optional Redis-based rate limiting to temporarily track submission frequency by IP address.",
+      "Spam Protection: If Cloudflare Turnstile is enabled, a privacy-preserving verification widget runs when you open the contact form. Cloudflare processes interaction signals to verify human presence without invasive profiling.",
+      "Analytics: Google Analytics 4 (only if enabled via configuration) is used for aggregated traffic measurement.",
       "Legal & Regulatory Authorities: We may disclose information only if required by a valid court order, subpoena, or applicable Indian law.",
     ],
   },
@@ -74,23 +75,22 @@ export const privacySections: LegalSection[] = [
     id: "international-transfers",
     heading: "6. International Data Transfers",
     paragraphs: [
-      "Our website hosting providers and enterprise cloud services may operate data centers located both in India and internationally. When personal data is stored or processed on servers outside India, it is handled in compliance with contractual safeguards and applicable cross-border transfer requirements.",
-      "[[TO CONFIRM: lawyer to confirm international data transfer safeguards and restrictions under Indian law]].",
+      "Our website is hosted on Vercel, which may process data in data centres located both in India and internationally. When personal data is stored or processed on servers outside India, it is handled in compliance with the hosting provider's standard contractual safeguards.",
     ],
   },
   {
     id: "data-retention",
     heading: "7. Data Retention",
     paragraphs: [
-      "We retain contact form enquiries and correspondence only as long as necessary to address your project request, conduct business negotiations, and fulfill legal or accounting obligations.",
-      "Enquiry records are retained for [[TO CONFIRM: retention period, e.g. specified retention duration or until consent is withdrawn]], after which they are securely deleted or anonymized.",
+      "We retain contact form enquiries and correspondence only as long as necessary to address your project request, conduct business discussions, and fulfil any legal or accounting obligations.",
+      "If you request deletion of your data, we will remove or anonymise your enquiry records within a reasonable timeframe, subject to any applicable legal retention requirements.",
     ],
   },
   {
     id: "security-measures",
     heading: "8. Security Measures",
     paragraphs: [
-      "We implement appropriate technical and organizational safeguards to protect your personal information against unauthorized access, loss, alteration, or disclosure. These measures include:",
+      "We implement appropriate technical and organisational safeguards to protect your personal information against unauthorised access, loss, alteration, or disclosure. These measures include:",
     ],
     list: [
       "HTTPS encryption in transit across all website pages and API endpoints.",
@@ -111,7 +111,7 @@ export const privacySections: LegalSection[] = [
       "Right to Correction: You may ask us to update, complete, or correct inaccurate personal information.",
       "Right to Erasure: You may request the deletion of your personal data, subject to any statutory retention requirements.",
       "Right to Withdraw Consent: You may withdraw your consent for future communication at any time by contacting us.",
-      "How to Request: To exercise any of these rights, email us at [[TO CONFIRM: official privacy email address]]. We will review and respond within [[TO CONFIRM: response timeline, e.g. within statutory timeline of receiving a verified request]].",
+      "How to Request: To exercise any of these rights, email us at thebusinesswork.co@gmail.com. We will review and respond within a reasonable timeframe.",
     ],
   },
   {
@@ -120,8 +120,7 @@ export const privacySections: LegalSection[] = [
     paragraphs: [
       "Default Cookie-Free Mode: By default, this website operates in a strictly cookie-free mode. We do not use advertising trackers, marketing cookies, third-party analytics pixels, or cross-site tracking scripts. No cookies, localStorage, or sessionStorage items are stored on your device when browsing the public website.",
       "Optional Google Analytics: If and only if Google Analytics 4 is enabled by the site operator, a non-modal cookie consent banner is displayed. Google Analytics scripts and cookies (_ga) load only after you explicitly click 'Accept'. If you click 'Reject' or if analytics is unset, zero analytics cookies or tracking scripts are loaded.",
-      "Optional Spam Protection: If Cloudflare Turnstile is enabled by the site operator to prevent automated spam abuse, a privacy-preserving security widget runs when you open the contact modal to verify human interaction without invasive profiling. [[TO CONFIRM: lawyer to confirm applicable privacy disclosures if Cloudflare Turnstile spam protection is enabled in production]].",
-      "[[TO CONFIRM: lawyer to confirm cookie notice, consent banner, or opt-out requirements if analytics is deployed in production]].",
+      "Optional Spam Protection: If Cloudflare Turnstile is enabled by the site operator, a privacy-preserving security widget runs when you open the contact modal to verify human interaction. Turnstile does not use intrusive tracking or create advertising profiles.",
     ],
   },
   {
@@ -135,7 +134,7 @@ export const privacySections: LegalSection[] = [
     id: "healthcare-notice",
     heading: "12. Healthcare & Sensitive Data Notice",
     paragraphs: [
-      "Our website and automation systems are not designed, certified, or intended for collecting, storing, or processing sensitive personal health information, medical histories, or patient records. Please do not submit medical or clinical details in our contact forms or chat messages.",
+      "Our website and automation systems are not designed, certified, or intended for collecting, storing, or processing sensitive personal health information, medical histories, or patient records. Please do not submit medical or clinical details in our contact forms or chat messages. Healthcare examples on our website refer solely to administrative workflows: enquiries, scheduling, reminders, and staff handoff.",
     ],
   },
   {
@@ -147,18 +146,11 @@ export const privacySections: LegalSection[] = [
     ],
   },
   {
-    id: "policy-changes-and-grievance",
-    heading: "14. Changes to this Policy and Grievance Redressal",
+    id: "policy-changes",
+    heading: "14. Changes to this Policy",
     paragraphs: [
       "We may update this Privacy Policy periodically to reflect operational, technical, or legal changes. Any updates will be posted on this page with an updated 'Last Updated' date.",
-      "If you have any grievance or concern regarding the processing of your personal data, you may reach our designated Grievance Officer:",
-    ],
-    list: [
-      "Grievance Officer: [[TO CONFIRM: Grievance Officer Name]]",
-      "Designation: [[TO CONFIRM: Grievance Officer Designation]]",
-      "Email: [[TO CONFIRM: Grievance Officer Email Address]]",
-      "Postal Address: [[TO CONFIRM: Grievance Officer Postal Address, India]]",
-      "Resolution Timeline: [[TO CONFIRM: statutory grievance resolution timeline, e.g. within prescribed statutory window]]",
+      "If you have any questions or concerns regarding the processing of your personal data, please contact us at thebusinesswork.co@gmail.com.",
     ],
   },
 ];

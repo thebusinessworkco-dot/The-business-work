@@ -9,7 +9,7 @@ export function generateMetadata(): Metadata {
   const robots = getLegalRobots("terms");
 
   return {
-    title: "Terms of Service | The Business Work",
+    title: "Terms of Service",
     description:
       "Terms and conditions governing your use of The Business Work website, commercial enquiries, and digital automation capabilities.",
     alternates: {

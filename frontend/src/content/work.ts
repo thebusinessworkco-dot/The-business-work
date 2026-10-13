@@ -9,6 +9,10 @@ export type Demo = {
   flow: { text: string; tag: string }[];
   scope: { label: string; value: string }[];
   note: string;
+  /** Optional: absolute or relative path/URL to a demo walkthrough video */
+  videoSrc?: string;
+  /** Optional: poster image shown before video loads */
+  posterSrc?: string;
 };
 
 export const demos: Demo[] = [
@@ -32,6 +36,8 @@ export const demos: Demo[] = [
       { label: "Still to verify", value: "Duplicate-booking prevention, reminders, error handling" },
     ],
     note: "Demo brand. Not a live client deployment. AI assists with scheduling only and never provides clinical advice.",
+    // videoSrc: "/demos/hospital-appointments.mp4",
+    // posterSrc: "/demos/hospital-appointments-poster.jpg",
   },
   {
     id: "website-chatbot",
@@ -53,5 +59,7 @@ export const demos: Demo[] = [
       { label: "Still to verify", value: "Rate limits, knowledge-base content, production hosting" },
     ],
     note: "Capabilities shown are prototype-level. Not connected to this website.",
+    // videoSrc: "/demos/website-chatbot.mp4",
+    // posterSrc: "/demos/website-chatbot-poster.jpg",
   },
 ];

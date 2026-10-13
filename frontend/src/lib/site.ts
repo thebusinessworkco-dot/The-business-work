@@ -1,24 +1,30 @@
 /**
  * Single source of truth for business details.
- * ALL values below are DEMO PLACEHOLDERS — replace before going live.
+ * Updated with verified contact information for The Business Work.
  */
 export const site = {
   name: "The Business Work",
   tagline: "We Make Business Simpler.",
+  founder: "Aman Rajbhar",
   description:
-    "The Business Work is an AI automation and digital systems agency in India. We build AI agents, WhatsApp automation, and CRM workflows around your business.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
-  email: "hello@example.com", // TODO: real business email
-  phone: "+91 00000 00000", // TODO: real phone
-  whatsappNumber: "910000000000", // TODO: digits only, with country code, no "+"
-  location: "India", // TODO: city / registered address
-  social: [] as { label: string; href: string }[], // add only real, ready accounts
+    "The Business Work helps small and medium businesses in India automate customer enquiries, bookings, lead follow-ups and repetitive admin — using WhatsApp, AI and connected business tools.",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://the-business-work.vercel.app",
+  email: "thebusinesswork.co@gmail.com",
+  phone: "+91 79720 20292",
+  phoneHref: "tel:+917972020292",
+  whatsappNumber: "917972020292", // digits only, with country code, no "+"
+  whatsappHref: "https://wa.me/917972020292",
+  instagram: "https://instagram.com/thebusinesswork.co",
+  location: "India", // No verified office address — keep general
+  social: [
+    { label: "Instagram", href: "https://instagram.com/thebusinesswork.co" },
+  ] as readonly { label: string; href: string }[],
 } as const;
 
 /**
  * Stable timestamp for sitemap and metadata to prevent churn on every rebuild.
  */
-export const LAST_MODIFIED = "2026-10-12T00:00:00.000Z";
+export const LAST_MODIFIED = "2026-10-13T00:00:00.000Z";
 
 /**
  * Placeholder guard functions.
@@ -82,6 +88,8 @@ export function getCleanSiteUrl(): string {
   return raw.replace(/\/+$/, "");
 }
 
-export function whatsappLink(message = "Hi, I'd like to discuss a project with The Business Work.") {
+export function whatsappLink(
+  message = "Hi, I'd like to discuss a business automation project with The Business Work. Could we set up a time to talk?"
+) {
   return `https://wa.me/${site.whatsappNumber}?text=${encodeURIComponent(message)}`;
 }

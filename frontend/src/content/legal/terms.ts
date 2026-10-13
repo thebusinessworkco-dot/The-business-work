@@ -1,6 +1,6 @@
 import type { LegalSection } from "./types";
 
-export const lastUpdated = "2026-10-12";
+export const lastUpdated = "2026-10-13";
 
 export const termsSections: LegalSection[] = [
   {
@@ -23,7 +23,7 @@ export const termsSections: LegalSection[] = [
     heading: "3. Enquiries Are Not Binding Contracts",
     paragraphs: [
       "Submitting an enquiry through our contact form, initiating a chat on WhatsApp, or sending an email does not form a client relationship, partnership, or binding service agreement between you and The Business Work.",
-      "All client engagements commence only upon mutual negotiation, finalization, and execution of a separate written Statement of Work (SOW) or commercial proposal signed or confirmed by authorized representatives of both parties.",
+      "All client engagements commence only upon mutual negotiation, finalisation, and execution of a separate written Statement of Work (SOW) or commercial proposal confirmed by authorised representatives of both parties.",
     ],
   },
   {
@@ -38,19 +38,17 @@ export const termsSections: LegalSection[] = [
     id: "payments-and-taxes",
     heading: "5. Quotes, Payments, and Taxes",
     paragraphs: [
-      "Project work commences upon payment of an agreed advance fee, with remaining balances linked to defined project milestone completions ([[TO CONFIRM: advance % and milestone schedule]]).",
-      "Invoices are issued upon milestone completion and must be settled within [[TO CONFIRM: invoice due date window, e.g. agreed number of calendar days]].",
-      "Late payments may lead to project suspension until outstanding balances are cleared ([[TO CONFIRM: late payment terms and interest if applicable]]).",
-      "Applicable taxes, including Goods and Services Tax (GST), will be charged on all professional fees as required under Indian law ([[TO CONFIRM: GST registration and rate]]).",
-      "All payments must be made through approved banking channels ([[TO CONFIRM: accepted payment methods, e.g. approved electronic banking methods]]).",
+      "Project pricing, advance payment requirements, milestone payment schedule, and invoice terms are defined in each individual written project agreement.",
+      "Applicable taxes, including Goods and Services Tax (GST) where required, will be stated in the project agreement.",
+      "All payment terms, methods, and conditions are confirmed in the project agreement before work begins.",
     ],
   },
   {
     id: "third-party-costs",
     heading: "6. Third-Party Platform Costs and Dependencies",
     paragraphs: [
-      "Our automation systems and software integrations connect with and rely upon external third-party software and cloud platforms, including Meta / WhatsApp Cloud API, AI model providers (such as OpenAI and Anthropic), Google Workspace, CRM platforms, and cloud hosting infrastructure.",
-      "Usage fees charged by external providers—including WhatsApp conversation charges, AI token consumption, hosting tiers, and CRM software subscriptions—are separate from our engineering fees and are payable directly by the client unless explicitly stated otherwise in the project proposal.",
+      "Our automation systems and software integrations connect with and rely upon external third-party software and cloud platforms, including Meta / WhatsApp Cloud API, AI model providers (such as OpenAI and Google), Google Workspace, CRM platforms, and cloud hosting infrastructure.",
+      "Usage fees charged by external providers — including WhatsApp conversation charges, AI token consumption, hosting tiers, and CRM software subscriptions — are separate from our engineering fees and are payable directly by the client unless explicitly stated otherwise in the project proposal.",
       "The client retains direct ownership and administrative control of their third-party accounts, API credentials, and billing profiles as detailed in the commercial proposal.",
       "Approvals & Policies: Account verification, business manager verification, phone number onboarding, and template approvals are governed entirely by the external platform providers. We build to official standards but do not guarantee third-party platform approvals or approval timelines.",
     ],
@@ -81,9 +79,8 @@ export const termsSections: LegalSection[] = [
     id: "cancellation-and-refunds",
     heading: "9. Cancellation and Refunds",
     paragraphs: [
-      "Either party may terminate an ongoing project agreement by giving written notice to the other party ([[TO CONFIRM: notice period, e.g. agreed written notice period]]).",
+      "Cancellation terms, notice periods, and refund conditions are defined in each individual written project agreement.",
       "In the event of cancellation, the client is liable for payment of all work completed, milestones delivered, and non-recoverable direct expenses incurred up to the date of cancellation.",
-      "Advance payments, initial setup deposits, and fees for completed milestones are non-refundable ([[TO CONFIRM: refund rules and non-refundable deposit terms]]).",
     ],
   },
   {
@@ -91,7 +88,7 @@ export const termsSections: LegalSection[] = [
     heading: "10. Ongoing Support and Maintenance",
     paragraphs: [
       "Standard implementation engagements include post-delivery bug-fix support for a limited period specified in the project proposal.",
-      "Ongoing maintenance, platform API version upgrades, workflow modifications, and continuous operational monitoring require a separate written support agreement with its own scope, response SLAs, and retainer fees.",
+      "Ongoing maintenance, platform API version upgrades, workflow modifications, and continuous operational monitoring require a separate written support agreement with its own scope, response commitments, and retainer fees.",
     ],
   },
   {
@@ -134,15 +131,15 @@ export const termsSections: LegalSection[] = [
     id: "limitation-of-liability",
     heading: "15. Limitation of Liability",
     paragraphs: [
-      "To the maximum extent permitted by applicable law, in no event shall The Business Work, its proprietors, partners, employees, or contractors be liable for any indirect, consequential, punitive, incidental, or special damages, including lost profits, loss of data, loss of goodwill, or business interruption arising out of or in connection with your use of or inability to use this website.",
-      "[[TO CONFIRM: lawyer to set liability cap and exclusions, e.g. liability limited to agreed cap or fees paid]].",
+      "To the maximum extent permitted by applicable law, in no event shall The Business Work, its founder, employees, or contractors be liable for any indirect, consequential, punitive, incidental, or special damages, including lost profits, loss of data, loss of goodwill, or business interruption arising out of or in connection with your use of or inability to use this website.",
+      "Specific liability limits for project engagements are defined in the relevant written project agreement.",
     ],
   },
   {
     id: "separate-project-agreements",
     heading: "16. Separate Written Project Agreements",
     paragraphs: [
-      "The terms on this page govern public website browsing and enquiries only. Commercial project parameters—including detailed scope of deliverables, milestone deadlines, development fees, maintenance terms, software ownership, and warranties—are governed exclusively by a separate, customized written contract signed by both parties.",
+      "The terms on this page govern public website browsing and enquiries only. Commercial project parameters — including detailed scope of deliverables, milestone deadlines, development fees, maintenance terms, software ownership, and warranties — are governed exclusively by a separate, customised written contract confirmed by both parties.",
       "In the event of any conflict between these website Terms and an executed project agreement, the executed project agreement shall prevail.",
     ],
   },
@@ -151,7 +148,7 @@ export const termsSections: LegalSection[] = [
     heading: "17. Governing Law and Dispute Resolution",
     paragraphs: [
       "These Terms shall be governed by and construed in accordance with the laws of India, without regard to conflict of law principles.",
-      "Any dispute, controversy, or claim arising out of or relating to these Terms or your use of the website shall be subject to the exclusive jurisdiction of the competent courts in [[TO CONFIRM: city and state jurisdiction in India]].",
+      "Any dispute, controversy, or claim arising out of or relating to these Terms or your use of the website shall be subject to the exclusive jurisdiction of the competent courts in India. The specific jurisdiction is determined in each project agreement.",
     ],
   },
   {
@@ -159,7 +156,7 @@ export const termsSections: LegalSection[] = [
     heading: "18. Changes to Terms and Contact Information",
     paragraphs: [
       "We reserve the right to revise or modify these Terms at any time. Any changes will become effective immediately upon posting on this website with an updated 'Last Updated' date. Your continued use of the website following such changes constitutes your acceptance of the updated Terms.",
-      "If you have questions regarding these Terms, please contact us at [[TO CONFIRM: official contact email address]].",
+      "If you have questions regarding these Terms, please contact us at thebusinesswork.co@gmail.com.",
     ],
   },
 ];

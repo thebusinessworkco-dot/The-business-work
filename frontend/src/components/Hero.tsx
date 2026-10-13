@@ -1,6 +1,7 @@
 "use client";
 
-import { ArrowRight, CheckCircle2, ShieldCheck } from "lucide-react";
+import { ArrowRight, CheckCircle2, ShieldCheck, MessageCircle, Instagram } from "lucide-react";
+import { site, whatsappLink } from "@/lib/site";
 import { useContactModal } from "./ContactModal";
 
 const rows = [
@@ -20,24 +21,44 @@ export default function Hero() {
             We Make Business Simpler.
           </h1>
           <p className="max-w-[620px] font-body text-base leading-relaxed text-ink-muted sm:text-lg">
-            We help businesses save time, reduce repetitive work, and grow with smart automation and digital solutions.
+            We help small and medium businesses in India automate customer enquiries, bookings, lead follow&#8209;ups and repetitive admin&mdash;using WhatsApp, AI and connected business tools.
           </p>
           <p className="max-w-[620px] font-body text-sm leading-relaxed text-ink-muted">
-            Tell us how your business works. We&apos;ll help you identify what can be automated and build a solution around your needs.
+            Built around how your business works, with human handoff when needed.
           </p>
-          <div className="flex flex-wrap items-center gap-4 pt-2">
+          <div className="flex flex-wrap items-center gap-3 sm:gap-4 pt-2">
             <button
               onClick={() => openModal(undefined, "hero")}
-              className="group inline-flex items-center justify-center gap-2.5 bg-ink px-7 py-3.5 font-headline text-xs font-semibold uppercase tracking-wider text-background transition-colors hover:bg-accent-ochre"
+              className="group inline-flex items-center justify-center gap-2.5 bg-ink px-6 sm:px-7 py-3.5 font-headline text-xs font-semibold uppercase tracking-wider text-background transition-colors hover:bg-accent-ochre"
             >
               <span>Discuss Your Project</span>
               <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
             </button>
             <a
               href="#services"
-              className="inline-flex items-center justify-center rounded-full border border-border-taupe bg-surface-card px-7 py-3.5 font-headline text-xs font-medium uppercase tracking-wider text-ink transition-all hover:border-ink hover:bg-[#EFEAE0]"
+              className="inline-flex items-center justify-center rounded-full border border-border-taupe bg-surface-card px-6 sm:px-7 py-3.5 font-headline text-xs font-medium uppercase tracking-wider text-ink transition-all hover:border-ink hover:bg-[#EFEAE0]"
             >
               Explore Services
+            </a>
+            <a
+              href={whatsappLink()}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Chat with us on WhatsApp"
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-border-taupe bg-surface-card px-4 sm:px-5 py-3.5 font-headline text-xs font-medium uppercase tracking-wider text-ink transition-all hover:border-ink hover:bg-[#EFEAE0]"
+            >
+              <MessageCircle size={15} aria-hidden="true" />
+              <span>WhatsApp</span>
+            </a>
+            <a
+              href={site.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Follow us on Instagram"
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-border-taupe bg-surface-card px-4 sm:px-5 py-3.5 font-headline text-xs font-medium uppercase tracking-wider text-ink transition-all hover:border-ink hover:bg-[#EFEAE0]"
+            >
+              <Instagram size={15} aria-hidden="true" />
+              <span>Instagram</span>
             </a>
           </div>
           <div className="flex flex-wrap items-center gap-6 border-t border-border-sand pt-6 font-headline text-[12px] uppercase tracking-wider text-ink-muted">

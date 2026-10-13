@@ -16,9 +16,9 @@ export default function Services() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-12">
         <SectionHeading
           eyebrow="01 / SERVICES"
-          title="Four areas. One custom solution."
+          title="Four capabilities. One custom solution."
           id="services-title"
-          aside="These are capabilities, not fixed packages. Most clients need a combination, built around their own workflow."
+          aside="These are capabilities we combine into custom solutions, not fixed packages. We understand your workflow first, then recommend the simplest suitable system — using AI only where useful and plain rule-based automation where it works better."
         />
 
         <ul className="divide-y divide-border-sand">

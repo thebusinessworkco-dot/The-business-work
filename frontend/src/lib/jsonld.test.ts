@@ -21,11 +21,11 @@ describe("JSON-LD Structured Data", () => {
     expect(profService.areaServed.name).toBe("India");
     expect(profService.serviceType).toEqual(services.map((s) => s.title));
 
-    // Placeholder guard test: email, phone, address, sameAs must NOT be emitted while placeholders
-    expect(org.email).toBeUndefined();
-    expect(org.telephone).toBeUndefined();
+    // Verified contact details are emitted; unconfirmed address & sameAs remain undefined
+    expect(org.email).toBe(site.email);
+    expect(org.telephone).toBe(site.phone);
     expect(org.address).toBeUndefined();
-    expect(org.sameAs).toBeUndefined();
+    expect(org.sameAs).toEqual(["https://instagram.com/thebusinesswork.co"]);
 
     // No fake rating fields
     expect(profService).not.toHaveProperty("aggregateRating");

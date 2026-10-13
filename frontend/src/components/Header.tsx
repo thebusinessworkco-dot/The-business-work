@@ -2,8 +2,9 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { Menu, X, MessageCircle, Instagram } from "lucide-react";
 import Logo from "./Logo";
+import { site, whatsappLink } from "@/lib/site";
 import { useContactModal } from "./ContactModal";
 
 const nav = [
@@ -47,6 +48,26 @@ export default function Header() {
         </nav>
 
         <div className="relative z-20 flex items-center gap-2 sm:gap-3 shrink-0">
+          <a
+            href={whatsappLink()}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Chat on WhatsApp"
+            className="hidden sm:inline-flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full border border-border-taupe bg-surface-card text-ink transition-all hover:border-ink hover:bg-[#F2ECE0] active:scale-[0.98]"
+            title="Chat on WhatsApp"
+          >
+            <MessageCircle size={16} aria-hidden="true" />
+          </a>
+          <a
+            href={site.instagram}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Follow on Instagram"
+            className="hidden sm:inline-flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full border border-border-taupe bg-surface-card text-ink transition-all hover:border-ink hover:bg-[#F2ECE0] active:scale-[0.98]"
+            title="Follow on Instagram"
+          >
+            <Instagram size={16} aria-hidden="true" />
+          </a>
           <button
             type="button"
             onClick={() => openModal(undefined, "header")}
@@ -81,7 +102,7 @@ export default function Header() {
               </li>
             ))}
           </ul>
-          <div className="pt-4">
+          <div className="pt-4 space-y-2.5">
             <button
               type="button"
               onClick={() => { setOpen(false); openModal(); }}
@@ -89,6 +110,28 @@ export default function Header() {
             >
               Discuss Your Project
             </button>
+            <div className="grid grid-cols-2 gap-2">
+              <a
+                href={whatsappLink()}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setOpen(false)}
+                className="flex items-center justify-center gap-2 rounded border border-border-taupe bg-surface-card py-2.5 font-headline text-xs font-medium uppercase tracking-wider text-ink transition-colors hover:border-ink hover:bg-[#F2ECE0]"
+              >
+                <MessageCircle size={15} aria-hidden="true" />
+                <span>WhatsApp</span>
+              </a>
+              <a
+                href={site.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setOpen(false)}
+                className="flex items-center justify-center gap-2 rounded border border-border-taupe bg-surface-card py-2.5 font-headline text-xs font-medium uppercase tracking-wider text-ink transition-colors hover:border-ink hover:bg-[#F2ECE0]"
+              >
+                <Instagram size={15} aria-hidden="true" />
+                <span>Instagram</span>
+              </a>
+            </div>
           </div>
         </nav>
       )}

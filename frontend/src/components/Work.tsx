@@ -4,9 +4,43 @@ import { useState } from "react";
 import { demos, type Demo } from "@/content/work";
 import SectionHeading from "./SectionHeading";
 
+function DemoVideo({ demo }: { demo: Demo }) {
+  if (demo.videoSrc) {
+    return (
+      <div className="relative mt-6 w-full overflow-hidden rounded border border-border-sand bg-ink">
+        <div className="relative w-full" style={{ paddingBottom: "56.25%" }}>
+          <video
+            src={demo.videoSrc}
+            poster={demo.posterSrc}
+            controls
+            playsInline
+            preload="metadata"
+            className="absolute inset-0 h-full w-full object-contain"
+            aria-label={`Demo walkthrough: ${demo.title}`}
+          >
+            Your browser does not support the video element.
+          </video>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative mt-6 w-full overflow-hidden rounded border border-border-sand bg-surface-muted">
+      <div
+        className="relative flex w-full items-center justify-center"
+        style={{ paddingBottom: "56.25%" }}
+      >
+        <span className="absolute inset-0 flex items-center justify-center font-headline text-xs uppercase tracking-wider text-ink-muted">
+          Demo walkthrough coming soon
+        </span>
+      </div>
+    </div>
+  );
+}
+
 function DemoCard({ demo }: { demo: Demo }) {
   const [tab, setTab] = useState<"flow" | "scope">("flow");
-  const tabs: ("flow" | "scope")[] = ["flow", "scope"];
 
   const handleKeyDown = (e: React.KeyboardEvent, currentTab: "flow" | "scope") => {
     let newTab: "flow" | "scope" | null = null;
@@ -119,6 +153,10 @@ function DemoCard({ demo }: { demo: Demo }) {
               </dl>
             </div>
           )}
+
+          {/* Video placeholder / player area */}
+          <DemoVideo demo={demo} />
+
           <div className="mt-6 border-t border-border-sand pt-4 font-headline text-xs text-ink-muted">{demo.note}</div>
         </div>
       </div>

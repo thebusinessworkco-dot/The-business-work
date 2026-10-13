@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { X } from "lucide-react";
 import { useContactModal } from "@/components/ContactModal";
-import { isPlaceholder, whatsappLink } from "@/lib/site";
+import { site, isPlaceholder, whatsappLink } from "@/lib/site";
 import { matchQuery, FALLBACK_ANSWER, DEFAULT_SUGGESTIONS } from "@/lib/assistant/match";
 import Logo, { MARK_PATHS } from "@/components/Logo";
 
@@ -344,9 +344,17 @@ export default function AssistantWidget() {
                 rel="noopener noreferrer"
                 className="min-h-[44px] flex items-center justify-center rounded border border-border-sand bg-surface-card px-3 py-2 font-headline text-xs font-medium text-ink transition-colors hover:border-ink focus:outline-none focus:ring-2 focus:ring-ink"
               >
-                Chat on WhatsApp
+                WhatsApp
               </a>
             )}
+            <a
+              href={site.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="min-h-[44px] flex items-center justify-center rounded border border-border-sand bg-surface-card px-3 py-2 font-headline text-xs font-medium text-ink transition-colors hover:border-ink focus:outline-none focus:ring-2 focus:ring-ink"
+            >
+              Instagram
+            </a>
           </div>
 
           {/* Text Input Form */}

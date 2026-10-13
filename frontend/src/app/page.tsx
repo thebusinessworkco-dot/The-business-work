@@ -6,6 +6,7 @@ import Process from "@/components/Process";
 import Industries from "@/components/Industries";
 import Work from "@/components/Work";
 import Principles from "@/components/Principles";
+import Founder from "@/components/Founder";
 import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
 import JsonLd from "@/components/JsonLd";
@@ -13,15 +14,15 @@ import { getHomeJsonLd } from "@/lib/jsonld";
 
 export const metadata: Metadata = {
   title: {
-    absolute: "The Business Work | AI Automation & Systems Agency India",
+    absolute: "The Business Work | AI Automation & Digital Systems",
   },
   description:
-    "Practical AI agents, WhatsApp automation, and CRM workflows custom-built for businesses in India. Reduce repetitive tasks and automate operations.",
+    "We help small and medium businesses in India automate customer enquiries, bookings, lead follow-ups and repetitive admin — using WhatsApp, AI and connected business tools.",
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "The Business Work | AI Automation & Systems Agency India",
+    title: "The Business Work | AI Automation & Digital Systems",
     description:
       "Practical AI agents, WhatsApp automation, and CRM workflows custom-built for businesses in India.",
   },
@@ -41,6 +42,7 @@ export default function Home() {
         <Industries />
         <Work />
         <Principles />
+        <Founder />
         <CTA />
       </main>
       <Footer />

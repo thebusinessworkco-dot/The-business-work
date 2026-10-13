@@ -1,6 +1,7 @@
 import Link from "next/link";
+import { MessageCircle, Instagram } from "lucide-react";
 import Logo from "./Logo";
-import { site } from "@/lib/site";
+import { site, whatsappLink } from "@/lib/site";
 import { services } from "@/content/services";
 
 export default function Footer() {
@@ -58,12 +59,42 @@ export default function Footer() {
           </div>
 
           <div className="space-y-4">
-            <div className="font-headline text-xs uppercase tracking-wider text-section-cream">Contact</div>
+            <div className="font-headline text-xs uppercase tracking-wider text-section-cream">Contact &amp; Connect</div>
             <div className="space-y-2 font-body text-sm text-on-ink-muted">
-              <div>{site.phone}</div>
-              <div>{site.location}</div>
+              <div>
+                <a href={site.phoneHref} className="transition-colors hover:text-section-cream">
+                  {site.phone}
+                </a>
+              </div>
+              <div>
+                <a href={`mailto:${site.email}`} className="transition-colors hover:text-section-cream">
+                  {site.email}
+                </a>
+              </div>
             </div>
-            <div className="flex flex-col space-y-2.5 pt-2">
+            <div className="flex flex-wrap gap-2 pt-1">
+              <a
+                href={whatsappLink()}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Chat with us on WhatsApp"
+                className="inline-flex items-center gap-1.5 rounded border border-section-cream/30 bg-section-cream/10 px-3 py-1.5 font-headline text-xs uppercase tracking-wider text-section-cream transition-colors hover:border-section-cream hover:bg-section-cream hover:text-ink"
+              >
+                <MessageCircle size={14} aria-hidden="true" />
+                <span>WhatsApp</span>
+              </a>
+              <a
+                href={site.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Follow us on Instagram"
+                className="inline-flex items-center gap-1.5 rounded border border-section-cream/30 bg-section-cream/10 px-3 py-1.5 font-headline text-xs uppercase tracking-wider text-section-cream transition-colors hover:border-section-cream hover:bg-section-cream hover:text-ink"
+              >
+                <Instagram size={14} aria-hidden="true" />
+                <span>Instagram</span>
+              </a>
+            </div>
+            <div className="flex flex-col space-y-2 pt-2">
               <Link
                 href="/privacy"
                 className="font-body text-sm text-on-ink-muted underline decoration-section-cream/30 underline-offset-4 transition-colors hover:text-section-cream hover:decoration-section-cream"

@@ -9,7 +9,7 @@ export function generateMetadata(): Metadata {
   const robots = getLegalRobots("privacy");
 
   return {
-    title: "Privacy Policy | The Business Work",
+    title: "Privacy Policy",
     description:
       "Learn how The Business Work collects, uses, and protects personal data from commercial project enquiries under Indian data protection practices.",
     alternates: {

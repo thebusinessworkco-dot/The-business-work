@@ -83,6 +83,26 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
       followUps: ["Our services", "How a project works", "Contact us"],
     },
 
+    // 2b. Founder Information
+    {
+      id: "about-founder",
+      title: "Who's behind The Business Work",
+      keywords: [
+        "founder",
+        "who founded",
+        "who is aman",
+        "aman rajbhar",
+        "who runs",
+        "owner",
+        "team",
+        "founder kaun hai",
+        "kiska business hai",
+      ],
+      answer:
+        `The Business Work was founded by ${site.founder}. He builds practical automation and digital systems for businesses in India, focusing on daily workflows, clear scope, human oversight, and clean handovers.`,
+      followUps: ["What The Business Work does", "Our services", "Contact us"],
+    },
+
     // 3. Four Core Services
     {
       id: "services-overview",
@@ -502,10 +522,24 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
         "kaise baat karein",
       ],
       answer:
-        "You can discuss a project by clicking 'Send an enquiry' to open our project form" +
-        (whatsappAvailable ? " or messaging us directly on WhatsApp." : ".") +
-        " Share what you'd like to automate and we'll reply with next steps.",
+        `You can email us at ${site.email}, call or message on WhatsApp at ${site.phone}, or follow us on Instagram @thebusinesswork.co. You can also click 'Send an enquiry' to discuss your project.`,
       followUps: ["Our services", "Pricing", "How a project works"],
+    },
+
+    {
+      id: "social-media",
+      title: "Social media and Instagram",
+      keywords: [
+        "instagram",
+        "insta",
+        "social media",
+        "instagram page",
+        "socials",
+        "follow",
+      ],
+      answer:
+        `Follow The Business Work on Instagram at ${site.instagram} for updates on business automation, digital workflows, and practical systems.`,
+      followUps: ["How to contact us", "Our services"],
     },
 
     // 16. Conversational Openers & Closers

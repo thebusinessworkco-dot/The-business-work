@@ -9,7 +9,9 @@ describe("Sitemap Generation (sitemap.ts)", () => {
   });
 
   it("lists / and all 4 service pages, excluding /privacy and /terms when placeholders exist", () => {
-    // Current state: legal documents have [[TO CONFIRM placeholders
+    // Simulate active [[TO CONFIRM]] placeholders
+    vi.spyOn(legalModule, "isLegalDraft").mockReturnValue(true);
+
     const map = sitemap();
     const urls = map.map((entry) => entry.url);
 
@@ -28,9 +30,7 @@ describe("Sitemap Generation (sitemap.ts)", () => {
   });
 
   it("automatically includes /privacy and /terms once all placeholders are resolved", () => {
-    // Mock isLegalDraft to return false (simulating all placeholders confirmed/resolved)
-    vi.spyOn(legalModule, "isLegalDraft").mockReturnValue(false);
-
+    // Naturally finalized legal pages (no [[TO CONFIRM]] remaining)
     const map = sitemap();
     const urls = map.map((entry) => entry.url);
 

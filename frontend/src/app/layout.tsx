@@ -30,11 +30,11 @@ const allowIndexing = isIndexingAllowed();
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "The Business Work | AI Automation & Systems Agency India",
+    default: "The Business Work | AI Automation & Digital Systems",
     template: "%s | The Business Work",
   },
   description:
-    "Practical AI agents, WhatsApp automation, and CRM workflows custom-built for businesses in India. Reduce repetitive tasks and automate operations.",
+    "We help small and medium businesses in India automate customer enquiries, bookings, lead follow-ups and repetitive admin — using WhatsApp, AI and connected business tools.",
   applicationName: site.name,
   openGraph: {
     type: "website",
