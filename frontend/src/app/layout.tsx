@@ -56,12 +56,15 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
+      { url: "/tbw-icon-dark.svg", type: "image/svg+xml", media: "(prefers-color-scheme: dark)" },
+      { url: "/tbw-icon-light.svg", type: "image/svg+xml", media: "(prefers-color-scheme: light)" },
       { url: "/tbw-icon.svg", type: "image/svg+xml" },
-      { url: "/icon", sizes: "32x32", type: "image/png" },
     ],
-    shortcut: "/tbw-icon.svg",
+    shortcut: [
+      { url: "/tbw-icon-dark.svg", media: "(prefers-color-scheme: dark)" },
+      { url: "/tbw-icon-light.svg", media: "(prefers-color-scheme: light)" },
+    ],
     apple: [
-      { url: "/tbw-icon.svg", type: "image/svg+xml" },
       { url: "/apple-icon", sizes: "180x180", type: "image/png" },
     ],
   },
@@ -101,6 +104,37 @@ export const viewport: Viewport = { themeColor: "#F7F4EE" };
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en-IN" className={`${spaceGrotesk.variable} ${manrope.variable}`}>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){
+              function syncThemeIcon(){
+                try {
+                  var isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                  var target = isDark ? '/tbw-icon-dark.svg' : '/tbw-icon-light.svg';
+                  var links = document.querySelectorAll("link[rel*='icon']");
+                  links.forEach(function(l){
+                    if (l.getAttribute('type') === 'image/svg+xml' || l.getAttribute('rel') === 'shortcut icon') {
+                      if (!l.hasAttribute('media')) {
+                        l.href = target;
+                      }
+                    }
+                  });
+                } catch(e) {}
+              }
+              syncThemeIcon();
+              if (window.matchMedia) {
+                var mq = window.matchMedia('(prefers-color-scheme: dark)');
+                if (mq.addEventListener) {
+                  mq.addEventListener('change', syncThemeIcon);
+                } else if (mq.addListener) {
+                  mq.addListener(syncThemeIcon);
+                }
+              }
+            })();`,
+          }}
+        />
+      </head>
       <body className="bg-background font-body text-ink antialiased selection:bg-[#EAE4D7] selection:text-ink">
         <a
           href="#main"
