@@ -15,7 +15,7 @@ export const privacySections: LegalSection[] = [
       "Founder: Aman Rajbhar",
       "Email: thebusinesswork.co@gmail.com",
       "Phone / WhatsApp: +91 79720 20292",
-      "Website: https://www.thebusinesswork.com",
+      "Website: https://thebusinesswork.com",
     ],
   },
   {
