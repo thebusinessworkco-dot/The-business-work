@@ -6,6 +6,7 @@ import { site, isIndexingAllowed, getCleanSiteUrl } from "@/lib/site";
 import { ContactModalProvider } from "@/components/ContactModal";
 import CookieConsent from "@/components/CookieConsent";
 import AssistantLauncher from "@/components/assistant/AssistantLauncher";
+import ScrollManager from "@/components/ScrollManager";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -104,6 +105,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){
+              try {
+                if ('scrollRestoration' in history) {
+                  history.scrollRestoration = 'manual';
+                }
+                window.addEventListener('beforeunload', function() {
+                  window.scrollTo(0, 0);
+                });
+              } catch(e) {}
               function syncThemeIcon(){
                 try {
                   var isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -139,6 +148,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Skip to main content
         </a>
         <ContactModalProvider>
+          <ScrollManager />
           {children}
           <AssistantLauncher />
         </ContactModalProvider>

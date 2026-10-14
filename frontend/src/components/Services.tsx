@@ -38,16 +38,16 @@ export default function Services({ items = [] }: { items?: HomeServiceItem[] }) 
           aside="We do not sell fixed packages. We learn how you work first. Then we build a simple tool that fits your needs."
         />
 
-        <ul className="divide-y divide-border-sand">
+        <ul className="border-t border-ink/15">
           {items.map((s) => {
             const isOpen = openId === s.id;
             const Icon = SERVICE_ICONS[s.id] || Bot;
             return (
               <li
                 key={s.id}
-                className={`-mx-2 sm:-mx-4 rounded px-2 sm:px-4 transition-colors duration-300 ${
-                  isOpen ? "bg-surface-card/40" : "hover:bg-surface-card/60"
-                }`}
+                className={`border-b border-ink/15 transition-colors duration-300 ${
+                  isOpen ? "bg-surface-card/40 border-accent-ochre/30" : "hover:bg-surface-card/60 hover:border-ink/25"
+                } -mx-2 sm:-mx-4 rounded px-2 sm:px-4`}
               >
                 <button
                   id={`service-trigger-${s.id}`}

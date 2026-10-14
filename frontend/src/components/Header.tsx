@@ -25,6 +25,12 @@ export default function Header() {
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
+      const scrollDiff = Math.abs(currentScrollY - lastScrollY.current);
+
+      // If mobile navbar is open and user scrolls, close it smoothly
+      if (open && scrollDiff > 5) {
+        setOpen(false);
+      }
 
       // Always show near top
       if (currentScrollY <= 30) {
@@ -42,7 +48,7 @@ export default function Header() {
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [open]);
 
   useEffect(() => {
     if (!open) return;
@@ -60,18 +66,18 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 border-b border-border-sand/70 bg-background/80 backdrop-blur-md transition-transform duration-300 ease-in-out ${
+      className={`fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#141413]/95 backdrop-blur-md transition-transform duration-300 ease-in-out text-white shadow-md ${
         isVisible ? "translate-y-0" : "-translate-y-full"
       }`}
     >
       <div className="mx-auto flex h-16 sm:h-20 max-w-7xl items-center justify-between gap-2 sm:gap-4 md:gap-8 px-4 sm:px-6 lg:px-12">
         <Link href="/" aria-label="The Business Work, home" className="shrink-0 flex items-center">
-          <Logo />
+          <Logo fill="#F7F4EE" className="!text-white" />
         </Link>
 
         <nav aria-label="Primary" className="hidden items-center gap-8 md:flex">
           {nav.map((n) => (
-            <Link key={n.href} href={n.href} className="py-1 font-headline text-xs uppercase tracking-wider text-ink-muted transition-colors hover:text-ink">
+            <Link key={n.href} href={n.href} className="py-1 font-headline text-xs uppercase tracking-wider text-white/70 transition-colors hover:text-white">
               {n.label}
             </Link>
           ))}
@@ -83,7 +89,7 @@ export default function Header() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Chat on WhatsApp"
-            className="hidden sm:inline-flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full border border-border-taupe bg-surface-card text-ink transition-all hover:border-ink hover:bg-[#F2ECE0] active:scale-[0.98]"
+            className="hidden sm:inline-flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white transition-all hover:bg-white/20 active:scale-[0.98]"
             title="Chat on WhatsApp"
           >
             <MessageCircle size={16} aria-hidden="true" />
@@ -93,7 +99,7 @@ export default function Header() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Follow on Instagram"
-            className="hidden sm:inline-flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full border border-border-taupe bg-surface-card text-ink transition-all hover:border-ink hover:bg-[#F2ECE0] active:scale-[0.98]"
+            className="hidden sm:inline-flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white transition-all hover:bg-white/20 active:scale-[0.98]"
             title="Follow on Instagram"
           >
             <Instagram size={16} aria-hidden="true" />
@@ -101,70 +107,101 @@ export default function Header() {
           <button
             type="button"
             onClick={() => openModal(undefined, "header")}
-            aria-label="Discuss Your Project"
-            className="inline-flex min-h-[38px] sm:min-h-[44px] items-center justify-center rounded-full border border-border-taupe bg-surface-card px-3 sm:px-5 py-1.5 sm:py-2.5 font-headline text-[10px] sm:text-xs font-medium uppercase tracking-wider text-ink transition-all hover:border-ink hover:bg-[#F2ECE0] whitespace-nowrap active:scale-[0.98]"
+            aria-label="Let's Talk"
+            className="inline-flex min-h-[38px] sm:min-h-[42px] items-center justify-center rounded-full bg-accent-ochre px-4 sm:px-5 py-1.5 sm:py-2 font-headline text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-white transition-all hover:bg-accent-ochre-dark active:scale-[0.98] shadow-sm whitespace-nowrap"
           >
-            <span className="hidden sm:inline">Discuss Your Project</span>
-            <span className="sm:hidden">Discuss</span>
+            Let&apos;s Talk
           </button>
           <button
             type="button"
             ref={toggleBtnRef}
-            className="inline-flex h-11 w-11 items-center justify-center rounded border border-border-taupe bg-surface-card text-ink transition-colors hover:border-ink md:hidden shrink-0 active:scale-[0.98]"
+            className="inline-flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white transition-all hover:bg-white/20 md:hidden shrink-0 active:scale-95 shadow-sm"
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
             aria-controls="mobile-nav"
             onClick={() => setOpen((v) => !v)}
           >
-            {open ? <X size={18} /> : <Menu size={18} />}
+            <div className="relative flex h-3.5 w-4 flex-col justify-between items-end" aria-hidden="true">
+              <span
+                className={`h-[1.5px] rounded-full bg-current transition-all duration-300 ease-in-out ${
+                  open ? "w-4 translate-y-[6px] rotate-45" : "w-4"
+                }`}
+              />
+              <span
+                className={`h-[1.5px] rounded-full bg-current transition-all duration-300 ease-in-out ${
+                  open ? "opacity-0" : "w-2.5"
+                }`}
+              />
+              <span
+                className={`h-[1.5px] rounded-full bg-current transition-all duration-300 ease-in-out ${
+                  open ? "w-4 -translate-y-[6px] -rotate-45" : "w-4"
+                }`}
+              />
+            </div>
           </button>
         </div>
       </div>
 
-      {open && (
-        <nav id="mobile-nav" aria-label="Mobile" className="border-t border-border-sand bg-background px-4 py-4 sm:px-6 md:hidden">
-          <ul className="flex flex-col">
-            {nav.map((n) => (
-              <li key={n.href}>
-                <Link href={n.href} onClick={() => setOpen(false)} className="block border-b border-border-sand/70 py-3 font-headline text-xs uppercase tracking-wider text-ink">
-                  {n.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-          <div className="pt-4 space-y-2.5">
-            <button
-              type="button"
-              onClick={() => { setOpen(false); openModal(); }}
-              className="w-full bg-ink py-3 font-headline text-xs font-semibold uppercase tracking-wider text-background transition-colors hover:bg-accent-ochre active:scale-[0.99]"
-            >
-              Discuss Your Project
-            </button>
-            <div className="grid grid-cols-2 gap-2">
-              <a
-                href={whatsappLink()}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setOpen(false)}
-                className="flex items-center justify-center gap-2 rounded border border-border-taupe bg-surface-card py-2.5 font-headline text-xs font-medium uppercase tracking-wider text-ink transition-colors hover:border-ink hover:bg-[#F2ECE0]"
+      {/* Collapsible Mobile Navigation Drawer with smooth animation */}
+      <div
+        id="mobile-nav"
+        aria-hidden={!open}
+        className={`grid transition-[grid-template-rows,opacity] duration-300 ease-in-out md:hidden ${
+          open ? "grid-rows-[1fr] opacity-100 border-t border-white/10" : "grid-rows-[0fr] opacity-0 pointer-events-none"
+        }`}
+      >
+        <div className="overflow-hidden">
+          <nav aria-label="Mobile" className="bg-[#141413] px-4 py-4 sm:px-6 shadow-2xl text-white">
+            <ul className="flex flex-col">
+              {nav.map((n) => (
+                <li key={n.href}>
+                  <Link
+                    href={n.href}
+                    onClick={() => setOpen(false)}
+                    className="block border-b border-white/10 py-3 font-headline text-xs uppercase tracking-wider text-white/80 transition-colors hover:text-accent-ochre"
+                  >
+                    {n.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <div className="pt-4 space-y-2.5">
+              <button
+                type="button"
+                onClick={() => {
+                  setOpen(false);
+                  openModal();
+                }}
+                className="w-full rounded bg-accent-ochre py-3 font-headline text-xs font-semibold uppercase tracking-wider text-white transition-colors hover:bg-accent-ochre-dark active:scale-[0.99] shadow-sm"
               >
-                <MessageCircle size={15} aria-hidden="true" />
-                <span>WhatsApp</span>
-              </a>
-              <a
-                href={site.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setOpen(false)}
-                className="flex items-center justify-center gap-2 rounded border border-border-taupe bg-surface-card py-2.5 font-headline text-xs font-medium uppercase tracking-wider text-ink transition-colors hover:border-ink hover:bg-[#F2ECE0]"
-              >
-                <Instagram size={15} aria-hidden="true" />
-                <span>Instagram</span>
-              </a>
+                Let&apos;s Talk
+              </button>
+              <div className="grid grid-cols-2 gap-2">
+                <a
+                  href={whatsappLink()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setOpen(false)}
+                  className="flex items-center justify-center gap-2 rounded border border-white/15 bg-white/5 py-2.5 font-headline text-xs font-medium uppercase tracking-wider text-white transition-colors hover:bg-white/15"
+                >
+                  <MessageCircle size={15} aria-hidden="true" />
+                  <span>WhatsApp</span>
+                </a>
+                <a
+                  href={site.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setOpen(false)}
+                  className="flex items-center justify-center gap-2 rounded border border-white/15 bg-white/5 py-2.5 font-headline text-xs font-medium uppercase tracking-wider text-white transition-colors hover:bg-white/15"
+                >
+                  <Instagram size={15} aria-hidden="true" />
+                  <span>Instagram</span>
+                </a>
+              </div>
             </div>
-          </div>
-        </nav>
-      )}
+          </nav>
+        </div>
+      </div>
     </header>
   );
 }
