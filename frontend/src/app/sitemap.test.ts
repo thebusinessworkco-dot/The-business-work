@@ -41,23 +41,23 @@ describe("Sitemap Generation (sitemap.ts)", () => {
     expect(urls.some((u) => u.endsWith("/terms"))).toBe(true);
   });
 
-  it("uses the official production domain https://thebusinesswork.com consistently for all entries", () => {
+  it("uses the official production domain https://www.thebusinesswork.com consistently for all entries", () => {
     delete process.env.NEXT_PUBLIC_SITE_URL;
     const map = sitemap();
     expect(map).toHaveLength(7);
     for (const entry of map) {
-      expect(entry.url.startsWith("https://thebusinesswork.com")).toBe(true);
+      expect(entry.url.startsWith("https://www.thebusinesswork.com")).toBe(true);
       expect(entry.url).not.toContain("your-domain");
       expect(entry.url).not.toContain("vercel.app");
     }
   });
 
-  it("intercepts placeholder your-domain.vercel.app and falls back to https://thebusinesswork.com", () => {
+  it("intercepts placeholder your-domain.vercel.app and falls back to https://www.thebusinesswork.com", () => {
     process.env.NEXT_PUBLIC_SITE_URL = "https://your-domain.vercel.app";
     const map = sitemap();
     expect(map).toHaveLength(7);
     for (const entry of map) {
-      expect(entry.url.startsWith("https://thebusinesswork.com")).toBe(true);
+      expect(entry.url.startsWith("https://www.thebusinesswork.com")).toBe(true);
       expect(entry.url).not.toContain("your-domain");
     }
   });
