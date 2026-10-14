@@ -16,14 +16,14 @@ import { services } from "@/content/services";
 
 export const metadata: Metadata = {
   title: {
-    absolute: "The Business Work | AI & WhatsApp Tools for Business",
+    absolute: "The Business Work | AI Automation & WhatsApp Tools for Business",
   },
   description: site.description,
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "The Business Work | AI & WhatsApp Tools for Business",
+    title: "The Business Work | AI Automation & WhatsApp Tools for Business",
     description: site.description,
   },
 };

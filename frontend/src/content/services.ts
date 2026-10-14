@@ -24,6 +24,8 @@ export type Service = {
   id: string;
   index: string;
   title: string;
+  seoTitle?: string;
+  metaDescription?: string;
   tag: string;
   icon: LucideIcon;
   summary: string;
@@ -42,6 +44,9 @@ export const services: Service[] = [
     id: "ai-agents-chatbots",
     index: "01",
     title: "AI Agents & Chatbots",
+    seoTitle: "AI Agents & Chatbots for Business",
+    metaDescription:
+      "We build AI chatbots and intake tools for your business. Answer customer questions, collect qualified leads, and pass hard chats to your team.",
     tag: "Customer-facing AI",
     icon: Bot,
     summary:
@@ -185,6 +190,9 @@ export const services: Service[] = [
     id: "crm-sales-automation",
     index: "02",
     title: "CRM & Sales Automation",
+    seoTitle: "CRM & Sales Pipeline Automation",
+    metaDescription:
+      "We help you organise your CRM, track sales stages, and schedule follow-ups automatically. Prevent missed leads and keep deal records up to date.",
     tag: "Pipeline & follow-ups",
     icon: TrendingUp,
     summary:
@@ -328,6 +336,9 @@ export const services: Service[] = [
     id: "business-workflow-automation",
     index: "03",
     title: "Business Workflow Automation",
+    seoTitle: "n8n & Business Workflow Automation",
+    metaDescription:
+      "We connect your business apps using n8n, Make, and custom APIs. Move data automatically between sheets, forms, and tools without typing mistakes.",
     tag: "Connected systems",
     icon: Workflow,
     summary:
@@ -471,6 +482,9 @@ export const services: Service[] = [
     id: "whatsapp-social-automation",
     index: "04",
     title: "WhatsApp & Social Automation",
+    seoTitle: "WhatsApp Business Automation & Chatbots",
+    metaDescription:
+      "We build official WhatsApp Business automation tools to answer customer questions, capture leads, and send booking reminders using approved templates.",
     tag: "Messaging channels",
     icon: MessageCircle,
     summary:

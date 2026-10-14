@@ -1,5 +1,6 @@
 import { site, isPlaceholder, getCleanSiteUrl } from "@/lib/site";
 import { services, type Service } from "@/content/services";
+import type { Solution } from "@/content/solutions";
 
 /**
  * Safely serialize JSON-LD with escaped `<` characters to prevent script injection.
@@ -254,4 +255,79 @@ export function getServiceJsonLd(service: Service): ServiceJsonLd {
 
   return schemas;
 }
+
+export type SolutionJsonLd = [ServiceSchema, BreadcrumbListSchema, FAQPageSchema?];
+
+/**
+ * Structured data for a Solution Detail page:
+ * - Service
+ * - BreadcrumbList
+ * - FAQPage (matches on-page visible FAQ text exactly)
+ */
+export function getSolutionJsonLd(solution: Solution): SolutionJsonLd {
+  const siteUrl = getCleanSiteUrl();
+  const solutionUrl = `${siteUrl}/solutions/${solution.slug}`;
+
+  const serviceSchema: SolutionJsonLd[0] = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: solution.title,
+    description: solution.summary,
+    url: solutionUrl,
+    provider: {
+      "@type": "Organization",
+      name: site.name,
+      url: siteUrl,
+    },
+    areaServed: {
+      "@type": "Country",
+      name: "India",
+    },
+  };
+
+  const breadcrumb: SolutionJsonLd[1] = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: siteUrl,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Solutions",
+        item: `${siteUrl}/#services`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: solution.title,
+        item: solutionUrl,
+      },
+    ],
+  };
+
+  const schemas: SolutionJsonLd = [serviceSchema, breadcrumb];
+
+  if (Array.isArray(solution.faq) && solution.faq.length > 0) {
+    schemas.push({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: solution.faq.map((f) => ({
+        "@type": "Question",
+        name: f.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: f.answer,
+        },
+      })),
+    });
+  }
+
+  return schemas;
+}
+
 

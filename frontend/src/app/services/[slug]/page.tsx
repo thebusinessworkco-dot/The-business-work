@@ -23,16 +23,18 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
 
   const siteUrl = getCleanSiteUrl();
   const canonicalUrl = `${siteUrl}/services/${service.id}`;
+  const title = service.seoTitle ?? service.title;
+  const description = service.metaDescription ?? service.summary;
 
   return {
-    title: service.title,
-    description: service.summary,
+    title,
+    description,
     alternates: {
       canonical: `/services/${service.id}`,
     },
     openGraph: {
-      title: `${service.title} | ${site.name}`,
-      description: service.summary,
+      title: `${title} | ${site.name}`,
+      description,
       url: canonicalUrl,
       type: "website",
       images: [
@@ -46,8 +48,8 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
     },
     twitter: {
       card: "summary_large_image",
-      title: `${service.title} | ${site.name}`,
-      description: service.summary,
+      title: `${title} | ${site.name}`,
+      description,
       images: [`${siteUrl}/opengraph-image`],
     },
   };

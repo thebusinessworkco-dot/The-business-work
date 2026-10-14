@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getCleanSiteUrl, LAST_MODIFIED } from "@/lib/site";
 import { services } from "@/content/services";
+import { solutions } from "@/content/solutions";
 import { isLegalDraft } from "@/lib/legal";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -16,6 +17,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const serviceEntries: MetadataRoute.Sitemap = services.map((s) => ({
     url: `${siteUrl}/services/${s.id}`,
+    lastModified,
+    changeFrequency: "monthly",
+    priority: 0.8,
+  }));
+
+  const solutionEntries: MetadataRoute.Sitemap = solutions.map((sol) => ({
+    url: `${siteUrl}/solutions/${sol.slug}`,
     lastModified,
     changeFrequency: "monthly",
     priority: 0.8,
@@ -43,5 +51,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     });
   }
 
-  return [homeEntry, ...serviceEntries, ...legalEntries];
+  return [homeEntry, ...serviceEntries, ...solutionEntries, ...legalEntries];
 }
