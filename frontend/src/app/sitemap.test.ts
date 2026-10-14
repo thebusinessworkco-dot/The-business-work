@@ -1,11 +1,18 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import sitemap from "./sitemap";
 import * as legalModule from "@/lib/legal";
 import { services } from "@/content/services";
 
 describe("Sitemap Generation (sitemap.ts)", () => {
+  const originalEnv = process.env;
+
   beforeEach(() => {
     vi.restoreAllMocks();
+    process.env = { ...originalEnv };
+  });
+
+  afterEach(() => {
+    process.env = originalEnv;
   });
 
   it("lists / and all 4 service pages, excluding /privacy and /terms when placeholders exist", () => {
