@@ -39,21 +39,27 @@ describe("HTTPS, HSTS, and Canonical URL Safety", () => {
     }
   });
 
-  it("emits https:// URLs across JSON-LD schemas when NEXT_PUBLIC_SITE_URL is https", () => {
+  it("canonicalizes apex thebusinesswork.com to www and emits https:// URLs across JSON-LD schemas", () => {
     process.env.NEXT_PUBLIC_SITE_URL = "https://thebusinesswork.com";
     const cleanUrl = getCleanSiteUrl();
-    expect(cleanUrl).toBe("https://thebusinesswork.com");
+    expect(cleanUrl).toBe("https://www.thebusinesswork.com");
     expect(cleanUrl.startsWith("https://")).toBe(true);
 
     const [website, org, profService] = getHomeJsonLd();
-    expect(website.url.startsWith("https://")).toBe(true);
-    expect(org.url.startsWith("https://")).toBe(true);
-    expect(org.logo.startsWith("https://")).toBe(true);
-    expect(profService.url.startsWith("https://")).toBe(true);
+    expect(website.url.startsWith("https://www.thebusinesswork.com")).toBe(true);
+    expect(org.url.startsWith("https://www.thebusinesswork.com")).toBe(true);
+    expect(org.logo.startsWith("https://www.thebusinesswork.com")).toBe(true);
+    expect(profService.url.startsWith("https://www.thebusinesswork.com")).toBe(true);
 
     const [serviceSchema, breadcrumb] = getServiceJsonLd(services[0]);
-    expect(serviceSchema.url.startsWith("https://")).toBe(true);
-    expect(serviceSchema.provider.url.startsWith("https://")).toBe(true);
-    expect(breadcrumb.itemListElement[0].item.startsWith("https://")).toBe(true);
+    expect(serviceSchema.url.startsWith("https://www.thebusinesswork.com")).toBe(true);
+    expect(serviceSchema.provider.url.startsWith("https://www.thebusinesswork.com")).toBe(true);
+    expect(breadcrumb.itemListElement[0].item.startsWith("https://www.thebusinesswork.com")).toBe(true);
+  });
+
+  it("canonicalizes insecure http://thebusinesswork.com to https://www.thebusinesswork.com", () => {
+    process.env.NEXT_PUBLIC_SITE_URL = "http://thebusinesswork.com";
+    const cleanUrl = getCleanSiteUrl();
+    expect(cleanUrl).toBe("https://www.thebusinesswork.com");
   });
 });

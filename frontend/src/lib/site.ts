@@ -90,6 +90,8 @@ export function getCleanSiteUrl(): string {
   const raw = process.env.NEXT_PUBLIC_SITE_URL || site.url;
   const trimmed = raw.replace(/\/+$/, "");
   if (
+    trimmed === "https://thebusinesswork.com" ||
+    trimmed === "http://thebusinesswork.com" ||
     trimmed.includes("your-domain") ||
     trimmed.includes("the-business-work.vercel.app")
   ) {
