@@ -9,6 +9,7 @@
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "seo": "npm run seo:check",
     "seo:check": "vitest run src/lib/jsonld.test.ts src/lib/https.test.ts && node scripts/images-check.mjs",
     "legal:check": "node scripts/legal-check.mjs",
     "test:a11y": "playwright test tests/a11y.spec.ts tests/assistant.spec.ts tests/capabilities.spec.ts",

@@ -80,17 +80,35 @@ async function run() {
     record("/", "ERR", 200, false, err.message);
   }
 
-  // 2. Legal pages
+  function inspectHtml(html) {
+    const titleMatch = /<title[^>]*>([^<]+)<\/title>/i.exec(html);
+    const title = titleMatch ? titleMatch[1].trim() : null;
+
+    const h1Match = /<h1[^>]*>([\s\S]*?)<\/h1>/i.exec(html);
+    const h1 = h1Match ? h1Match[1].replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim() : null;
+
+    const canonMatch =
+      /<link[^>]+rel=["']canonical["'][^>]+href=["']([^"']+)["']/i.exec(html) ||
+      /<link[^>]+href=["']([^"']+)["'][^>]+rel=["']canonical["']/i.exec(html);
+    const canonical = canonMatch ? canonMatch[1] : null;
+
+    return { title, h1, canonical };
+  }
+
+  // 2. Legal pages (/privacy, /terms)
   for (const legalPath of ["/privacy", "/terms"]) {
     try {
       const res = await fetch(`${baseUrl}${legalPath}`);
-      record(legalPath, res.status, 200, res.status === 200, `status=${res.status}`);
+      const text = await res.text();
+      const { title, h1, canonical } = inspectHtml(text);
+      const ok = res.status === 200 && !!title && !!h1 && !!canonical;
+      record(legalPath, res.status, 200, ok, `status=${res.status}, title="${title}", h1="${h1}", canonical="${canonical}"`);
     } catch (err) {
       record(legalPath, "ERR", 200, false, err.message);
     }
   }
 
-  // 3. All 4 Service pages
+  // 3. All 4 Canonical Service pages
   const serviceSlugs = [
     "ai-agents-chatbots",
     "crm-sales-automation",
@@ -102,9 +120,31 @@ async function run() {
     const sPath = `/services/${slug}`;
     try {
       const res = await fetch(`${baseUrl}${sPath}`);
-      record(sPath, res.status, 200, res.status === 200, `status=${res.status}`);
+      const text = await res.text();
+      const { title, h1, canonical } = inspectHtml(text);
+      const ok = res.status === 200 && !!title && !!h1 && !!canonical;
+      record(sPath, res.status, 200, ok, `status=${res.status}, title="${title}", h1="${h1}", canonical="${canonical}"`);
     } catch (err) {
       record(sPath, "ERR", 200, false, err.message);
+    }
+  }
+
+  // 3b. Solution pages
+  const solutionSlugs = [
+    "whatsapp-appointment-booking-clinics",
+    "n8n-workflow-automation-guide",
+  ];
+
+  for (const slug of solutionSlugs) {
+    const solPath = `/solutions/${slug}`;
+    try {
+      const res = await fetch(`${baseUrl}${solPath}`);
+      const text = await res.text();
+      const { title, h1, canonical } = inspectHtml(text);
+      const ok = res.status === 200 && !!title && !!h1 && !!canonical;
+      record(solPath, res.status, 200, ok, `status=${res.status}, title="${title}", h1="${h1}", canonical="${canonical}"`);
+    } catch (err) {
+      record(solPath, "ERR", 200, false, err.message);
     }
   }
 
@@ -126,12 +166,22 @@ async function run() {
     record("/icon", "ERR", 200, false, err.message);
   }
 
-  // 5. Custom 404 path
-  try {
-    const res = await fetch(`${baseUrl}/unknown-nonexistent-smoke-test-path`);
-    record("/[404-check]", res.status, 404, res.status === 404, `status=${res.status} (custom 404 verified)`);
-  } catch (err) {
-    record("/[404-check]", "ERR", 404, false, err.message);
+  // 5. Invalid & Obsolete route 404 checks
+  const invalidPaths = [
+    "/services/ai-lead-generation",
+    "/services/ai-customer-support",
+    "/services/unknown-nonexistent-service",
+    "/solutions/unknown-nonexistent-solution",
+    "/unknown-nonexistent-smoke-test-path",
+  ];
+
+  for (const invPath of invalidPaths) {
+    try {
+      const res = await fetch(`${baseUrl}${invPath}`);
+      record(invPath, res.status, 404, res.status === 404, `status=${res.status} (expected 404 not found)`);
+    } catch (err) {
+      record(invPath, "ERR", 404, false, err.message);
+    }
   }
 
   // 6. Robots.txt
