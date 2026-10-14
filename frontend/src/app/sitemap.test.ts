@@ -68,4 +68,13 @@ describe("Sitemap Generation (sitemap.ts)", () => {
       expect(entry.url).not.toContain("your-domain");
     }
   });
+
+  it("canonicalizes apex https://thebusinesswork.com to https://www.thebusinesswork.com in sitemap entries", () => {
+    process.env.NEXT_PUBLIC_SITE_URL = "https://thebusinesswork.com";
+    const map = sitemap();
+    expect(map).toHaveLength(7);
+    for (const entry of map) {
+      expect(entry.url.startsWith("https://www.thebusinesswork.com")).toBe(true);
+    }
+  });
 });
