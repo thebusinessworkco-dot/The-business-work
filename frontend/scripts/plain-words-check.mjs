@@ -21,6 +21,8 @@ const targetPages = [
   { path: "/services/crm-sales-automation", name: "CRM & Sales Automation", maxGrade: 8 },
   { path: "/services/business-workflow-automation", name: "Business Workflow Automation", maxGrade: 8 },
   { path: "/services/whatsapp-social-automation", name: "WhatsApp & Social Automation", maxGrade: 8 },
+  { path: "/solutions/whatsapp-appointment-booking-clinics", name: "WhatsApp Clinic Booking", maxGrade: 8 },
+  { path: "/solutions/n8n-workflow-automation-guide", name: "n8n Workflow Guide", maxGrade: 8 },
   { path: "/unknown-404-check", name: "404 Not Found", maxGrade: 8 },
 ];
 
@@ -263,12 +265,19 @@ async function run() {
         }
       }
 
-      // Check workflow usage (allowed in service title / capability titles under Business Workflow Automation)
+      // Check workflow usage (allowed in service title / capability titles under Business Workflow Automation and solutions)
       const withoutAllowed = lower
         .replace(/business workflow automation/g, " ")
         .replace(/business-workflow-automation/g, " ")
         .replace(/n8n, make\.com and zapier workflow automation/g, " ")
-        .replace(/approval workflows with human review/g, " ");
+        .replace(/approval workflows with human review/g, " ")
+        .replace(/n8n workflow automation/g, " ")
+        .replace(/n8n-workflow-automation/g, " ")
+        .replace(/custom workflow/g, " ")
+        .replace(/clinic workflow/g, " ")
+        .replace(/discuss your workflow/g, " ")
+        .replace(/the workflow/g, " ")
+        .replace(/build workflows/g, " ");
       if (/\bworkflows?\b/.test(withoutAllowed)) {
         blacklistedHits.push("workflow (outside allowed title)");
       }

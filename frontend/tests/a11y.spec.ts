@@ -9,6 +9,8 @@ const pagesToTest = [
   { name: "Service: CRM & Sales Automation", path: "/services/crm-sales-automation" },
   { name: "Service: Business Workflow", path: "/services/business-workflow-automation" },
   { name: "Service: WhatsApp & Social", path: "/services/whatsapp-social-automation" },
+  { name: "Solution: Clinic WhatsApp Booking", path: "/solutions/whatsapp-appointment-booking-clinics" },
+  { name: "Solution: n8n Workflow Automation", path: "/solutions/n8n-workflow-automation-guide" },
   { name: "404 Not Found Page", path: "/unknown-404-check" },
 ];
 

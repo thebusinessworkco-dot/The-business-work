@@ -1,7 +1,16 @@
-export const industries = [
+export type Industry = {
+  name: string;
+  body: string;
+  href?: string;
+  linkText?: string;
+};
+
+export const industries: Industry[] = [
   {
     name: "Healthcare & clinics",
     body: "We help clinics handle booking questions, send reminders, and alert staff. AI never gives medical advice.",
+    href: "/solutions/whatsapp-appointment-booking-clinics",
+    linkText: "See clinic booking solution",
   },
   {
     name: "Local businesses",
