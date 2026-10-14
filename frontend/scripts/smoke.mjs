@@ -190,10 +190,11 @@ async function run() {
     const text = await res.text();
     let robotsTxtOk = res.status === 200;
     let rDetail = `status=${res.status}`;
-    if (expectNoindex && !text.includes("Disallow: /")) {
+    const disallowRoot = /(?:^|\n)Disallow:\s*\/\s*(?:\r|\n|$)/.test(text);
+    if (expectNoindex && !disallowRoot) {
       robotsTxtOk = false;
       rDetail += " (FAILED: expected Disallow: /)";
-    } else if (expectIndex && text.includes("Disallow: /")) {
+    } else if (expectIndex && disallowRoot) {
       robotsTxtOk = false;
       rDetail += " (FAILED: expected Allow indexing)";
     }
