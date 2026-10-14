@@ -21,6 +21,27 @@ export default function Header() {
   const lastScrollY = useRef(0);
   const { openModal } = useContactModal();
   const toggleBtnRef = useRef<HTMLButtonElement>(null);
+  const mobileNavRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = mobileNavRef.current;
+    if (!el) return;
+
+    if (!open) {
+      if (typeof document !== "undefined" && el.contains(document.activeElement)) {
+        toggleBtnRef.current?.focus({ preventScroll: true });
+      }
+      el.setAttribute("inert", "");
+      if ("inert" in el) {
+        (el as HTMLElement).inert = true;
+      }
+    } else {
+      el.removeAttribute("inert");
+      if ("inert" in el) {
+        (el as HTMLElement).inert = false;
+      }
+    }
+  }, [open]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -145,7 +166,9 @@ export default function Header() {
       {/* Collapsible Mobile Navigation Drawer with smooth animation */}
       <div
         id="mobile-nav"
+        ref={mobileNavRef}
         aria-hidden={!open}
+        inert={!open ? true : undefined}
         className={`grid transition-[grid-template-rows,opacity] duration-300 ease-in-out md:hidden ${
           open ? "grid-rows-[1fr] opacity-100 border-t border-white/10" : "grid-rows-[0fr] opacity-0 pointer-events-none"
         }`}
