@@ -1,6 +1,8 @@
 import { chromium } from "@playwright/test";
 
 async function testLinks() {
+  const baseUrl = (process.argv[2] || "http://localhost:3000").replace(/\/+$/, "");
+  console.log(`Testing internal links against: ${baseUrl}`);
   const browser = await chromium.launch();
   const widths = [320, 360, 375, 390, 430, 768, 1024, 1280, 1440];
 
@@ -10,7 +12,7 @@ async function testLinks() {
     const page = await browser.newPage({ viewport: { width, height } });
 
     // 1. Homepage Healthcare link to Clinic Solution
-    await page.goto("http://localhost:3000/", { waitUntil: "networkidle" });
+    await page.goto(`${baseUrl}/`, { waitUntil: "networkidle" });
 
     // Verify no horizontal overflow
     const hasHorizontalOverflow = await page.evaluate(() => {
@@ -31,7 +33,7 @@ async function testLinks() {
     console.log(`  [Home -> Clinic] Click navigated to "${clinicH1}"`);
 
     // 2. WhatsApp Service page link to Clinic Solution
-    await page.goto("http://localhost:3000/services/whatsapp-social-automation", { waitUntil: "networkidle" });
+    await page.goto(`${baseUrl}/services/whatsapp-social-automation`, { waitUntil: "networkidle" });
     const clinicLinkWa = page.locator('a[href="/solutions/whatsapp-appointment-booking-clinics"]');
     if (!(await clinicLinkWa.isVisible())) {
       throw new Error(`Clinic link not visible on WhatsApp service page at ${width}px`);
@@ -41,7 +43,7 @@ async function testLinks() {
     console.log(`  [WhatsApp -> Clinic] Click navigated successfully`);
 
     // 3. Workflow Automation page link to n8n Solution
-    await page.goto("http://localhost:3000/services/business-workflow-automation", { waitUntil: "networkidle" });
+    await page.goto(`${baseUrl}/services/business-workflow-automation`, { waitUntil: "networkidle" });
     const n8nLink = page.locator('a[href="/solutions/n8n-workflow-automation-guide"]');
     if (!(await n8nLink.isVisible())) {
       throw new Error(`n8n link not visible on workflow service page at ${width}px`);
