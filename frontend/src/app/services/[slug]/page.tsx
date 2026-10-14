@@ -173,6 +173,30 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
                 </div>
               ))}
             </div>
+            {service.solutionLink && (
+              <div className="mt-8 rounded-lg border border-border-sand bg-surface-card p-6 sm:p-7">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  <div className="space-y-1">
+                    <div className="font-headline text-xs font-semibold uppercase tracking-wider text-accent-ochre-dark">
+                      Dedicated Guide
+                    </div>
+                    <h3 className="font-headline text-base font-medium text-ink">
+                      {service.solutionLink.title}
+                    </h3>
+                    <p className="font-body text-sm leading-relaxed text-ink-muted">
+                      {service.solutionLink.description}
+                    </p>
+                  </div>
+                  <Link
+                    href={service.solutionLink.href}
+                    className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border-taupe bg-background px-4 py-2 font-headline text-xs uppercase tracking-wider text-ink transition-colors hover:border-ink hover:bg-[#EFEAE0]"
+                  >
+                    <span>Read solution guide</span>
+                    <ArrowRight size={13} aria-hidden="true" />
+                  </Link>
+                </div>
+              </div>
+            )}
           </div>
         </section>
 

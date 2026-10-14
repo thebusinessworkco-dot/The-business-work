@@ -20,12 +20,19 @@ export type ServiceFaq = {
   answer: string;
 };
 
+export type SolutionLink = {
+  title: string;
+  href: string;
+  description: string;
+};
+
 export type Service = {
   id: string;
   index: string;
   title: string;
   seoTitle?: string;
   metaDescription?: string;
+  solutionLink?: SolutionLink;
   tag: string;
   icon: LucideIcon;
   summary: string;
@@ -339,6 +346,12 @@ export const services: Service[] = [
     seoTitle: "n8n & Business Workflow Automation",
     metaDescription:
       "We connect your business apps using n8n, Make, and custom APIs. Move data automatically between sheets, forms, and tools without typing mistakes.",
+    solutionLink: {
+      title: "n8n Workflow Automation for Businesses",
+      href: "/solutions/n8n-workflow-automation-guide",
+      description:
+        "Read our guide on how businesses connect tools with n8n and avoid per-task fees.",
+    },
     tag: "Connected systems",
     icon: Workflow,
     summary:
@@ -485,6 +498,12 @@ export const services: Service[] = [
     seoTitle: "WhatsApp Business Automation & Chatbots",
     metaDescription:
       "We build official WhatsApp Business automation tools to answer customer questions, capture leads, and send booking reminders using approved templates.",
+    solutionLink: {
+      title: "WhatsApp Appointment Booking for Clinics",
+      href: "/solutions/whatsapp-appointment-booking-clinics",
+      description:
+        "Explore how clinics automate patient booking, reminders, and calendar updates on WhatsApp.",
+    },
     tag: "Messaging channels",
     icon: MessageCircle,
     summary:
