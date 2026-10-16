@@ -1,3 +1,5 @@
+import path from "node:path";
+
 const cspHeader = `
   default-src 'self';
   script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://challenges.cloudflare.com;
@@ -26,6 +28,16 @@ const nextConfig = {
   },
   experimental: {
     optimizePackageImports: ["lucide-react"],
+  },
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        "next/dist/build/polyfills/polyfill-module": path.resolve("./src/lib/empty-polyfill.js"),
+        "../build/polyfills/polyfill-module": path.resolve("./src/lib/empty-polyfill.js"),
+      };
+    }
+    return config;
   },
   async headers() {
     return [

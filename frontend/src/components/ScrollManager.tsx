@@ -13,7 +13,7 @@ export default function ScrollManager() {
     }
 
     // If navigating or reloading without a hash anchor, ensure viewport starts at the top
-    if (typeof window !== "undefined" && !window.location.hash) {
+    if (typeof window !== "undefined" && !window.location.hash && window.scrollY > 0) {
       window.scrollTo(0, 0);
     }
   }, [pathname]);
