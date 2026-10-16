@@ -147,9 +147,8 @@ export default function ReviewsSlanted() {
         {/* Marquee Track: Moving Right to Left */}
         <div
           ref={scrollRef}
-          className="flex gap-4 sm:gap-6 pb-2 pt-1 select-none w-max"
+          className="animate-marquee-rtl flex gap-4 sm:gap-6 pb-2 pt-1 select-none w-max"
           style={{
-            animation: "marqueeRightToLeft 42s linear infinite",
             animationPlayState: isPaused ? "paused" : "running",
           }}
           onMouseEnter={() => setIsPaused(true)}
@@ -204,18 +203,6 @@ export default function ReviewsSlanted() {
             ))}
           </div>
         </div>
-
-        {/* Marquee Keyframe Styles for smooth Right-to-Left Infinite Scroll */}
-      <style jsx>{`
-        @keyframes marqueeRightToLeft {
-          0% {
-            transform: translate3d(0, 0, 0);
-          }
-          100% {
-            transform: translate3d(-50%, 0, 0);
-          }
-        }
-      `}</style>
     </section>
   );
 }

@@ -110,45 +110,6 @@ export const viewport: Viewport = { themeColor: "#FAF7E8" };
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en-IN" className={`${spaceGrotesk.variable} ${manrope.variable} ${newsreader.variable}`}>
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){
-              try {
-                if ('scrollRestoration' in history) {
-                  history.scrollRestoration = 'manual';
-                }
-                window.addEventListener('beforeunload', function() {
-                  window.scrollTo(0, 0);
-                });
-              } catch(e) {}
-              function syncThemeIcon(){
-                try {
-                  var isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-                  var target = isDark ? '/tbw-icon-dark.svg' : '/tbw-icon-light.svg';
-                  var links = document.querySelectorAll("link[rel*='icon']");
-                  links.forEach(function(l){
-                    if (l.getAttribute('type') === 'image/svg+xml' || l.getAttribute('rel') === 'shortcut icon') {
-                      if (!l.hasAttribute('media')) {
-                        l.href = target;
-                      }
-                    }
-                  });
-                } catch(e) {}
-              }
-              syncThemeIcon();
-              if (window.matchMedia) {
-                var mq = window.matchMedia('(prefers-color-scheme: dark)');
-                if (mq.addEventListener) {
-                  mq.addEventListener('change', syncThemeIcon);
-                } else if (mq.addListener) {
-                  mq.addListener(syncThemeIcon);
-                }
-              }
-            })();`,
-          }}
-        />
-      </head>
       <body className="bg-background font-body text-ink antialiased selection:bg-[#EAE4D7] selection:text-ink">
         <a
           href="#main"

@@ -80,7 +80,38 @@ export default function Process() {
   /* ─── Track scroll position and set target step progress (0 to totalSteps - 1) ─── */
   useEffect(() => {
     let rAFId = 0;
+    let animId = 0;
+    let isRunning = false;
     let ticking = false;
+
+    const tick = () => {
+      const target = targetProgressRef.current;
+      const current = animProgressRef.current;
+      const diff = target - current;
+
+      if (Math.abs(diff) > 0.0005) {
+        const maxDeltaPerFrame = isMobile ? 0.038 : 0.032;
+        const delta = Math.sign(diff) * Math.min(Math.abs(diff * 0.085), maxDeltaPerFrame);
+        const nextVal = current + delta;
+        animProgressRef.current = nextVal;
+        setAnimProgress(nextVal);
+        animId = requestAnimationFrame(tick);
+      } else {
+        if (current !== target) {
+          animProgressRef.current = target;
+          setAnimProgress(target);
+        }
+        isRunning = false;
+        animId = 0;
+      }
+    };
+
+    const startLoop = () => {
+      if (!isRunning) {
+        isRunning = true;
+        animId = requestAnimationFrame(tick);
+      }
+    };
 
     const onScroll = () => {
       if (!ticking) {
@@ -93,6 +124,7 @@ export default function Process() {
               const scrolled = -rect.top;
               const progress = Math.max(0, Math.min(1, scrolled / totalScrollable));
               targetProgressRef.current = progress * (totalSteps - 1);
+              startLoop();
             }
           }
           ticking = false;
@@ -102,37 +134,13 @@ export default function Process() {
 
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
+
     return () => {
       window.removeEventListener("scroll", onScroll);
       if (rAFId) cancelAnimationFrame(rAFId);
+      if (animId) cancelAnimationFrame(animId);
     };
-  }, [totalSteps]);
-
-  /* ─── Damped Lerp Animation Loop: User kitna bhi tez scroll kare, aram se glide karega ─── */
-  useEffect(() => {
-    let animId: number;
-
-    const tick = () => {
-      const target = targetProgressRef.current;
-      const current = animProgressRef.current;
-      const diff = target - current;
-
-      if (Math.abs(diff) > 0.0005) {
-        // Controlled speed clamp: Prevents fast scroll skipping!
-        // Moves at a steady, majestic, luxurious pace no matter how violently the user scrolls
-        const maxDeltaPerFrame = isMobile ? 0.038 : 0.032;
-        const delta = Math.sign(diff) * Math.min(Math.abs(diff * 0.085), maxDeltaPerFrame);
-        const nextVal = current + delta;
-        animProgressRef.current = nextVal;
-        setAnimProgress(nextVal);
-      }
-
-      animId = requestAnimationFrame(tick);
-    };
-
-    animId = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(animId);
-  }, [isMobile]);
+  }, [totalSteps, isMobile]);
 
   return (
     <section
