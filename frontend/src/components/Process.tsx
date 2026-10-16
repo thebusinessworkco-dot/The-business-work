@@ -136,10 +136,6 @@ export default function Process() {
       className="relative w-full border-y border-[#1E2321] bg-[#0C0E0D] text-white selection:bg-[#E05A47]/30"
       style={{ minHeight: isMobile ? `${totalSteps * 65}vh` : `${totalSteps * 80}vh` }}
     >
-      {/* Top & Bottom overscroll shields: Prevents any white/beige body background flash during fast mobile momentum flings */}
-      <div className="absolute -top-36 inset-x-0 h-40 bg-[#0C0E0D] pointer-events-none z-0" />
-      <div className="absolute -bottom-36 inset-x-0 h-40 bg-[#0C0E0D] pointer-events-none z-0" />
-
       {/* Subtle ambient background glow & diagonal runway line */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden opacity-35">
         <div
@@ -156,7 +152,7 @@ export default function Process() {
 
       {/* ═══════ STICKY PINNED VIEWPORT (100% Focused on Cards, Wispr Flow Exact) ═══════ */}
       <div
-        className="sticky -top-12 sm:top-0 w-full h-[calc(100dvh+48px)] sm:h-screen flex items-center justify-center z-10 overflow-hidden bg-[#0C0E0D]"
+        className="sticky top-0 w-full h-[100dvh] sm:h-screen flex items-center justify-center z-10 overflow-hidden bg-[#0C0E0D]"
         style={{
           WebkitBackfaceVisibility: "hidden",
           backfaceVisibility: "hidden",
