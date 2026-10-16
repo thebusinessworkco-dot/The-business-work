@@ -1,14 +1,49 @@
+import React from "react";
+
 export default function SectionHeading({
-  eyebrow, title, aside, id, dark = false, borderClassName,
-}: { eyebrow: string; title: string; aside?: React.ReactNode; id?: string; dark?: boolean; borderClassName?: string }) {
-  const border = borderClassName ?? (dark ? "border-section-cream/25" : "border-ink/15");
+  eyebrow,
+  title,
+  aside,
+  id,
+  dark = false,
+  borderClassName,
+}: {
+  eyebrow: string;
+  title: string | React.ReactNode;
+  aside?: React.ReactNode;
+  id?: string;
+  dark?: boolean;
+  borderClassName?: string;
+}) {
+  const border = borderClassName ?? (dark ? "border-white/15" : "border-[#E8E2D5]");
   return (
-    <div className={`flex flex-col justify-between gap-6 border-b pb-10 md:pb-12 md:flex-row md:items-end ${border}`}>
-      <div className="max-w-2xl">
-        <div className={`mb-3 font-headline text-xs font-semibold uppercase tracking-[0.22em] ${dark ? "text-ochre-on-dark" : "text-accent-ochre-dark"}`}>{eyebrow}</div>
-        <h2 id={id} className={`font-headline text-3xl font-medium tracking-tight sm:text-4xl ${dark ? "text-section-cream" : "text-ink"}`}>{title}</h2>
+    <div className={`flex flex-col justify-between gap-6 border-b pb-8 md:pb-10 md:flex-row md:items-end ${border}`}>
+      <div className="max-w-3xl">
+        <div
+          className={`mb-3 font-headline text-xs sm:text-[13px] font-bold uppercase tracking-[0.24em] ${
+            dark ? "text-[#EBDDFE]" : "text-[#141413]"
+          }`}
+        >
+          {eyebrow}
+        </div>
+        <h2
+          id={id}
+          className={`font-serif text-3xl sm:text-4xl md:text-5xl lg:text-[54px] font-medium tracking-tight leading-[1.1] ${
+            dark ? "text-white" : "text-[#141413]"
+          }`}
+        >
+          {title}
+        </h2>
       </div>
-      {aside ? <div className={`max-w-sm font-body text-sm leading-relaxed sm:text-base ${dark ? "text-on-pine-muted" : "text-ink-muted"}`}>{aside}</div> : null}
+      {aside ? (
+        <div
+          className={`max-w-sm font-body text-sm sm:text-[15px] leading-relaxed font-medium ${
+            dark ? "text-white/85" : "text-[#2B2824]"
+          }`}
+        >
+          {aside}
+        </div>
+      ) : null}
     </div>
   );
 }

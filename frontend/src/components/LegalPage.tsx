@@ -23,7 +23,7 @@ export default function LegalPage({
   return (
     <>
       <Header />
-      <main id="main" className="w-full pt-28 md:pt-32">
+      <main id="main" className="w-full pt-28 md:pt-32 bg-[#FAF8F5]">
         <div className="mx-auto max-w-4xl px-6 pb-24 lg:px-12">
           {/* Back link */}
           <div className="mb-8 border-b border-border-sand pb-4">
@@ -68,7 +68,7 @@ export default function LegalPage({
 
           {/* Page Heading & Meta */}
           <div className="space-y-4">
-            <h1 className="font-headline text-4xl font-medium tracking-tight text-ink sm:text-5xl">
+            <h1 className="font-serif text-4xl sm:text-5xl font-normal tracking-tight text-[#141413]">
               {title}
             </h1>
             <div className="flex flex-wrap items-center gap-3 font-headline text-xs uppercase tracking-wider text-ink-muted">

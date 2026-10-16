@@ -5,12 +5,12 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "#F7F4EE",
-        surface: "#F7F4EE",
+        background: "#FAF7E8",
+        surface: "#FAF7E8",
         "surface-card": "#FFFFFF",
-        "surface-muted": "#EFEBE1",
-        "border-sand": "#E4DFD5",
-        "border-taupe": "#D6D0C4",
+        "surface-muted": "#F0EBDC",
+        "border-sand": "#E8E2D2",
+        "border-taupe": "#D8D2C2",
         ink: "#181716",
         "ink-muted": "#646059",
         "ink-faint": "#6E6A62",
@@ -18,10 +18,10 @@ const config: Config = {
         "accent-ochre": "#A3512B",
         "accent-ochre-dark": "#7A3A1C",
         primary: "#181716",
-        "on-primary": "#F7F4EE",
+        "on-primary": "#FAF7E8",
 
         // Semantic section background tokens (bolder, distinct, earthy)
-        "section-cream": "#F7F4EE",
+        "section-cream": "#FAF7E8",
         "section-sand": "#E8DDC8",
         "section-pine": "#283730",
         "section-clay": "#EFD7C3",
@@ -51,6 +51,7 @@ const config: Config = {
       fontFamily: {
         headline: ["var(--font-space-grotesk)", "system-ui", "sans-serif"],
         body: ["var(--font-manrope)", "system-ui", "sans-serif"],
+        serif: ["var(--font-newsreader)", "Georgia", "serif"],
         mono: ["ui-monospace", "SFMono-Regular", "monospace"],
       },
     },

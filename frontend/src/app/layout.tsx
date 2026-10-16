@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Manrope, Space_Grotesk } from "next/font/google";
+import { Manrope, Space_Grotesk, Newsreader } from "next/font/google";
 import "./globals.css";
 import dynamic from "next/dynamic";
 import { site, isIndexingAllowed, getCleanSiteUrl } from "@/lib/site";
@@ -19,6 +19,14 @@ const manrope = Manrope({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-manrope",
+  display: "swap",
+});
+
+const newsreader = Newsreader({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
+  variable: "--font-newsreader",
   display: "swap",
 });
 
@@ -96,11 +104,11 @@ export const metadata: Metadata = {
   },
 };
 
-export const viewport: Viewport = { themeColor: "#F7F4EE" };
+export const viewport: Viewport = { themeColor: "#FAF7E8" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en-IN" className={`${spaceGrotesk.variable} ${manrope.variable}`}>
+    <html lang="en-IN" className={`${spaceGrotesk.variable} ${manrope.variable} ${newsreader.variable}`}>
       <head>
         <script
           dangerouslySetInnerHTML={{

@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
-import { X } from "lucide-react";
+import { X, MessageCircle } from "lucide-react";
 import { serviceList } from "@/content/service-list";
 import { whatsappLink, isPlaceholder } from "@/lib/site";
 
@@ -15,8 +15,8 @@ export const useContactModal = () => useContext(ModalContext);
 type Status = "idle" | "sending" | "success" | "error";
 
 const inputCls =
-  "w-full rounded border border-border-sand bg-background px-3 py-2.5 font-body text-sm text-ink transition-colors focus:border-ink focus:outline-none focus:ring-1 focus:ring-ink";
-const labelCls = "mb-1.5 block font-headline text-xs uppercase tracking-wider text-ink-muted";
+  "w-full rounded-xl border border-[#DDD6C5] bg-white px-3.5 py-2.5 font-body text-sm text-[#141413] transition-colors focus:border-[#141413] focus:outline-none focus:ring-1 focus:ring-[#141413] placeholder:text-[#8C867A]";
+const labelCls = "mb-1.5 block font-headline text-[11px] font-bold uppercase tracking-wider text-[#141413]";
 
 export function ContactModalProvider({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
@@ -261,7 +261,7 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
       {children}
       {open && (
         <div
-          className="fixed inset-0 z-[70] flex items-center justify-center bg-ink/40 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-[70] flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm"
           onMouseDown={(e) => {
             if (e.target === e.currentTarget) close();
           }}
@@ -271,25 +271,34 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
             role="dialog"
             aria-modal="true"
             aria-labelledby="enquiry-title"
-            className="max-h-[92vh] w-full max-w-lg space-y-5 overflow-y-auto rounded-lg border border-ink bg-surface-card p-6 shadow-2xl md:p-8"
+            className="max-h-[92vh] w-full max-w-lg space-y-5 overflow-y-auto rounded-[28px] sm:rounded-[36px] border border-[#DDD6C5] bg-[#FAF7E8] p-6 sm:p-8 shadow-[0_25px_60px_rgba(0,0,0,0.2)]"
           >
-            <div className="flex items-center justify-between border-b border-border-sand pb-4">
-              <div className="flex items-center gap-2">
-                <div className="h-2 w-2 bg-accent-ochre" />
-                <h2
-                  id="enquiry-title"
-                  className="font-headline text-xs font-semibold uppercase tracking-wider text-ink"
-                >
-                  Discuss Your Project
-                </h2>
+            {/* Header: Warm, editorial, matching page */}
+            <div className="flex items-start justify-between border-b border-[#E8E2D5] pb-4">
+              <div>
+                <div className="flex items-center gap-2 mb-1.5">
+                  <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span
+                    id="enquiry-title"
+                    className="font-headline text-[11px] font-bold uppercase tracking-[0.2em] text-[#141413]"
+                  >
+                    Discuss Your Project
+                  </span>
+                </div>
+                <h3 className="font-serif text-2xl sm:text-[26px] font-medium text-[#141413] tracking-tight leading-tight">
+                  Tell us what takes too much of your time.
+                </h3>
+                <p className="font-body text-xs sm:text-[13px] text-[#555047] mt-1">
+                  We will study your workflow and suggest a simple fix.
+                </p>
               </div>
               <button
                 type="button"
                 onClick={close}
                 aria-label="Close dialog"
-                className="-mr-2 flex h-11 w-11 items-center justify-center rounded text-ink-muted transition-colors hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-ink"
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#EDE7D8] text-[#141413] transition-colors hover:bg-[#E2DDD0] active:scale-95"
               >
-                <X size={20} />
+                <X size={18} />
               </button>
             </div>
 
@@ -297,28 +306,27 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
               <div
                 role="status"
                 aria-live="polite"
-                className="space-y-4 py-4 text-center"
+                className="space-y-4 py-8 text-center"
               >
-                <p className="font-headline text-sm uppercase tracking-wider text-ink">
+                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+                  <span className="text-xl font-bold">✓</span>
+                </div>
+                <h4 className="font-serif text-2xl font-medium text-[#141413]">
                   Thank you. We got your message.
-                </p>
-                <p className="font-body text-sm text-ink-muted">
-                  We will read it and reply.
+                </h4>
+                <p className="font-body text-sm text-[#555047] max-w-sm mx-auto">
+                  We will review your workflow details and reply within a few hours.
                 </p>
                 <button
                   type="button"
                   onClick={close}
-                  className="bg-ink px-6 py-3 font-headline text-xs font-semibold uppercase tracking-wider text-background hover:bg-accent-ochre"
+                  className="rounded-xl bg-[#141413] px-7 py-3 font-headline text-xs font-semibold uppercase tracking-wider text-white hover:bg-black transition-colors"
                 >
                   Close
                 </button>
               </div>
             ) : (
               <form onSubmit={onSubmit} className="space-y-4" noValidate={false}>
-                <p className="font-body text-sm text-ink-muted">
-                  Tell us what takes too much of your time. We will suggest a simple fix.
-                </p>
-
                 {/* Honeypot: real users never see or fill this */}
                 <div
                   aria-hidden="true"
@@ -335,7 +343,7 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
 
                 <div>
                   <label className={labelCls} htmlFor="c-name">
-                    Your name <span className="text-accent-ochre">*</span>
+                    Your name <span className="text-emerald-700">*</span>
                   </label>
                   <input
                     ref={firstFieldRef}
@@ -344,6 +352,7 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
                     required
                     maxLength={100}
                     autoComplete="name"
+                    placeholder="e.g. Rahul Sharma"
                     className={inputCls}
                   />
                 </div>
@@ -356,6 +365,7 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
                     name="business"
                     maxLength={120}
                     autoComplete="organization"
+                    placeholder="e.g. Apex Clinic / Sharma Retail"
                     className={inputCls}
                   />
                 </div>
@@ -370,6 +380,7 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
                       type="email"
                       maxLength={160}
                       autoComplete="email"
+                      placeholder="name@business.com"
                       className={inputCls}
                     />
                   </div>
@@ -383,11 +394,12 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
                       type="tel"
                       maxLength={25}
                       autoComplete="tel"
+                      placeholder="+91 98765 43210"
                       className={inputCls}
                     />
                   </div>
                 </div>
-                <p className="-mt-2 font-body text-xs text-ink-faint">
+                <p className="-mt-2 font-body text-[11px] text-[#7A756D]">
                   Provide at least an email or a phone number.
                 </p>
                 <div>
@@ -417,7 +429,7 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
                     rows={3}
                     maxLength={1500}
                     className={inputCls}
-                    placeholder="e.g. We reply to appointment requests on WhatsApp by hand."
+                    placeholder="e.g. We reply to appointment requests on WhatsApp by hand and want to auto-save to Google Sheets."
                   />
                 </div>
 
@@ -436,18 +448,18 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
                     required
                     checked={consent}
                     onChange={(e) => setConsent(e.target.checked)}
-                    className="mt-0.5 h-4 w-4 rounded border-border-sand bg-background text-ink accent-ink focus:outline-none focus:ring-1 focus:ring-ink"
+                    className="mt-0.5 h-4 w-4 rounded border-[#DDD6C5] bg-white accent-[#141413] focus:outline-none focus:ring-1 focus:ring-[#141413]"
                   />
                   <label
                     htmlFor="c-consent"
-                    className="font-body text-xs leading-relaxed text-ink-muted"
+                    className="font-body text-xs leading-relaxed text-[#555047]"
                   >
                     I agree to be contacted about my enquiry. See the{" "}
                     <a
                       href="/privacy"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-ink underline decoration-border-taupe underline-offset-2 hover:text-accent-ochre"
+                      className="text-[#141413] underline decoration-[#DDD6C5] underline-offset-2 hover:text-black font-semibold"
                     >
                       Privacy Policy
                     </a>
@@ -456,7 +468,7 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
                 </div>
 
                 {status === "error" && (
-                  <p role="alert" className="font-body text-sm text-red-700">
+                  <p role="alert" className="font-body text-sm text-red-700 bg-red-50 p-2.5 rounded-lg border border-red-200">
                     {error}
                   </p>
                 )}
@@ -464,22 +476,31 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
                 <button
                   type="submit"
                   disabled={status === "sending"}
-                  className="w-full rounded bg-ink py-3.5 font-headline text-xs font-semibold uppercase tracking-wider text-background transition-colors hover:bg-accent-ochre disabled:opacity-60"
+                  className="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-[#141413] bg-[#EBDDFE] py-3.5 font-headline text-sm font-bold text-[#141413] transition-all hover:bg-[#E2CEFF] active:scale-[0.98] shadow-xs disabled:opacity-60"
                 >
-                  {status === "sending" ? "Sending…" : "Send Enquiry"}
+                  <span className="grid grid-cols-2 gap-0.5 w-3 h-3" aria-hidden="true">
+                    <span className="bg-[#141413] rounded-[0.5px]"></span>
+                    <span className="bg-[#141413] rounded-[0.5px]"></span>
+                    <span className="bg-[#141413] rounded-[0.5px]"></span>
+                    <span className="bg-[#141413] rounded-[0.5px]"></span>
+                  </span>
+                  <span>{status === "sending" ? "Sending…" : "Send Enquiry"}</span>
                 </button>
+
                 {!isPlaceholder("whatsapp") && (
-                  <p className="text-center font-body text-xs text-ink-muted">
-                    Prefer chat?{" "}
+                  <div className="pt-1">
                     <a
-                      className="underline underline-offset-4 hover:text-accent-ochre"
+                      className="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-[#DDD6C5] bg-white py-2.5 px-4 font-headline text-xs font-semibold text-[#141413] transition-colors hover:bg-[#F5F2EA]"
                       href={whatsappLink()}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      Message us on WhatsApp
+                      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#25D366] text-white">
+                        <MessageCircle size={12} />
+                      </span>
+                      <span>Prefer chat? Message us on WhatsApp</span>
                     </a>
-                  </p>
+                  </div>
                 )}
               </form>
             )}

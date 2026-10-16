@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
+import SpeedComparison from "@/components/SpeedComparison";
+import ReviewsSlanted from "@/components/ReviewsSlanted";
 import Services from "@/components/Services";
 import Process from "@/components/Process";
 import Industries from "@/components/Industries";
-import Work from "@/components/Work";
 import Principles from "@/components/Principles";
 import Founder from "@/components/Founder";
 import CTA from "@/components/CTA";
@@ -46,12 +47,13 @@ export default function Home() {
     <>
       <JsonLd data={jsonLd} />
       <Header />
-      <main id="main" className="w-full pt-16 sm:pt-20">
+      <main id="main" className="w-full pt-20 sm:pt-24">
         <Hero />
+        <SpeedComparison />
+        <ReviewsSlanted />
         <Services items={homeServices} />
         <Process />
         <Industries />
-        <Work />
         <Principles />
         <Founder />
         <CTA />

@@ -1,9 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Plus, Bot, Workflow, TrendingUp, MessageCircle, type LucideIcon } from "lucide-react";
-import SectionHeading from "./SectionHeading";
+import { MessageCircle } from "lucide-react";
 import { useContactModal } from "./ContactModal";
 
 export interface HomeServiceItem {
@@ -17,135 +15,246 @@ export interface HomeServiceItem {
   depends: string;
 }
 
-const SERVICE_ICONS: Record<string, LucideIcon> = {
-  "ai-agents-chatbots": Bot,
-  "crm-sales-automation": Workflow,
-  "business-workflow-automation": TrendingUp,
-  "whatsapp-social-automation": MessageCircle,
-};
-
 export default function Services({ items = [] }: { items?: HomeServiceItem[] }) {
-  const [openId, setOpenId] = useState<string | null>(null);
   const { openModal } = useContactModal();
 
+  const servicesData = items.length > 0 ? items : [
+    {
+      id: "ai-agents-chatbots",
+      index: "01",
+      title: "AI Agents & Chatbots",
+      tag: "Customer-facing AI",
+      summary: "We build AI tools that answer customer questions. They collect leads, help with sales, and handle repeat tasks.",
+      solves: "Stops lost leads when your staff are busy or offline.",
+      capabilities: [{ name: "24/7 Question Answering" }, { name: "Lead Qualification" }],
+      depends: "Your approved business guides & FAQs",
+    },
+    {
+      id: "crm-sales-automation",
+      index: "02",
+      title: "CRM & Sales Automation",
+      tag: "Pipeline & follow-ups",
+      summary: "We help you track leads, manage sales, and send follow-ups automatically.",
+      solves: "Stops manual lead tracking and forgotten follow-ups.",
+      capabilities: [{ name: "Automated Follow-ups" }, { name: "Lead Status Tracking" }],
+      depends: "Your current CRM or spreadsheet",
+    },
+    {
+      id: "business-workflow-automation",
+      index: "03",
+      title: "Business Workflow Automation",
+      tag: "Connected systems",
+      summary: "We connect your business apps. Software does repeat tasks so your team saves time.",
+      solves: "Typing data twice between apps, messy form entries, and time lost on repeat reports.",
+      capabilities: [{ name: "Cross-App Sync" }, { name: "Automated Reports" }],
+      depends: "Your existing tools and login access",
+    },
+    {
+      id: "whatsapp-social-automation",
+      index: "04",
+      title: "WhatsApp & Social Automation",
+      tag: "Messaging channels",
+      summary: "We help you reply to enquiries and collect leads on WhatsApp and social chat.",
+      solves: "Slow replies to customer messages during busy hours.",
+      capabilities: [{ name: "WhatsApp Business API" }, { name: "Lead Intake Forms" }],
+      depends: "Your WhatsApp Business account",
+    },
+  ];
+
   return (
-    <section id="services" aria-labelledby="services-title" className="w-full border-y border-border-sand bg-section-sand py-16 md:py-20">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-12">
-        <SectionHeading
-          eyebrow="01 / SERVICES"
-          title="What we do for you"
-          id="services-title"
-          aside="We do not sell fixed packages. We learn how you work first. Then we build a simple tool that fits your needs."
-        />
+    <section id="services" aria-labelledby="services-title" className="relative w-full border-y border-[#E8E2D5] bg-[#FAF7E8] py-20 sm:py-28 overflow-hidden">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-12 z-10">
+        
+        {/* Header with user's exact SERVICES eyebrow and headline */}
+        <div className="max-w-6xl mx-auto mb-8 sm:mb-10">
+          <div className="font-headline text-xs sm:text-[13px] font-bold uppercase tracking-[0.28em] text-[#141413] mb-3">
+            01 // SERVICES
+          </div>
+          <h2
+            id="services-title"
+            className="font-serif text-3xl sm:text-4xl md:text-[44px] lg:text-[48px] font-medium tracking-tight text-[#141413] leading-[1.12]"
+          >
+            Built around <span className="italic font-normal">how you work,</span>{" "}
+            <span className="block sm:inline">not rigid packages.</span>
+          </h2>
+        </div>
 
-        <ul className="border-t border-ink/15">
-          {items.map((s) => {
-            const isOpen = openId === s.id;
-            const Icon = SERVICE_ICONS[s.id] || Bot;
-            return (
-              <li
-                key={s.id}
-                className={`border-b border-ink/15 transition-colors duration-300 ${
-                  isOpen ? "bg-surface-card/40 border-accent-ochre/30" : "hover:bg-surface-card/60 hover:border-ink/25"
-                } -mx-2 sm:-mx-4 rounded px-2 sm:px-4`}
-              >
-                <button
-                  id={`service-trigger-${s.id}`}
-                  type="button"
-                  className="group w-full py-5 sm:py-7 md:py-8 text-left"
-                  aria-expanded={isOpen}
-                  aria-controls={`panel-${s.id}`}
-                  onClick={() => setOpenId(isOpen ? null : s.id)}
-                >
-                  <span className="grid grid-cols-1 items-start gap-3 sm:gap-4 lg:grid-cols-12 lg:gap-6">
-                    <span className="font-headline text-xs font-semibold uppercase tracking-wider text-ink-muted transition-colors group-hover:text-ink lg:col-span-1">
-                      {s.index} {"//"} 04
-                    </span>
-                    <span className="lg:col-span-4">
-                      <span className="flex items-center gap-3">
-                        <Icon size={20} className="text-accent-ochre-dark" aria-hidden />
-                        <span className="font-headline text-xl font-medium text-ink transition-colors group-hover:text-accent-ochre-dark">{s.title}</span>
-                      </span>
-                      <span className="mt-2 inline-block rounded border border-border-sand bg-surface-card px-2.5 py-0.5 font-headline text-[10px] uppercase tracking-wider text-ink-muted">
-                        {s.tag}
-                      </span>
-                    </span>
-                    <span className="font-body text-sm leading-relaxed text-ink-muted lg:col-span-6">{s.summary}</span>
-                    <span className="flex justify-end text-ink-muted lg:col-span-1" aria-hidden>
-                      <span
-                        className={`inline-flex h-8 w-8 items-center justify-center rounded-full transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-                          isOpen
-                            ? "rotate-45 text-accent-ochre bg-accent-ochre/10"
-                            : "rotate-0 text-ink-muted group-hover:text-ink"
-                        }`}
-                      >
-                        <Plus size={20} />
-                      </span>
-                    </span>
-                  </span>
-                </button>
-
-                <div
-                  id={`panel-${s.id}`}
-                  role="region"
-                  aria-labelledby={`service-trigger-${s.id}`}
-                  className={`grid accordion-panel-transition overflow-hidden ${
-                    isOpen
-                      ? "grid-rows-[1fr] opacity-100 visible"
-                      : "grid-rows-[0fr] opacity-0 invisible pointer-events-none"
-                  }`}
-                >
-                  <div className="overflow-hidden min-h-0">
-                    <div
-                      className={`pb-8 pt-1 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-                        isOpen ? "translate-y-0" : "-translate-y-2"
-                      }`}
-                    >
-                      <div className="grid grid-cols-1 gap-4 sm:gap-6 rounded border border-border-sand bg-surface-card p-4 sm:p-6 md:grid-cols-3">
-                        <div>
-                          <div className="mb-2 font-headline text-xs uppercase tracking-wider text-ink-muted">Problem it solves</div>
-                          <p className="font-body text-sm leading-relaxed text-ink">{s.solves}</p>
-                        </div>
-                        <div>
-                          <div className="mb-2 font-headline text-xs uppercase tracking-wider text-ink-muted">Capabilities</div>
-                          <ul className="list-disc space-y-1 pl-4 font-body text-sm leading-relaxed text-ink">
-                            {s.capabilities.map((c) => <li key={c.name}>{c.name}</li>)}
-                          </ul>
-                        </div>
-                        <div>
-                          <div className="mb-2 font-headline text-xs uppercase tracking-wider text-ink-muted">Depends on</div>
-                          <p className="font-body text-sm leading-relaxed text-ink">{s.depends}</p>
-                        </div>
-                      </div>
-                      <div className="mt-4 flex justify-end">
-                        <Link
-                          href={`/services/${s.id}`}
-                          className="inline-flex items-center gap-2 font-headline text-xs font-semibold uppercase tracking-wider text-ink transition-colors hover:text-accent-ochre"
-                        >
-                          <span>Read about {s.title}</span>
-                          <ArrowRight size={14} aria-hidden="true" />
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
+        {/* 4 User Services Grid with Visually Rich Card Design */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 max-w-6xl mx-auto">
+          
+          {/* Service 01: AI Agents & Chatbots (Lilac Card with Capsule Widget) */}
+          <div className="rounded-[28px] bg-[#EDE7DA] border border-[#DDD6C5]/80 p-6 sm:p-7 flex flex-col sm:flex-row items-start sm:items-center gap-6 shadow-[0_2px_8px_rgba(0,0,0,0.02)] transition-all duration-300 hover:border-[#CDC5B3] hover:shadow-[0_6px_20px_rgba(0,0,0,0.04)]">
+            {/* Lilac Thumbnail with Interactive AI Capsule */}
+            <div className="w-[124px] h-[124px] rounded-[22px] bg-[#EBDDFE] border border-[#D8C4FA] flex items-center justify-center shrink-0 shadow-inner">
+              <div className="inline-flex items-center gap-2.5 rounded-full bg-[#141413] px-3.5 py-1.5 shadow-md">
+                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-white/20 text-white text-[9px] font-mono">
+                  ✕
+                </span>
+                <div className="flex items-center gap-[2.5px] h-3.5">
+                  <span className="w-[1.5px] h-2 bg-white rounded-full" />
+                  <span className="w-[1.5px] h-3.5 bg-white rounded-full" />
+                  <span className="w-[1.5px] h-2 bg-white rounded-full" />
+                  <span className="w-[1.5px] h-3 bg-white rounded-full" />
+                  <span className="w-[1.5px] h-1.5 bg-white rounded-full" />
                 </div>
-              </li>
-            );
-          })}
-        </ul>
+                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-emerald-400 text-[#141413] text-[9px] font-bold">
+                  ✓
+                </span>
+              </div>
+            </div>
 
-        <div className="mt-8 sm:mt-10 flex flex-col items-start justify-between gap-4 sm:gap-6 border border-border-sand bg-surface-card p-4 sm:p-6 md:p-8 sm:flex-row sm:items-center">
+            {/* Text & Action */}
+            <div className="flex-1 flex flex-col justify-between min-w-0">
+              <div>
+                <h3 className="font-headline text-lg sm:text-[19px] font-bold text-[#141413] tracking-tight leading-snug">
+                  AI Agents &amp; Chatbots
+                </h3>
+                <p className="font-body text-xs sm:text-[13px] text-[#555047] leading-relaxed mt-1.5 mb-3.5">
+                  We build AI tools that answer customer questions. They collect leads, help with sales, and handle repeat tasks.
+                </p>
+              </div>
+              <Link
+                href="/services/ai-agents-chatbots"
+                className="self-start inline-flex items-center gap-1 font-headline text-xs sm:text-[13px] font-semibold text-[#141413] transition-colors hover:text-[#6D32A8]"
+              >
+                <span>Explore service</span>
+                <span aria-hidden="true" className="font-bold">›</span>
+              </Link>
+            </div>
+          </div>
+
+          {/* Service 02: CRM & Sales Automation (Peach Card with Sheets ➔ CRM Sync Widget) */}
+          <div className="rounded-[28px] bg-[#EDE7DA] border border-[#DDD6C5]/80 p-6 sm:p-7 flex flex-col sm:flex-row items-start sm:items-center gap-6 shadow-[0_2px_8px_rgba(0,0,0,0.02)] transition-all duration-300 hover:border-[#CDC5B3] hover:shadow-[0_6px_20px_rgba(0,0,0,0.04)]">
+            {/* Peach Thumbnail with Connected Apps Icon */}
+            <div className="w-[124px] h-[124px] rounded-[22px] bg-[#FCE6CF] border border-[#F0CCA8] flex items-center justify-center shrink-0 shadow-inner">
+              <div className="rounded-xl bg-white/95 p-2.5 shadow-sm border border-[#E8C5A0] flex flex-col items-center gap-1.5 w-20">
+                <span className="text-[10px] font-mono font-bold text-[#2B1705]">Sheets ➔ CRM</span>
+                <div className="flex items-center gap-1 text-[8px] font-mono text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">
+                  <span>Synced</span>
+                  <span>✓</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Text & Action */}
+            <div className="flex-1 flex flex-col justify-between min-w-0">
+              <div>
+                <h3 className="font-headline text-lg sm:text-[19px] font-bold text-[#141413] tracking-tight leading-snug">
+                  CRM &amp; Sales Automation
+                </h3>
+                <p className="font-body text-xs sm:text-[13px] text-[#555047] leading-relaxed mt-1.5 mb-3.5">
+                  We help you track leads, manage sales pipelines, and send follow-ups automatically so you never miss a buyer.
+                </p>
+              </div>
+              <Link
+                href="/services/crm-sales-automation"
+                className="self-start inline-flex items-center gap-1 font-headline text-xs sm:text-[13px] font-semibold text-[#141413] transition-colors hover:text-[#6D32A8]"
+              >
+                <span>Explore service</span>
+                <span aria-hidden="true" className="font-bold">›</span>
+              </Link>
+            </div>
+          </div>
+
+          {/* Service 03: Business Workflow Automation (Forest Green Card with Connected Systems) */}
+          <div className="rounded-[28px] bg-[#EDE7DA] border border-[#DDD6C5]/80 p-6 sm:p-7 flex flex-col sm:flex-row items-start sm:items-center gap-6 shadow-[0_2px_8px_rgba(0,0,0,0.02)] transition-all duration-300 hover:border-[#CDC5B3] hover:shadow-[0_6px_20px_rgba(0,0,0,0.04)]">
+            {/* Forest Green Thumbnail with Connected Systems Nodes */}
+            <div className="w-[124px] h-[124px] rounded-[22px] bg-[#07382B] border border-[#0A4838] flex items-center justify-center shrink-0 shadow-inner relative overflow-hidden">
+              <div className="w-[72px] rounded-lg bg-[#FAF8F2] shadow-md p-2 flex flex-col gap-1 border border-[#E0DBCB]">
+                <div className="flex items-center justify-between border-b border-[#E8E2D5] pb-1">
+                  <span className="text-[7.5px] font-headline font-bold text-[#07382B]">Webhook Sync</span>
+                  <span className="text-[7px]">🔄</span>
+                </div>
+                <div className="text-[6.5px] font-mono text-[#555047] leading-tight space-y-0.5">
+                  <div>Form ➔ Sheets</div>
+                  <div>Sheets ➔ WhatsApp</div>
+                </div>
+                <div className="h-[2px] w-full bg-emerald-600 rounded-full mt-0.5" />
+              </div>
+            </div>
+
+            {/* Text & Action */}
+            <div className="flex-1 flex flex-col justify-between min-w-0">
+              <div>
+                <h3 className="font-headline text-lg sm:text-[19px] font-bold text-[#141413] tracking-tight leading-snug">
+                  Business Workflow Automation
+                </h3>
+                <p className="font-body text-xs sm:text-[13px] text-[#555047] leading-relaxed mt-1.5 mb-3.5">
+                  We connect your business apps. Software does repeat tasks so your team saves hours every week.
+                </p>
+              </div>
+              <Link
+                href="/services/business-workflow-automation"
+                className="self-start inline-flex items-center gap-1 font-headline text-xs sm:text-[13px] font-semibold text-[#141413] transition-colors hover:text-[#6D32A8]"
+              >
+                <span>Explore service</span>
+                <span aria-hidden="true" className="font-bold">›</span>
+              </Link>
+            </div>
+          </div>
+
+          {/* Service 04: WhatsApp & Social Automation (Mint Emerald Card with WhatsApp Badge) */}
+          <div className="rounded-[28px] bg-[#EDE7DA] border border-[#DDD6C5]/80 p-6 sm:p-7 flex flex-col sm:flex-row items-start sm:items-center gap-6 shadow-[0_2px_8px_rgba(0,0,0,0.02)] transition-all duration-300 hover:border-[#CDC5B3] hover:shadow-[0_6px_20px_rgba(0,0,0,0.04)]">
+            {/* Mint Emerald Thumbnail with WhatsApp Bubble */}
+            <div className="w-[124px] h-[124px] rounded-[22px] bg-[#D5F5E3] border border-[#B8E8CD] flex items-center justify-center shrink-0 shadow-inner">
+              <div className="rounded-xl bg-white/95 p-2.5 shadow-sm border border-[#A5DEBC] flex items-center gap-2">
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#25D366] text-white">
+                  <MessageCircle size={13} />
+                </span>
+                <span className="text-[10px] font-headline font-bold text-[#063828]">Auto-Reply</span>
+              </div>
+            </div>
+
+            {/* Text & Action */}
+            <div className="flex-1 flex flex-col justify-between min-w-0">
+              <div>
+                <h3 className="font-headline text-lg sm:text-[19px] font-bold text-[#141413] tracking-tight leading-snug">
+                  WhatsApp &amp; Social Automation
+                </h3>
+                <p className="font-body text-xs sm:text-[13px] text-[#555047] leading-relaxed mt-1.5 mb-3.5">
+                  We help you reply to enquiries and collect leads on WhatsApp and social chat 24/7 without delays.
+                </p>
+              </div>
+              <Link
+                href="/services/whatsapp-social-automation"
+                className="self-start inline-flex items-center gap-1 font-headline text-xs sm:text-[13px] font-semibold text-[#141413] transition-colors hover:text-[#6D32A8]"
+              >
+                <span>Explore service</span>
+                <span aria-hidden="true" className="font-bold">›</span>
+              </Link>
+            </div>
+          </div>
+
+        </div>
+
+        {/* Custom Requirements Box */}
+        <div className="mt-12 sm:mt-16 rounded-3xl border border-[#E8E2D5] bg-white p-8 sm:p-12 shadow-[0_4px_24px_rgba(0,0,0,0.02)] flex flex-col md:flex-row items-start md:items-center justify-between gap-6 max-w-6xl mx-auto">
           <div className="max-w-2xl">
-            <div className="mb-2 font-headline text-xs font-semibold uppercase tracking-[0.2em] text-accent-ochre">Custom tools</div>
-            <p className="font-body text-sm leading-relaxed text-ink sm:text-base">
-              Not sure what you need? Tell us your problem. We will suggest a simple fix that fits your daily work.
+            <div className="font-headline text-[11px] font-semibold uppercase tracking-[0.24em] text-[#6D32A8] mb-2">
+              Custom Requirements
+            </div>
+            <h4 className="font-serif text-2xl sm:text-3xl font-normal text-[#141413] mb-2">
+              Not sure what you need?
+            </h4>
+            <p className="font-body text-sm sm:text-base leading-relaxed text-[#555047]">
+              Tell us what slows your team down. We will look at your daily work and build a simple tool that fits your business.
             </p>
           </div>
-          <button onClick={() => openModal(undefined, "services")} className="shrink-0 bg-ink px-6 py-3.5 font-headline text-xs font-semibold uppercase tracking-wider text-background transition-colors hover:bg-accent-ochre">
-            Discuss Your Project
+          <button
+            onClick={() => openModal(undefined, "services")}
+            className="shrink-0 inline-flex items-center gap-2.5 rounded-lg border border-[#141413] bg-[#EBDDFE] px-7 py-3.5 font-headline text-xs font-semibold uppercase tracking-wider text-[#141413] shadow-sm transition-all hover:bg-[#E2CEFF] active:scale-[0.98]"
+          >
+            <span className="grid grid-cols-2 gap-0.5 w-3 h-3">
+              <span className="bg-[#141413] rounded-[0.5px]"></span>
+              <span className="bg-[#141413] rounded-[0.5px]"></span>
+              <span className="bg-[#141413] rounded-[0.5px]"></span>
+              <span className="bg-[#141413] rounded-[0.5px]"></span>
+            </span>
+            <span>Discuss Your Project</span>
           </button>
         </div>
       </div>
     </section>
   );
 }
+

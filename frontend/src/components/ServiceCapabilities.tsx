@@ -110,7 +110,7 @@ export default function ServiceCapabilities({
       </div>
 
       {/* Interactive 6-Box Grid */}
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
         {capabilities.map((c, index) => (
           <button
             key={c.name}
@@ -119,7 +119,7 @@ export default function ServiceCapabilities({
             }}
             type="button"
             onClick={() => openDetail(index)}
-            className="group flex h-full w-full flex-col justify-between rounded border border-border-sand bg-surface-card p-6 text-left transition-all hover:border-ink hover:bg-[#EFEAE0] focus-visible:outline-2 focus-visible:outline-ink cursor-pointer"
+            className="group flex h-full w-full flex-col justify-between rounded-2xl border border-[#E8E2D5] bg-white p-6 sm:p-7 text-left shadow-xs transition-all hover:border-[#141413] hover:shadow-md focus-visible:outline-2 focus-visible:outline-[#141413] cursor-pointer"
             aria-haspopup="dialog"
             aria-expanded={activeIndex === index}
             aria-label={`View explanation for ${c.name}`}
@@ -127,20 +127,20 @@ export default function ServiceCapabilities({
             <div>
               <div className="flex items-start gap-3">
                 <CheckCircle2
-                  size={18}
-                  className="mt-0.5 shrink-0 text-accent-ochre-dark"
+                  size={19}
+                  className="mt-0.5 shrink-0 text-[#10B981]"
                   aria-hidden="true"
                 />
-                <span className="font-body text-sm font-medium text-ink">
+                <span className="font-body text-[15px] sm:text-base font-semibold text-[#141413] leading-snug">
                   {c.name}
                 </span>
               </div>
             </div>
-            <div className="mt-4 flex items-center gap-1.5 font-headline text-[11px] font-semibold uppercase tracking-wider text-accent-ochre-dark group-hover:text-ink">
-              <span>Click to read more</span>
+            <div className="mt-5 flex items-center gap-1.5 font-headline text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#6D32A8] group-hover:text-[#141413] transition-colors">
+              <span>Click to read details</span>
               <ArrowRight
-                size={12}
-                className="transition-transform group-hover:translate-x-0.5"
+                size={13}
+                className="transition-transform group-hover:translate-x-1"
                 aria-hidden="true"
               />
             </div>
@@ -153,7 +153,7 @@ export default function ServiceCapabilities({
         <div
           role="presentation"
           onClick={closeDetail}
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-ink/70 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-[#141413]/60 backdrop-blur-sm"
         >
           <div
             ref={dialogRef}
@@ -161,7 +161,7 @@ export default function ServiceCapabilities({
             aria-modal="true"
             aria-labelledby="capability-dialog-heading"
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-lg border border-border-sand bg-section-cream p-6 sm:p-8 shadow-2xl"
+            className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl border border-[#DDD6C5] bg-[#FAF7E8] p-6 sm:p-9 shadow-2xl"
           >
             {/* Top Close Button */}
             <button
@@ -169,23 +169,23 @@ export default function ServiceCapabilities({
               type="button"
               onClick={closeDetail}
               aria-label="Close capability details"
-              className="absolute top-4 right-4 sm:top-6 sm:right-6 rounded p-2 text-ink-muted hover:text-ink hover:bg-surface-card transition-colors focus-visible:outline-2 focus-visible:outline-ink"
+              className="absolute top-4 right-4 sm:top-6 sm:right-6 rounded-full p-2 text-[#7A756D] hover:text-[#141413] hover:bg-white transition-colors focus-visible:outline-2 focus-visible:outline-[#141413] cursor-pointer"
             >
               <X size={20} aria-hidden="true" />
             </button>
 
             {/* Header */}
             <div className="pr-12">
-              <div className="flex items-center gap-2 font-headline text-xs font-semibold uppercase tracking-[0.2em] text-accent-ochre-dark">
+              <div className="flex items-center gap-2 font-headline text-[11px] font-bold uppercase tracking-[0.2em] text-[#7A756D]">
                 <span>{serviceTitle}</span>
-                <span className="text-border-taupe">·</span>
+                <span className="text-[#DDD6C5]">·</span>
                 <span>
                   Part {activeIndex !== null ? activeIndex + 1 : 1} of 6
                 </span>
               </div>
               <h3
                 id="capability-dialog-heading"
-                className="mt-1 font-headline text-2xl font-medium tracking-tight text-ink sm:text-3xl"
+                className="mt-1 font-serif text-2xl sm:text-3xl font-medium tracking-tight text-[#141413]"
               >
                 {activeCapability.name}
               </h3>
@@ -195,36 +195,36 @@ export default function ServiceCapabilities({
             <div className="mt-6 space-y-5">
               {/* 1. What */}
               <div className="space-y-1">
-                <div className="font-headline text-xs font-semibold uppercase tracking-wider text-accent-ochre-dark">
+                <div className="font-headline text-[11px] font-bold uppercase tracking-wider text-[#7A756D]">
                   What it is
                 </div>
-                <p className="font-body text-sm leading-relaxed text-ink">
+                <p className="font-body text-sm sm:text-[15px] leading-relaxed text-[#141413]">
                   {activeCapability.details.what}
                 </p>
               </div>
 
               {/* 2. Problem */}
               <div className="space-y-1">
-                <div className="font-headline text-xs font-semibold uppercase tracking-wider text-accent-ochre-dark">
+                <div className="font-headline text-[11px] font-bold uppercase tracking-wider text-[#7A756D]">
                   Problem it solves
                 </div>
-                <p className="font-body text-sm leading-relaxed text-ink">
+                <p className="font-body text-sm sm:text-[15px] leading-relaxed text-[#141413]">
                   {activeCapability.details.problem}
                 </p>
               </div>
 
               {/* 3. Steps */}
-              <div className="space-y-1.5">
-                <div className="font-headline text-xs font-semibold uppercase tracking-wider text-accent-ochre-dark">
-                  How it works in 3 steps
+              <div className="space-y-2">
+                <div className="font-headline text-[11px] font-bold uppercase tracking-wider text-[#7A756D]">
+                  How it works in 3 simple steps
                 </div>
                 <ol className="space-y-2 pt-1">
                   {activeCapability.details.steps.map((step, idx) => (
                     <li key={idx} className="flex items-start gap-3">
-                      <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-accent-ochre/15 font-headline text-[11px] font-semibold text-accent-ochre-dark">
+                      <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#EBDDFE] font-headline text-[11px] font-bold text-[#6D32A8]">
                         {idx + 1}
                       </span>
-                      <span className="font-body text-sm leading-relaxed text-ink">
+                      <span className="font-body text-sm leading-relaxed text-[#141413]">
                         {step}
                       </span>
                     </li>
@@ -234,44 +234,44 @@ export default function ServiceCapabilities({
 
               {/* 4. Example */}
               <div className="space-y-1">
-                <div className="font-headline text-xs font-semibold uppercase tracking-wider text-accent-ochre-dark">
+                <div className="font-headline text-[11px] font-bold uppercase tracking-wider text-[#7A756D]">
                   Real example
                 </div>
-                <div className="rounded border border-border-sand bg-surface-card p-4 font-body text-sm leading-relaxed text-ink">
-                  <span className="font-semibold text-ink">Example: </span>
+                <div className="rounded-2xl border border-[#DDD6C5] bg-white p-4 font-body text-sm leading-relaxed text-[#141413] shadow-xs">
+                  <span className="font-semibold text-[#141413]">Example: </span>
                   {activeCapability.details.example}
                 </div>
               </div>
 
               {/* 5. Benefit */}
               <div className="space-y-1">
-                <div className="font-headline text-xs font-semibold uppercase tracking-wider text-accent-ochre-dark">
+                <div className="font-headline text-[11px] font-bold uppercase tracking-wider text-[#7A756D]">
                   How it helps your business
                 </div>
-                <p className="font-body text-sm leading-relaxed text-ink">
+                <p className="font-body text-sm sm:text-[15px] leading-relaxed text-[#141413]">
                   {activeCapability.details.benefit}
                 </p>
               </div>
 
               {/* 6. Tools */}
-              <div className="space-y-1 border-t border-border-sand pt-4">
-                <div className="font-headline text-xs font-semibold uppercase tracking-wider text-accent-ochre-dark">
+              <div className="space-y-1 border-t border-[#E8E2D5] pt-4">
+                <div className="font-headline text-[11px] font-bold uppercase tracking-wider text-[#7A756D]">
                   Tools and setup
                 </div>
-                <p className="font-body text-xs leading-relaxed text-ink-muted">
+                <p className="font-body text-xs sm:text-sm leading-relaxed text-[#5A554E]">
                   {activeCapability.details.tools}
                 </p>
               </div>
             </div>
 
             {/* Navigation & Close Footer */}
-            <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t border-border-sand pt-4">
+            <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t border-[#E8E2D5] pt-5">
               <div className="flex items-center gap-2">
                 <button
                   type="button"
                   onClick={handlePrev}
                   aria-label="Previous capability"
-                  className="inline-flex items-center gap-1.5 rounded border border-border-sand bg-surface-card px-3 py-2 font-headline text-xs font-semibold uppercase tracking-wider text-ink transition-colors hover:border-ink hover:bg-background focus-visible:outline-2 focus-visible:outline-ink"
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-[#DDD6C5] bg-white px-3.5 py-2 font-headline text-xs font-semibold uppercase tracking-wider text-[#141413] transition-all hover:bg-[#EDE7DA] focus-visible:outline-2 focus-visible:outline-[#141413] cursor-pointer"
                 >
                   <ArrowLeft size={13} aria-hidden="true" />
                   <span>Previous</span>
@@ -280,7 +280,7 @@ export default function ServiceCapabilities({
                   type="button"
                   onClick={handleNext}
                   aria-label="Next capability"
-                  className="inline-flex items-center gap-1.5 rounded border border-border-sand bg-surface-card px-3 py-2 font-headline text-xs font-semibold uppercase tracking-wider text-ink transition-colors hover:border-ink hover:bg-background focus-visible:outline-2 focus-visible:outline-ink"
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-[#DDD6C5] bg-white px-3.5 py-2 font-headline text-xs font-semibold uppercase tracking-wider text-[#141413] transition-all hover:bg-[#EDE7DA] focus-visible:outline-2 focus-visible:outline-[#141413] cursor-pointer"
                 >
                   <span>Next</span>
                   <ArrowRight size={13} aria-hidden="true" />
@@ -290,7 +290,7 @@ export default function ServiceCapabilities({
               <button
                 type="button"
                 onClick={closeDetail}
-                className="rounded border border-border-sand bg-surface-card px-5 py-2 font-headline text-xs font-semibold uppercase tracking-wider text-ink transition-colors hover:border-ink hover:bg-background focus-visible:outline-2 focus-visible:outline-ink"
+                className="rounded-xl border border-[#DDD6C5] bg-white px-5 py-2 font-headline text-xs font-semibold uppercase tracking-wider text-[#141413] transition-all hover:bg-[#EDE7DA] focus-visible:outline-2 focus-visible:outline-[#141413] cursor-pointer"
               >
                 Close
               </button>

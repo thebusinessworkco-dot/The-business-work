@@ -22,11 +22,17 @@ export default function DiscussProjectButton({
       onClick={() => openModal(serviceTitle, cta)}
       className={
         className ||
-        "inline-flex items-center justify-center gap-2.5 bg-ink px-7 py-3.5 font-headline text-xs font-semibold uppercase tracking-wider text-background transition-colors hover:bg-accent-ochre"
+        "inline-flex items-center justify-center gap-2.5 rounded-lg border border-[#141413] bg-[#EBDDFE] px-6 sm:px-7 py-3.5 font-headline text-xs font-semibold uppercase tracking-wider text-[#141413] shadow-sm transition-all hover:bg-[#E2CEFF] active:scale-[0.98]"
       }
     >
+      <span className="grid grid-cols-2 gap-0.5 w-3 h-3">
+        <span className="bg-[#141413] rounded-[0.5px]"></span>
+        <span className="bg-[#141413] rounded-[0.5px]"></span>
+        <span className="bg-[#141413] rounded-[0.5px]"></span>
+        <span className="bg-[#141413] rounded-[0.5px]"></span>
+      </span>
       <span>{label}</span>
-      <ArrowRight size={16} />
+      <ArrowRight size={15} />
     </button>
   );
 }
