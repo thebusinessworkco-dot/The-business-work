@@ -10,14 +10,14 @@ import ScrollManager from "@/components/ScrollManager";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["500", "700"],
   variable: "--font-space-grotesk",
   display: "swap",
 });
 
 const manrope = Manrope({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600"],
   variable: "--font-manrope",
   display: "swap",
 });
