@@ -160,22 +160,22 @@ export default function Process() {
         </svg>
       </div>
 
+      {/* Section Header: Placed above sticky track with clean scroll margin so it never clips */}
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-12 w-full pt-14 sm:pt-20 pb-6 sm:pb-8 text-center z-10 scroll-mt-28">
+        <div className="inline-block font-headline text-[11px] sm:text-xs font-bold uppercase tracking-[0.24em] text-[#7A756D] mb-2.5">
+          02 // HOW WE WORK
+        </div>
+        <h2
+          id="process-title"
+          className="font-serif text-3xl sm:text-4xl md:text-5xl font-medium tracking-tight text-[#141413] leading-[1.12]"
+        >
+          Simple steps, <span className="italic font-normal">clear execution.</span>
+        </h2>
+      </div>
+
       {/* Pinned Sticky Viewport Container */}
-      <div className="relative lg:sticky lg:top-24 lg:h-[calc(100vh-6rem)] w-full flex flex-col justify-center py-12 sm:py-16 lg:py-0 overflow-hidden z-10">
+      <div className="relative lg:sticky lg:top-24 lg:min-h-[calc(100vh-7rem)] w-full flex flex-col justify-center py-6 sm:py-8 lg:py-4 z-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-12 w-full">
-          
-          {/* Header Eyebrow & Title */}
-          <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-12">
-            <div className="inline-block font-headline text-[11px] sm:text-xs font-bold uppercase tracking-[0.24em] text-[#7A756D] mb-2.5">
-              02 // HOW WE WORK
-            </div>
-            <h2
-              id="process-title"
-              className="font-serif text-3xl sm:text-4xl md:text-5xl font-medium tracking-tight text-[#141413] leading-[1.12]"
-            >
-              Simple steps, <span className="italic font-normal">clear execution.</span>
-            </h2>
-          </div>
 
           {/* Mobile / Tablet Horizontal Scrollable Step Chips */}
           <div className="lg:hidden flex items-center gap-2 overflow-x-auto pb-4 mb-6 no-scrollbar">
@@ -238,7 +238,7 @@ export default function Process() {
 
             {/* 2. Center Column: Large Rounded Visual Mockup Card (Wispr style) */}
             <div className="lg:col-span-5 flex justify-center">
-              <div className="relative w-full max-w-[420px] aspect-[4/5] rounded-[32px] sm:rounded-[38px] bg-[#0E1513] text-white p-6 sm:p-8 flex flex-col justify-between overflow-hidden shadow-2xl border border-white/10 transition-all duration-300">
+              <div className="relative w-full max-w-[390px] max-h-[450px] aspect-[4/5] rounded-[32px] sm:rounded-[38px] bg-[#0E1513] text-white p-5 sm:p-7 flex flex-col justify-between overflow-hidden shadow-2xl border border-white/10 transition-all duration-300">
                 
                 {/* Background Ambient Glow */}
                 <div
