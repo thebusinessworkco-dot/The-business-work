@@ -129,7 +129,7 @@ export default function SpeedComparison() {
       {/* 2. Light Comparison Section: "10x faster than manual work" */}
       <div className="relative w-full bg-[#FAF7E8] py-10 sm:py-14 lg:py-16 text-[#141413] overflow-hidden">
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-12 z-10">
-          
+
           {/* Main Headline */}
           <div className="text-center max-w-3xl mx-auto mb-7 sm:mb-9">
             <div className="font-headline text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.24em] text-[#7A756D] mb-2.5">
@@ -142,7 +142,7 @@ export default function SpeedComparison() {
 
           {/* Two Clean, Easy-to-Read Comparison Cards: 50/50 Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-7 items-stretch max-w-5xl mx-auto">
-            
+
             {/* Left Card: Doing it by Hand (Manual) */}
             <div className="rounded-[24px] sm:rounded-[28px] border border-[#DDD6C5] bg-[#EDE7DA] p-5 sm:p-6 flex flex-col justify-between shadow-xs">
               <div>
@@ -185,7 +185,7 @@ export default function SpeedComparison() {
 
             {/* Right Card: With Our Automation (The Business Work) */}
             <div className="rounded-[24px] sm:rounded-[28px] border-2 border-emerald-500/40 bg-white p-5 sm:p-6 flex flex-col justify-between shadow-md relative overflow-hidden">
-              
+
               <div>
                 <div className="flex items-center justify-between relative z-10">
                   <span className="font-headline text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] text-emerald-800">
@@ -203,7 +203,7 @@ export default function SpeedComparison() {
 
                 {/* Authentic WhatsApp Chat Mockup (Light Theme) */}
                 <div className="mt-4 rounded-xl bg-[#EFEAE2] border border-[#DDD6C5] overflow-hidden shadow-sm relative z-10">
-                  
+
                   {/* WhatsApp Top Header Bar */}
                   <div className="bg-[#008069] px-3 py-2 flex items-center justify-between text-white">
                     <div className="flex items-center gap-2">
@@ -233,7 +233,7 @@ export default function SpeedComparison() {
 
                   {/* Chat Messages Area */}
                   <div className="p-3 space-y-2 bg-[#EFEAE2]">
-                    
+
                     {/* Date Pill */}
                     <div className="flex justify-center">
                       <span className="rounded-md bg-white/90 px-2 py-0.5 text-[9.5px] font-medium text-[#54656F] shadow-2xs border border-[#DDD6C5]/60">
