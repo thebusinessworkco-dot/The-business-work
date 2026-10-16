@@ -1,7 +1,6 @@
 "use client";
 
-import { useRef } from "react";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { useState, useRef } from "react";
 
 interface Review {
   id: string;
@@ -88,26 +87,36 @@ const reviews: Review[] = [
     avatarBg: "bg-[#CBD5E1] text-[#1E293B]",
     metric1: { val: "24/7", label: "Live auto-reply" },
   },
+  {
+    id: "review-6",
+    name: "VIKRAM JOSHI",
+    initials: "VJ",
+    role: "Co-founder",
+    company: "Nova Exports Hub",
+    quote:
+      "“Our export catalog quotes used to take 2 hours. Now our WhatsApp bot parses product requests and sends quotes in 30 seconds.”",
+    cardBg: "bg-[#FEE2E2]",
+    textColor: "text-[#450A0A]",
+    subColor: "text-[#7F1D1D]",
+    avatarBg: "bg-[#FECACA] text-[#7F1D1D]",
+    metric1: { val: "90%", label: "Quote turnaround" },
+  },
 ];
 
 export default function ReviewsSlanted() {
+  const [isPaused, setIsPaused] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const scrollLeft = () => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollBy({ left: -320, behavior: "smooth" });
-    }
-  };
+  // Duplicate for seamless 100% infinite marquee loop
+  const loopReviews = [...reviews, ...reviews];
 
-  const scrollRight = () => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollBy({ left: 320, behavior: "smooth" });
-    }
+  const togglePause = () => {
+    setIsPaused((prev) => !prev);
   };
 
   return (
     <section
-      className="relative w-full bg-[#0D0D0C] rounded-t-[32px] sm:rounded-t-[44px] py-12 sm:py-16 md:py-20 overflow-hidden"
+      className="relative w-full bg-[#0D0D0C] rounded-t-[32px] sm:rounded-t-[44px] pt-12 sm:pt-16 md:pt-18 pb-6 sm:pb-8 md:pb-9 overflow-hidden"
       aria-label="Client Reviews and Testimonials"
     >
       {/* Subtle Ambient Light */}
@@ -118,7 +127,7 @@ export default function ReviewsSlanted() {
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-12 z-10">
         
-        {/* Section Header: Compact margin, zero unwanted empty space */}
+        {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-6 sm:mb-8">
           <p className="font-headline text-xs font-bold uppercase tracking-[0.24em] text-[#EBDDFE] mb-2.5">
             EARLY ACCESS, REAL RESULTS
@@ -127,18 +136,31 @@ export default function ReviewsSlanted() {
             From the first <span className="italic font-normal">businesses to use it.</span>
           </h2>
         </div>
+      </div>
 
-        {/* Horizontal Carousel Track */}
-        <div className="relative w-full">
-          <div
-            ref={scrollRef}
-            className="flex gap-4 sm:gap-6 overflow-x-auto pb-4 pt-1 snap-x snap-mandatory scroll-smooth no-scrollbar"
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-          >
-            {reviews.map((rev) => (
+      {/* ═══ Continuous Infinite Marquee Track (Right to Left) - Full Width ═══ */}
+      <div className="relative w-full overflow-hidden z-10">
+        {/* Soft, minimal edge fade to prevent harsh cutoff without darkening cards */}
+        <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-4 sm:w-8 bg-gradient-to-r from-[#0D0D0C]/40 to-transparent z-20" />
+        <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-4 sm:w-8 bg-gradient-to-l from-[#0D0D0C]/40 to-transparent z-20" />
+
+        {/* Marquee Track: Moving Right to Left */}
+        <div
+          ref={scrollRef}
+          className="flex gap-4 sm:gap-6 pb-2 pt-1 select-none w-max"
+          style={{
+            animation: "marqueeRightToLeft 42s linear infinite",
+            animationPlayState: isPaused ? "paused" : "running",
+          }}
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
+            {loopReviews.map((rev, idx) => (
               <div
-                key={rev.id}
-                className={`w-[290px] sm:w-[350px] shrink-0 snap-center rounded-[26px] sm:rounded-[32px] ${rev.cardBg} ${rev.textColor} p-5 sm:p-7 shadow-xl border border-white/20 flex flex-col justify-between transition-transform duration-200 hover:scale-[1.01]`}
+                key={`${rev.id}-${idx}`}
+                onClick={togglePause}
+                title={isPaused ? "Click to resume scrolling" : "Click to pause"}
+                className={`w-[290px] sm:w-[350px] shrink-0 rounded-[26px] sm:rounded-[32px] ${rev.cardBg} ${rev.textColor} p-5 sm:p-7 shadow-xl border border-white/20 flex flex-col justify-between transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl cursor-pointer`}
               >
                 <div>
                   <div className="flex items-center justify-between">
@@ -181,37 +203,19 @@ export default function ReviewsSlanted() {
               </div>
             ))}
           </div>
-
-          {/* Navigation Controls: Clean subtle buttons */}
-          <div className="flex items-center justify-center gap-3 mt-6">
-            <button
-              type="button"
-              onClick={scrollLeft}
-              aria-label="Previous review"
-              className="h-9 w-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center border border-white/10 transition-colors active:scale-95"
-            >
-              <ArrowLeft size={16} />
-            </button>
-            <div className="flex items-center gap-1.5 px-2">
-              {reviews.map((r) => (
-                <span
-                  key={r.id}
-                  className="h-1.5 w-1.5 rounded-full bg-white/30"
-                />
-              ))}
-            </div>
-            <button
-              type="button"
-              onClick={scrollRight}
-              aria-label="Next review"
-              className="h-9 w-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center border border-white/10 transition-colors active:scale-95"
-            >
-              <ArrowRight size={16} />
-            </button>
-          </div>
         </div>
 
-      </div>
+        {/* Marquee Keyframe Styles for smooth Right-to-Left Infinite Scroll */}
+      <style jsx>{`
+        @keyframes marqueeRightToLeft {
+          0% {
+            transform: translate3d(0, 0, 0);
+          }
+          100% {
+            transform: translate3d(-50%, 0, 0);
+          }
+        }
+      `}</style>
     </section>
   );
 }

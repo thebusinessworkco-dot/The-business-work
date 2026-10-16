@@ -1,369 +1,320 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import {
-  ShieldCheck,
-  CheckCircle2,
-  AlertCircle,
-  FileText,
-  Code2,
-  Activity,
-  Rocket,
-  Headphones,
-  ArrowRight,
-  Sparkles,
-} from "lucide-react";
-import { processSteps } from "@/content/process";
+
+/* ════════════════════════════════════════════════
+   7 High-Fidelity WebP Cards (Alternating P-L-P-L-P-L-P)
+   From: /process-cards/ (Q88 WebP)
+   ════════════════════════════════════════════════ */
+const visualCards = [
+  {
+    id: 1,
+    image: "/process-cards/01-whatsapp-booking-doctor.webp",
+    aspect: "portrait",
+    title: "Doctor & Clinic WhatsApp Booking",
+    glow: "rgba(46, 227, 142, 0.4)",
+  },
+  {
+    id: 2,
+    image: "/process-cards/02-ai-sales-agent.webp",
+    aspect: "landscape",
+    title: "AI Sales & Lead Qualification Agent",
+    glow: "rgba(234, 88, 59, 0.4)",
+  },
+  {
+    id: 3,
+    image: "/process-cards/04-business-automation.webp",
+    aspect: "portrait",
+    title: "End-to-End Business Workflows",
+    glow: "rgba(56, 189, 248, 0.4)",
+  },
+  {
+    id: 4,
+    image: "/process-cards/03-crm-and-sales.webp",
+    aspect: "landscape",
+    title: "Automated CRM & Deals Pipeline",
+    glow: "rgba(245, 158, 11, 0.4)",
+  },
+  {
+    id: 5,
+    image: "/process-cards/06-social-automation.webp",
+    aspect: "portrait",
+    title: "Instagram, WhatsApp & Social Channels",
+    glow: "rgba(236, 72, 153, 0.4)",
+  },
+  {
+    id: 6,
+    image: "/process-cards/08-ai-customer-support-agent.webp",
+    aspect: "landscape",
+    title: "Custom AI Trained on Business Data",
+    glow: "rgba(99, 102, 241, 0.4)",
+  },
+  {
+    id: 7,
+    image: "/process-cards/07-automated-follow-ups.webp",
+    aspect: "portrait",
+    title: "Automated Retargeting & Reminders",
+    glow: "rgba(16, 185, 129, 0.4)",
+  },
+];
 
 export default function Process() {
-  const [activeStep, setActiveStep] = useState(0);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const [animProgress, setAnimProgress] = useState(0);
+  const targetProgressRef = useRef(0);
+  const animProgressRef = useRef(0);
+  const [isMobile, setIsMobile] = useState(false);
 
-  // Pinned scroll listener
+  const totalSteps = visualCards.length;
+
+  // Preload all 8 card images into browser cache on mount
   useEffect(() => {
-    const handleScroll = () => {
+    visualCards.forEach((card) => {
+      const img = new Image();
+      img.src = card.image;
+    });
+  }, []);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  /* ─── Track scroll position and set target step progress (0 to totalSteps - 1) ─── */
+  useEffect(() => {
+    const onScroll = () => {
       if (!sectionRef.current) return;
       const rect = sectionRef.current.getBoundingClientRect();
       const totalScrollable = rect.height - window.innerHeight;
-      
-      // If we are within the scrollable pinned track
-      if (rect.top <= 0 && -rect.top <= totalScrollable) {
-        const progress = Math.min(Math.max(-rect.top / totalScrollable, 0), 0.999);
-        const stepIndex = Math.floor(progress * processSteps.length);
-        setActiveStep(stepIndex);
-      } else if (rect.top > 0) {
-        setActiveStep(0);
-      } else if (-rect.top > totalScrollable) {
-        setActiveStep(processSteps.length - 1);
-      }
+      if (totalScrollable <= 0) return;
+
+      const scrolled = -rect.top;
+      const progress = Math.max(0, Math.min(1, scrolled / totalScrollable));
+      targetProgressRef.current = progress * (totalSteps - 1);
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [totalSteps]);
 
-  const scrollToStep = (index: number) => {
-    setActiveStep(index);
-    if (!sectionRef.current) return;
-    const sectionTop = sectionRef.current.getBoundingClientRect().top + window.scrollY;
-    const totalScrollable = sectionRef.current.offsetHeight - window.innerHeight;
-    const targetScroll = sectionTop + (index / processSteps.length) * totalScrollable + 40;
-    window.scrollTo({ top: targetScroll, behavior: "smooth" });
-  };
+  /* ─── Damped Lerp Animation Loop: User kitna bhi tez scroll kare, aram se glide karega ─── */
+  useEffect(() => {
+    let animId: number;
 
-  const currentStep = processSteps[activeStep] || processSteps[0];
+    const tick = () => {
+      const target = targetProgressRef.current;
+      const current = animProgressRef.current;
+      const diff = target - current;
 
-  // Visual cards data corresponding to the 6 steps
-  const visualCards = [
-    {
-      badge: "01 / WORKFLOW AUDIT",
-      title: "Analyzing Manual Tasks",
-      icon: Activity,
-      accent: "text-amber-400",
-      bgGlow: "from-amber-500/10 to-transparent",
-      items: [
-        { label: "Copying numbers to Excel", val: "4.2 hrs / day lost", warn: true },
-        { label: "Repetitive WhatsApp replies", val: "120+ chats daily", warn: true },
-        { label: "Automation potential", val: "85% manual time saved", check: true },
-      ],
-      tag: "Audit summary ready",
-    },
-    {
-      badge: "02 / SCOPE & BLUEPRINT",
-      title: "Agreed Action Plan",
-      icon: FileText,
-      accent: "text-emerald-400",
-      bgGlow: "from-emerald-500/10 to-transparent",
-      items: [
-        { label: "Deliverable", val: "WhatsApp AI Bot + Google Sheets CRM", check: true },
-        { label: "Timeline", val: "7 working days to launch", check: true },
-        { label: "Cost", val: "Fixed upfront • ₹0 surprise fees", check: true },
-      ],
-      tag: "Written plan and cost",
-    },
-    {
-      badge: "03 / LIVE BUILD",
-      title: "Custom AI & Tool Integration",
-      icon: Code2,
-      accent: "text-sky-400",
-      bgGlow: "from-sky-500/10 to-transparent",
-      items: [
-        { label: "WhatsApp Webhook", val: "Connected & Verified", check: true },
-        { label: "Lead Pipeline", val: "Syncing instantly to CRM", check: true },
-        { label: "Response Latency", val: "< 1.5 seconds", check: true },
-      ],
-      tag: "Working demo ready",
-    },
-    {
-      badge: "04 / REAL-WORLD TEST",
-      title: "Edge Cases & Fail-Safes",
-      icon: CheckCircle2,
-      accent: "text-emerald-400",
-      bgGlow: "from-emerald-500/10 to-transparent",
-      items: [
-        { label: "Pricing & Booking Tests", val: "Passed (100%)", check: true },
-        { label: "Off-Hours Response", val: "Passed (100%)", check: true },
-        { label: "Human Takeover Trigger", val: "Passed (100%)", check: true },
-      ],
-      tag: "Tested tool verified",
-    },
-    {
-      badge: "05 / GO LIVE",
-      title: "Production Deployment",
-      icon: Rocket,
-      accent: "text-purple-400",
-      bgGlow: "from-purple-500/10 to-transparent",
-      items: [
-        { label: "System Status", val: "🟢 LIVE in Production", check: true },
-        { label: "Team Training", val: "Video walkthrough provided", check: true },
-        { label: "Ownership", val: "100% yours, zero lock-in", check: true },
-      ],
-      tag: "Guides & handover complete",
-    },
-    {
-      badge: "06 / ONGOING SUPPORT",
-      title: "Optional Care & Upgrades",
-      icon: Headphones,
-      accent: "text-teal-400",
-      bgGlow: "from-teal-500/10 to-transparent",
-      items: [
-        { label: "Uptime Health", val: "99.98% monitored", check: true },
-        { label: "Support Channel", val: "Direct WhatsApp / Slack group", check: true },
-        { label: "Future Changes", val: "Available upon written request", check: true },
-      ],
-      tag: "Ongoing help (optional)",
-    },
-  ];
+      if (Math.abs(diff) > 0.0005) {
+        // Controlled speed clamp: Prevents fast scroll skipping!
+        // Moves at a steady, majestic, luxurious pace no matter how violently the user scrolls
+        const maxDeltaPerFrame = isMobile ? 0.038 : 0.032;
+        const delta = Math.sign(diff) * Math.min(Math.abs(diff * 0.085), maxDeltaPerFrame);
+        const nextVal = current + delta;
+        animProgressRef.current = nextVal;
+        setAnimProgress(nextVal);
+      }
 
-  const currentVisual = visualCards[activeStep] || visualCards[0];
-  const IconComponent = currentVisual.icon;
+      animId = requestAnimationFrame(tick);
+    };
+
+    animId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(animId);
+  }, [isMobile]);
 
   return (
     <section
       id="how-we-work"
-      aria-labelledby="process-title"
+      aria-label="How We Work"
       ref={sectionRef}
-      className="relative w-full border-y border-[#E8E2D5] bg-[#FAF7E8] text-[#141413] lg:min-h-[320vh]"
+      className="relative w-full border-y border-[#1E2321] bg-[#0C0E0D] text-white selection:bg-[#E05A47]/30"
+      style={{ minHeight: isMobile ? `${totalSteps * 65}vh` : `${totalSteps * 80}vh` }}
     >
-      {/* Background Subtle Swirl Accent (Wispr Flow style) */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden opacity-40">
-        <svg
-          className="absolute -top-32 left-1/2 -translate-x-1/2 w-[1200px] h-[900px] stroke-[#E6DEC9] fill-none"
-          viewBox="0 0 1200 900"
-        >
-          <path
-            d="M -100 200 C 400 50 800 350 1300 200 C 800 650 400 450 -100 800"
-            strokeWidth="1.5"
-            strokeDasharray="4 4"
-          />
+      {/* Top & Bottom overscroll shields: Prevents any white/beige body background flash during fast mobile momentum flings */}
+      <div className="absolute -top-36 inset-x-0 h-40 bg-[#0C0E0D] pointer-events-none z-0" />
+      <div className="absolute -bottom-36 inset-x-0 h-40 bg-[#0C0E0D] pointer-events-none z-0" />
+
+      {/* Subtle ambient background glow & diagonal runway line */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden opacity-35">
+        <div
+          className="absolute -top-40 left-1/2 -translate-x-1/2 w-[900px] h-[550px] rounded-full blur-[140px]"
+          style={{
+            background: "radial-gradient(ellipse at center, rgba(37,211,102,0.1) 0%, rgba(234,88,59,0.08) 50%, transparent 80%)",
+          }}
+        />
+        {/* Subtle diagonal trajectory line */}
+        <svg className="absolute inset-0 w-full h-full stroke-white/[0.04] fill-none" preserveAspectRatio="none">
+          <line x1="10%" y1="90%" x2="90%" y2="10%" strokeWidth="1.5" strokeDasharray="6 6" />
         </svg>
       </div>
 
-      {/* Section Header: Placed above sticky track with clean scroll margin so it never clips */}
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-12 w-full pt-14 sm:pt-20 pb-6 sm:pb-8 text-center z-10 scroll-mt-28">
-        <div className="inline-block font-headline text-[11px] sm:text-xs font-bold uppercase tracking-[0.24em] text-[#7A756D] mb-2.5">
-          02 // HOW WE WORK
-        </div>
-        <h2
-          id="process-title"
-          className="font-serif text-3xl sm:text-4xl md:text-5xl font-medium tracking-tight text-[#141413] leading-[1.12]"
+      {/* ═══════ STICKY PINNED VIEWPORT (100% Focused on Cards, Wispr Flow Exact) ═══════ */}
+      <div
+        className="sticky -top-12 sm:top-0 w-full h-[calc(100dvh+48px)] sm:h-screen flex items-center justify-center z-10 overflow-hidden bg-[#0C0E0D]"
+        style={{
+          WebkitBackfaceVisibility: "hidden",
+          backfaceVisibility: "hidden",
+          transform: "translate3d(0, 0, 0)",
+          willChange: "transform",
+        }}
+      >
+        {/* ─── 3D Card Stage with Diagonal Runway ─── */}
+        <div
+          className="relative w-full h-full flex items-center justify-center overflow-visible px-4"
+          style={{ perspective: "1500px", perspectiveOrigin: "50% 50%" }}
         >
-          Simple steps, <span className="italic font-normal">clear execution.</span>
-        </h2>
-      </div>
+          {visualCards.map((card, idx) => {
+            const cardStyle = getCardDynamicStyle(idx, animProgress, isMobile);
 
-      {/* Pinned Sticky Viewport Container */}
-      <div className="relative lg:sticky lg:top-24 lg:min-h-[calc(100vh-7rem)] w-full flex flex-col justify-center py-6 sm:py-8 lg:py-4 z-10">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-12 w-full">
-
-          {/* Mobile / Tablet Horizontal Scrollable Step Chips */}
-          <div className="lg:hidden flex items-center gap-2 overflow-x-auto pb-4 mb-6 no-scrollbar">
-            {processSteps.map((step, idx) => (
-              <button
-                key={step.phase}
-                onClick={() => setActiveStep(idx)}
-                className={`shrink-0 px-4 py-2 rounded-full font-headline text-xs font-semibold transition-all ${
-                  activeStep === idx
-                    ? "bg-[#141413] text-white shadow-sm"
-                    : "bg-[#EFE9DB] text-[#55524E] hover:bg-[#E5DDCB]"
-                }`}
+            return (
+              <div
+                key={card.id}
+                className="absolute inset-0 flex items-center justify-center pointer-events-none"
               >
-                0{idx + 1}. {step.phase}
-              </button>
-            ))}
-          </div>
-
-          {/* Main 3-Column Wispr Flow Style Pinned Layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-            
-            {/* 1. Left Column: Vertical Step Tabs with Vertical Indicator (Wispr style) */}
-            <div className="hidden lg:flex lg:col-span-3 flex-col gap-6 pl-4 border-l-2 border-[#E5DDCB]">
-              {processSteps.map((step, idx) => {
-                const isActive = activeStep === idx;
-                return (
-                  <button
-                    key={step.phase}
-                    onClick={() => scrollToStep(idx)}
-                    className="relative flex items-center gap-3 text-left group cursor-pointer transition-all select-none -ml-[18px]"
+                <div
+                  className="pointer-events-auto relative select-none"
+                  style={{
+                    transformStyle: "preserve-3d",
+                    backfaceVisibility: "hidden",
+                    WebkitBackfaceVisibility: "hidden",
+                    willChange: "transform, opacity",
+                    ...cardStyle,
+                  }}
+                >
+                  <div
+                    className="relative rounded-[24px] sm:rounded-[34px] overflow-hidden transition-all duration-300"
+                    style={{
+                      boxShadow: `
+                        0 28px 70px -15px rgba(0, 0, 0, 0.88),
+                        0 12px 28px -8px rgba(0, 0, 0, 0.65),
+                        0 0 60px -12px ${card.glow}
+                      `,
+                    }}
                   >
-                    {/* Vertical Active Pill Marker */}
-                    <span
-                      className={`h-7 w-1 rounded-full transition-all duration-300 ${
-                        isActive
-                          ? "bg-[#E05A47] scale-y-100 shadow-[0_0_8px_rgba(224,90,71,0.5)]"
-                          : "bg-transparent scale-y-50 group-hover:bg-[#141413]/20"
+                    <img
+                      src={card.image}
+                      alt={card.title}
+                      loading="eager"
+                      decoding="async"
+                      draggable={false}
+                      className={`block object-contain rounded-[24px] sm:rounded-[34px] ${
+                        card.aspect === "landscape"
+                          ? "w-[min(560px,92vw)] sm:w-[580px] md:w-[660px] max-h-[58vh] sm:max-h-[64vh]"
+                          : "w-[min(420px,82vw)] sm:w-[440px] md:w-[480px] max-h-[66vh] sm:max-h-[72vh]"
                       }`}
                     />
-                    <div className="flex flex-col">
-                      <span
-                        className={`font-serif text-xl lg:text-2xl transition-all duration-200 ${
-                          isActive
-                            ? "text-[#141413] font-semibold translate-x-1"
-                            : "text-[#8A8A86] hover:text-[#141413]"
-                        }`}
-                      >
-                        {step.phase}
-                      </span>
-                      {isActive && (
-                        <span className="font-mono text-[10px] uppercase tracking-wider text-[#E05A47] font-semibold mt-0.5">
-                          Step 0{idx + 1}
-                        </span>
-                      )}
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* 2. Center Column: Large Rounded Visual Mockup Card (Wispr style) */}
-            <div className="lg:col-span-5 flex justify-center">
-              <div className="relative w-full max-w-[390px] max-h-[450px] aspect-[4/5] rounded-[32px] sm:rounded-[38px] bg-[#0E1513] text-white p-5 sm:p-7 flex flex-col justify-between overflow-hidden shadow-2xl border border-white/10 transition-all duration-300">
-                
-                {/* Background Ambient Glow */}
-                <div
-                  className={`absolute inset-0 bg-gradient-to-b ${currentVisual.bgGlow} pointer-events-none transition-all duration-500`}
-                />
-
-                {/* Top Bar inside Visual Card */}
-                <div className="relative z-10 flex items-center justify-between pb-4 border-b border-white/10">
-                  <div className="flex items-center gap-2">
-                    <div className="h-8 w-8 rounded-xl bg-white/10 flex items-center justify-center text-white">
-                      <IconComponent size={16} className={currentVisual.accent} />
-                    </div>
-                    <div>
-                      <span className="font-mono text-[10px] uppercase tracking-widest text-white/50 block">
-                        {currentVisual.badge}
-                      </span>
-                      <span className="font-headline text-xs font-semibold text-white">
-                        {currentVisual.title}
-                      </span>
-                    </div>
                   </div>
-                  <span className="font-mono text-[10px] text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">
-                    Active
-                  </span>
                 </div>
-
-                {/* Middle Content List inside Visual Card */}
-                <div className="relative z-10 space-y-3 my-auto py-4">
-                  {currentVisual.items.map((item, i) => (
-                    <div
-                      key={i}
-                      className="rounded-2xl bg-white/5 border border-white/10 p-3.5 flex items-center justify-between gap-3 shadow-xs hover:bg-white/[0.08] transition-colors"
-                    >
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        {item.warn ? (
-                          <span className="text-amber-400 text-xs shrink-0">⚠️</span>
-                        ) : (
-                          <CheckCircle2 size={14} className="text-emerald-400 shrink-0" />
-                        )}
-                        <span className="font-body text-xs sm:text-[13px] text-white/90 truncate">
-                          {item.label}
-                        </span>
-                      </div>
-                      <span
-                        className={`font-mono text-[11px] font-semibold shrink-0 ${
-                          item.warn ? "text-amber-300" : "text-emerald-300"
-                        }`}
-                      >
-                        {item.val}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Bottom Footer inside Visual Card */}
-                <div className="relative z-10 pt-4 border-t border-white/10 flex items-center justify-between text-xs">
-                  <div className="flex items-center gap-2 text-white/60 font-body text-[11.5px]">
-                    <Sparkles size={13} className="text-amber-400" />
-                    <span>Deliverable verified</span>
-                  </div>
-                  <span className="font-mono text-[11px] text-white/80 bg-white/10 px-2.5 py-1 rounded-lg border border-white/10">
-                    {currentStep.output}
-                  </span>
-                </div>
-
               </div>
-            </div>
-
-            {/* 3. Right Column: Step Title, Description & Deliverable Badge (Wispr style) */}
-            <div className="lg:col-span-4 flex flex-col justify-center gap-4 text-left">
-              <div className="inline-flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-[0.2em] text-[#E05A47]">
-                <span>STEP 0{activeStep + 1}</span>
-                <span className="text-[#141413]/30">/</span>
-                <span>06</span>
-              </div>
-
-              <h3 className="font-serif text-2xl sm:text-3xl md:text-4xl text-[#141413] font-medium leading-[1.18] tracking-tight">
-                {currentStep.title}
-              </h3>
-
-              <p className="font-body text-base sm:text-[17px] text-[#55524E] leading-relaxed">
-                {currentStep.body}
-              </p>
-
-              {/* Deliverable Badge */}
-              <div className="mt-2 inline-flex items-center gap-2.5 rounded-xl bg-[#EFE9DB] border border-[#DDD5C5] px-4 py-2.5 self-start shadow-xs">
-                <span className="h-2 w-2 rounded-full bg-emerald-600 animate-pulse" />
-                <span className="font-headline text-xs font-bold text-[#141413]">
-                  Deliverable:{" "}
-                  <span className="font-normal text-[#55524E]">{currentStep.output}</span>
-                </span>
-              </div>
-
-              {/* Progress Indicator Dots */}
-              <div className="flex items-center gap-1.5 mt-4 pt-4 border-t border-[#E8E2D5]">
-                {processSteps.map((_, dotIdx) => (
-                  <button
-                    key={dotIdx}
-                    onClick={() => scrollToStep(dotIdx)}
-                    aria-label={`Go to step ${dotIdx + 1}`}
-                    className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
-                      activeStep === dotIdx
-                        ? "w-8 bg-[#141413]"
-                        : "w-2 bg-[#141413]/20 hover:bg-[#141413]/40"
-                    }`}
-                  />
-                ))}
-              </div>
-            </div>
-
-          </div>
-
-          {/* Bottom Trust Guarantee Banner */}
-          <div className="mt-10 sm:mt-12 pt-5 border-t border-[#E8E2D5] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-headline text-[#7A756D]">
-            <div className="flex items-center gap-2">
-              <ShieldCheck size={16} className="text-emerald-700 shrink-0" />
-              <span>Scope &amp; cost agreed in writing upfront</span>
-            </div>
-            <span className="font-mono text-[11px] text-[#55524E]">
-              Zero surprise fees • 100% code ownership
-            </span>
-          </div>
-
+            );
+          })}
         </div>
       </div>
     </section>
   );
+}
+
+/* ════════════════════════════════════════════════
+   Continuous 3D Diagonal Runway Tilt Calculator:
+   - Aate time (incoming from bottom-left): Aage ka tilt (rotateX +20deg, leaning forward towards user)
+   - Screen centre mein: 100% straight and flat (rotateX 0deg, rotateY 0deg, scale 1)
+   - Jaate time (departing to top-right): Piche ka tilt (rotateX -20deg, leaning backward into distance)
+   ════════════════════════════════════════════════ */
+function getCardDynamicStyle(idx: number, animProgress: number, isMobile: boolean): React.CSSProperties {
+  const offset = idx - animProgress;
+
+  // ─── 1. ACTIVE CARD IN SCREEN CENTER: Straight, flat, crisp, 100% sharp ───
+  if (Math.abs(offset) < 0.005) {
+    return {
+      transform: "translate3d(0px, 0px, 0px) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1)",
+      opacity: 1,
+      zIndex: 35,
+      filter: "brightness(1)",
+      pointerEvents: "auto",
+    };
+  }
+
+  // ─── 2. INCOMING CARDS (offset > 0): Arriving from BOTTOM-LEFT ───
+  // Aate time: Aage ka tilt (top edge leans forward towards viewer!)
+  if (offset > 0) {
+    const clamped = Math.min(offset, 1.35);
+    const xDist = isMobile ? 260 : 600;
+    const yDist = isMobile ? 180 : 180;
+
+    const x = -clamped * xDist;
+    const y = clamped * yDist;
+    const z = -clamped * 140;
+
+    // Aage ka tilt: rotateX +20deg tilted forward, rotateY -14deg, rotateZ -6deg
+    const rx = clamped * 20;
+    const ry = -clamped * 14;
+    const rz = -clamped * 6;
+    const scale = 1 - clamped * 0.22;
+
+    let opacity = 0;
+    if (isMobile) {
+      // Mobile: smoothly fades in as it approaches center
+      opacity = Math.max(0, 1 - clamped * 1.5);
+    } else {
+      // Desktop: visible waiting in the bottom-left with generous Wispr Flow gap
+      if (clamped <= 1.05) {
+        opacity = Math.max(0, 0.95 - (clamped - 0.7) * 1.6);
+      } else {
+        opacity = 0;
+      }
+    }
+
+    const zIndex = Math.round(30 - clamped * 10);
+
+    return {
+      transform: `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, ${z.toFixed(1)}px) rotateX(${rx.toFixed(1)}deg) rotateY(${ry.toFixed(1)}deg) rotateZ(${rz.toFixed(1)}deg) scale(${scale.toFixed(3)})`,
+      opacity: Number(opacity.toFixed(2)),
+      zIndex,
+      filter: `brightness(${(1 - clamped * 0.25).toFixed(2)})`,
+      pointerEvents: "none",
+    };
+  }
+
+  // ─── 3. DEPARTING CARDS (offset < 0): Exiting to TOP-RIGHT ───
+  // Jaate time: Piche ka tilt (top edge leans backward into distance!)
+  const absOffset = Math.min(-offset, 1.35);
+  const xDist = isMobile ? 260 : 600;
+  const yDist = isMobile ? 180 : 180;
+
+  const x = absOffset * xDist;
+  const y = -absOffset * yDist;
+  const z = -absOffset * 140;
+
+  // Piche ka tilt: rotateX -20deg tilted backward into distance, rotateY +14deg, rotateZ +6deg
+  const rx = -absOffset * 20;
+  const ry = absOffset * 14;
+  const rz = absOffset * 6;
+  const scale = 1 - absOffset * 0.22;
+
+  let opacity = 0;
+  if (isMobile) {
+    opacity = Math.max(0, 1 - absOffset * 1.5);
+  } else {
+    if (absOffset <= 1.05) {
+      opacity = Math.max(0, 0.92 - (absOffset - 0.7) * 1.6);
+    } else {
+      opacity = 0;
+    }
+  }
+
+  const zIndex = Math.round(30 - absOffset * 10);
+
+  return {
+    transform: `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, ${z.toFixed(1)}px) rotateX(${rx.toFixed(1)}deg) rotateY(${ry.toFixed(1)}deg) rotateZ(${rz.toFixed(1)}deg) scale(${scale.toFixed(3)})`,
+    opacity: Number(opacity.toFixed(2)),
+    zIndex,
+    filter: `brightness(${(1 - absOffset * 0.25).toFixed(2)})`,
+    pointerEvents: "none",
+  };
 }

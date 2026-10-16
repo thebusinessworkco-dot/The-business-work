@@ -50,6 +50,17 @@ export default function Header() {
         setOpen(false);
       }
 
+      // If user is inside the 3D card section (#how-we-work) on mobile, keep header hidden so cards have 100% full immersion
+      const howWeWorkEl = document.getElementById("how-we-work");
+      if (howWeWorkEl && window.innerWidth < 768) {
+        const rect = howWeWorkEl.getBoundingClientRect();
+        if (rect.top <= 20 && rect.bottom >= window.innerHeight - 20) {
+          setVisible(false);
+          lastScrollY.current = currentScrollY;
+          return;
+        }
+      }
+
       if (currentScrollY <= 30) {
         setVisible(true);
       } else if (currentScrollY > lastScrollY.current && currentScrollY > 80) {
