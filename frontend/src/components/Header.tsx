@@ -42,38 +42,51 @@ export default function Header() {
   }, [open]);
 
   useEffect(() => {
+    let rAFId = 0;
+    let ticking = false;
+
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      const scrollDiff = Math.abs(currentScrollY - lastScrollY.current);
+      if (!ticking) {
+        ticking = true;
+        rAFId = requestAnimationFrame(() => {
+          const currentScrollY = window.scrollY;
+          const scrollDiff = Math.abs(currentScrollY - lastScrollY.current);
 
-      if (open && scrollDiff > 5) {
-        setOpen(false);
-      }
+          if (open && scrollDiff > 5) {
+            setOpen(false);
+          }
 
-      // If user is inside the 3D card section (#how-we-work) on mobile, keep header hidden so cards have 100% full immersion
-      const howWeWorkEl = document.getElementById("how-we-work");
-      if (howWeWorkEl && window.innerWidth < 768) {
-        const rect = howWeWorkEl.getBoundingClientRect();
-        if (rect.top <= 20 && rect.bottom >= window.innerHeight - 20) {
-          setVisible(false);
+          // If user is inside the 3D card section (#how-we-work) on mobile, keep header hidden so cards have 100% full immersion
+          const howWeWorkEl = document.getElementById("how-we-work");
+          if (howWeWorkEl && window.innerWidth < 768) {
+            const rect = howWeWorkEl.getBoundingClientRect();
+            if (rect.top <= 20 && rect.bottom >= window.innerHeight - 20) {
+              setVisible(false);
+              lastScrollY.current = currentScrollY;
+              ticking = false;
+              return;
+            }
+          }
+
+          if (currentScrollY <= 30) {
+            setVisible(true);
+          } else if (currentScrollY > lastScrollY.current && currentScrollY > 80) {
+            setVisible(false);
+          } else if (currentScrollY < lastScrollY.current) {
+            setVisible(true);
+          }
+
           lastScrollY.current = currentScrollY;
-          return;
-        }
+          ticking = false;
+        });
       }
-
-      if (currentScrollY <= 30) {
-        setVisible(true);
-      } else if (currentScrollY > lastScrollY.current && currentScrollY > 80) {
-        setVisible(false);
-      } else if (currentScrollY < lastScrollY.current) {
-        setVisible(true);
-      }
-
-      lastScrollY.current = currentScrollY;
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (rAFId) cancelAnimationFrame(rAFId);
+    };
   }, [open]);
 
   useEffect(() => {

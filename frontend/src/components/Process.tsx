@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 
 /* ════════════════════════════════════════════════
    7 High-Fidelity WebP Cards (Alternating P-L-P-L-P-L-P)
@@ -67,14 +68,6 @@ export default function Process() {
 
   const totalSteps = visualCards.length;
 
-  // Preload all 8 card images into browser cache on mount
-  useEffect(() => {
-    visualCards.forEach((card) => {
-      const img = new Image();
-      img.src = card.image;
-    });
-  }, []);
-
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 640);
@@ -86,20 +79,33 @@ export default function Process() {
 
   /* ─── Track scroll position and set target step progress (0 to totalSteps - 1) ─── */
   useEffect(() => {
-    const onScroll = () => {
-      if (!sectionRef.current) return;
-      const rect = sectionRef.current.getBoundingClientRect();
-      const totalScrollable = rect.height - window.innerHeight;
-      if (totalScrollable <= 0) return;
+    let rAFId = 0;
+    let ticking = false;
 
-      const scrolled = -rect.top;
-      const progress = Math.max(0, Math.min(1, scrolled / totalScrollable));
-      targetProgressRef.current = progress * (totalSteps - 1);
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        rAFId = requestAnimationFrame(() => {
+          if (sectionRef.current) {
+            const rect = sectionRef.current.getBoundingClientRect();
+            const totalScrollable = rect.height - window.innerHeight;
+            if (totalScrollable > 0) {
+              const scrolled = -rect.top;
+              const progress = Math.max(0, Math.min(1, scrolled / totalScrollable));
+              targetProgressRef.current = progress * (totalSteps - 1);
+            }
+          }
+          ticking = false;
+        });
+      }
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (rAFId) cancelAnimationFrame(rAFId);
+    };
   }, [totalSteps]);
 
   /* ─── Damped Lerp Animation Loop: User kitna bhi tez scroll kare, aram se glide karega ─── */
@@ -193,13 +199,16 @@ export default function Process() {
                       `,
                     }}
                   >
-                    <img
+                    <Image
                       src={card.image}
                       alt={card.title}
-                      loading="eager"
-                      decoding="async"
+                      width={card.aspect === "landscape" ? 1592 : 1200}
+                      height={card.aspect === "landscape" ? 990 : 1313}
+                      priority={idx === 0}
+                      loading={idx === 0 ? "eager" : "lazy"}
                       draggable={false}
-                      className={`block object-contain rounded-[24px] sm:rounded-[34px] ${
+                      sizes="(max-width: 640px) 92vw, (max-width: 1024px) 660px, 660px"
+                      className={`block object-contain rounded-[24px] sm:rounded-[34px] w-auto h-auto ${
                         card.aspect === "landscape"
                           ? "w-[min(560px,92vw)] sm:w-[580px] md:w-[660px] max-h-[58vh] sm:max-h-[64vh]"
                           : "w-[min(420px,82vw)] sm:w-[440px] md:w-[480px] max-h-[66vh] sm:max-h-[72vh]"
