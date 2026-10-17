@@ -37,7 +37,7 @@ const allowIndexing = isIndexingAllowed();
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "The Business Work | AI & WhatsApp Tools for Business",
+    default: "The Business Work | AI & Business Automation",
     template: "%s | The Business Work",
   },
   description: site.description,
@@ -45,6 +45,8 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: site.name,
+    title: "The Business Work | AI & Business Automation",
+    description: site.description,
     locale: "en_IN",
     url: siteUrl,
     images: [
@@ -52,12 +54,14 @@ export const metadata: Metadata = {
         url: `${siteUrl}/opengraph-image`,
         width: 1200,
         height: 630,
-        alt: "The Business Work — AI Automation & Digital Systems",
+        alt: "The Business Work - AI & Business Automation",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
+    title: "The Business Work | AI & Business Automation",
+    description: site.description,
     images: [`${siteUrl}/opengraph-image`],
   },
   icons: {

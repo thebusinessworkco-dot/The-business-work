@@ -20,7 +20,24 @@ export function generateMetadata(): Metadata {
       description:
         "Review the terms governing access to The Business Work website and digital service enquiries.",
       url: `${siteUrl}/terms`,
+      siteName: site.name,
+      locale: "en_IN",
       type: "website",
+      images: [
+        {
+          url: `${siteUrl}/opengraph-image`,
+          width: 1200,
+          height: 630,
+          alt: "Terms of Service — The Business Work",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Terms of Service | The Business Work",
+      description:
+        "Review the terms governing access to The Business Work website and digital service enquiries.",
+      images: [`${siteUrl}/opengraph-image`],
     },
     robots,
   };

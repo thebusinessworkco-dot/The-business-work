@@ -7,6 +7,7 @@ import Services from "@/components/Services";
 import Process from "@/components/Process";
 import Industries from "@/components/Industries";
 import Principles from "@/components/Principles";
+import BlockerScrollAnimation from "@/components/BlockerScrollAnimation";
 import Founder from "@/components/Founder";
 import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
@@ -17,15 +18,36 @@ import { services } from "@/content/services";
 
 export const metadata: Metadata = {
   title: {
-    absolute: "The Business Work | AI Automation & WhatsApp Tools for Business",
+    absolute: "The Business Work | AI & Business Automation",
   },
-  description: site.description,
+  description:
+    "Simplify customer enquiries, follow-ups and daily work with AI agents, WhatsApp automation and connected business systems.",
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "The Business Work | AI Automation & WhatsApp Tools for Business",
-    description: site.description,
+    title: "The Business Work | AI & Business Automation",
+    description:
+      "Simplify customer enquiries, follow-ups and daily work with AI agents, WhatsApp automation and connected business systems.",
+    url: "https://www.thebusinesswork.com",
+    siteName: site.name,
+    locale: "en_IN",
+    type: "website",
+    images: [
+      {
+        url: "https://www.thebusinesswork.com/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "The Business Work - AI & Business Automation",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "The Business Work | AI & Business Automation",
+    description:
+      "Simplify customer enquiries, follow-ups and daily work with AI agents, WhatsApp automation and connected business systems.",
+    images: ["https://www.thebusinesswork.com/opengraph-image"],
   },
 };
 
@@ -55,6 +77,7 @@ export default function Home() {
         <Process />
         <Industries />
         <Principles />
+        <BlockerScrollAnimation />
         <Founder />
         <CTA />
       </main>

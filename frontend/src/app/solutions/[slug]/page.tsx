@@ -35,6 +35,8 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
       title: `${title} | ${site.name}`,
       description,
       url: canonicalUrl,
+      siteName: site.name,
+      locale: "en_IN",
       type: "website",
       images: [
         {

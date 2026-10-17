@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { MessageCircle, Instagram, Sparkles } from "lucide-react";
 import { site, whatsappLink } from "@/lib/site";
 import { useContactModal } from "./ContactModal";
@@ -105,23 +106,21 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 p-2 sm:p-4 pointer-events-none transition-transform duration-300 ease-in-out flex justify-center ${
-        isVisible ? "translate-y-0" : "-translate-y-full"
-      }`}
+      className={`fixed inset-x-0 top-0 z-50 p-2 sm:p-4 pointer-events-none transition-transform duration-300 ease-in-out flex justify-center ${isVisible ? "translate-y-0" : "-translate-y-full"
+        }`}
     >
       <div className="w-full max-w-5xl pointer-events-auto rounded-[22px] sm:rounded-full border border-[#DDD6C5] bg-white/95 backdrop-blur-md px-3 sm:px-7 h-12 sm:h-14 flex items-center justify-between shadow-[0_2px_14px_rgba(0,0,0,0.04)]">
-        
-        {/* Left: Brand Logo (Always visible and never truncated) */}
-        <Link href="/" aria-label="The Business Work, home" className="shrink-0 flex items-center gap-2 sm:gap-2.5 group">
-          <span className="flex items-end gap-0.5 h-3.5 sm:h-4 px-0.5" aria-hidden="true">
-            <span className="w-[2px] sm:w-[2.5px] h-2 sm:h-2.5 bg-[#141413] rounded-full" />
-            <span className="w-[2px] sm:w-[2.5px] h-3.5 sm:h-4.5 bg-[#141413] rounded-full" />
-            <span className="w-[2px] sm:w-[2.5px] h-1.5 sm:h-2 bg-[#141413] rounded-full" />
-            <span className="w-[2px] sm:w-[2.5px] h-2.5 sm:h-3.5 bg-[#141413] rounded-full" />
-          </span>
-          <span className="font-headline font-bold text-[13px] sm:text-[15px] tracking-tight text-[#141413] whitespace-nowrap">
-            The Business Work
-          </span>
+
+        {/* Left: Brand Logo (Single One-line Slab Serif) */}
+        <Link href="/" aria-label="The Business Work, home" className="shrink-0 flex items-center group py-1">
+          <Image
+            src="/thebusinesswork_svg/06-slab-serif-one-line-black.svg"
+            alt="The Business Work"
+            width={2618}
+            height={280}
+            priority
+            className="h-[18px] w-auto object-contain transition-opacity group-hover:opacity-80"
+          />
         </Link>
 
         {/* Center Navigation Links: Clean, spacious, only what's useful */}
@@ -171,19 +170,16 @@ export default function Header() {
           >
             <div className="flex h-3 w-3.5 sm:w-4 flex-col justify-between" aria-hidden="true">
               <span
-                className={`h-[1.5px] w-3.5 sm:w-4 rounded-full bg-[#141413] transition-all duration-300 ease-in-out ${
-                  open ? "translate-y-[5px] rotate-45" : ""
-                }`}
+                className={`h-[1.5px] w-3.5 sm:w-4 rounded-full bg-[#141413] transition-all duration-300 ease-in-out ${open ? "translate-y-[5px] rotate-45" : ""
+                  }`}
               />
               <span
-                className={`h-[1.5px] w-3.5 sm:w-4 rounded-full bg-[#141413] transition-all duration-300 ease-in-out ${
-                  open ? "opacity-0" : ""
-                }`}
+                className={`h-[1.5px] w-3.5 sm:w-4 rounded-full bg-[#141413] transition-all duration-300 ease-in-out ${open ? "opacity-0" : ""
+                  }`}
               />
               <span
-                className={`h-[1.5px] w-3.5 sm:w-4 rounded-full bg-[#141413] transition-all duration-300 ease-in-out ${
-                  open ? "-translate-y-[5px] -rotate-45" : ""
-                }`}
+                className={`h-[1.5px] w-3.5 sm:w-4 rounded-full bg-[#141413] transition-all duration-300 ease-in-out ${open ? "-translate-y-[5px] -rotate-45" : ""
+                  }`}
               />
             </div>
           </button>
@@ -196,9 +192,8 @@ export default function Header() {
         ref={mobileNavRef}
         aria-hidden={!open}
         inert={!open ? true : undefined}
-        className={`fixed top-14 inset-x-2.5 sm:inset-x-4 max-w-4xl mx-auto pointer-events-auto rounded-2xl border border-[#D6D0C4] bg-[#FAF7E8] shadow-xl overflow-hidden transition-[grid-template-rows,opacity] duration-300 ease-in-out md:hidden ${
-          open ? "grid grid-rows-[1fr] opacity-100" : "grid grid-rows-[0fr] opacity-0 pointer-events-none"
-        }`}
+        className={`fixed top-14 inset-x-2.5 sm:inset-x-4 max-w-4xl mx-auto pointer-events-auto rounded-2xl border border-[#D6D0C4] bg-[#FAF7E8] shadow-xl overflow-hidden transition-[grid-template-rows,opacity] duration-300 ease-in-out md:hidden ${open ? "grid grid-rows-[1fr] opacity-100" : "grid grid-rows-[0fr] opacity-0 pointer-events-none"
+          }`}
       >
         <div className="overflow-hidden">
           <nav aria-label="Mobile" className="px-5 py-4 text-[#181716]">

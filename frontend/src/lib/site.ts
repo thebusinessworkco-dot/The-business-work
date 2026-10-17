@@ -7,7 +7,7 @@ export const site = {
   tagline: "We Make Business Simpler.",
   founder: "Aman Rajbhar",
   description:
-    "We build AI chatbots, WhatsApp automation and lead tracking for businesses in India. Simple tools that save your team time on repeat tasks.",
+    "Simplify customer enquiries, follow-ups and daily work with AI agents, WhatsApp automation and connected business systems.",
   url: "https://www.thebusinesswork.com",
   email: "thebusinesswork.co@gmail.com",
   phone: "+91 79720 20292",

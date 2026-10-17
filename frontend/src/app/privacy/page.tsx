@@ -20,7 +20,24 @@ export function generateMetadata(): Metadata {
       description:
         "Information on personal data collection, processing, and security practices at The Business Work.",
       url: `${siteUrl}/privacy`,
+      siteName: site.name,
+      locale: "en_IN",
       type: "website",
+      images: [
+        {
+          url: `${siteUrl}/opengraph-image`,
+          width: 1200,
+          height: 630,
+          alt: "Privacy Policy — The Business Work",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Privacy Policy | The Business Work",
+      description:
+        "Information on personal data collection, processing, and security practices at The Business Work.",
+      images: [`${siteUrl}/opengraph-image`],
     },
     robots,
   };
