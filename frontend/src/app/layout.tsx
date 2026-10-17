@@ -66,16 +66,14 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/tbw-icon-dark.svg", type: "image/svg+xml", media: "(prefers-color-scheme: dark)" },
-      { url: "/tbw-icon-light.svg", type: "image/svg+xml", media: "(prefers-color-scheme: light)" },
-      { url: "/tbw-icon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.png", type: "image/png", sizes: "192x192" },
     ],
     shortcut: [
-      { url: "/tbw-icon-dark.svg", media: "(prefers-color-scheme: dark)" },
-      { url: "/tbw-icon-light.svg", media: "(prefers-color-scheme: light)" },
+      { url: "/favicon.ico" },
     ],
     apple: [
-      { url: "/apple-icon", sizes: "180x180", type: "image/png" },
+      { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
     ],
   },
   formatDetection: {
