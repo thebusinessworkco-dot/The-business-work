@@ -18,17 +18,17 @@ import { services } from "@/content/services";
 
 export const metadata: Metadata = {
   title: {
-    absolute: "The Business Work | AI & Business Automation",
+    absolute: "The Business Work | We Make Business Simpler",
   },
   description:
-    "Simplify customer enquiries, follow-ups and daily work with AI agents, WhatsApp automation and connected business systems.",
+    "Automate WhatsApp replies, manage leads, and simplify daily business workflows.",
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "The Business Work | AI & Business Automation",
+    title: "The Business Work | We Make Business Simpler",
     description:
-      "Simplify customer enquiries, follow-ups and daily work with AI agents, WhatsApp automation and connected business systems.",
+      "Automate WhatsApp replies, manage leads, and simplify daily business workflows.",
     url: "https://www.thebusinesswork.com",
     siteName: site.name,
     locale: "en_IN",
@@ -38,15 +38,15 @@ export const metadata: Metadata = {
         url: "https://www.thebusinesswork.com/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "The Business Work - AI & Business Automation",
+        alt: "The Business Work | We Make Business Simpler",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "The Business Work | AI & Business Automation",
+    title: "The Business Work | We Make Business Simpler",
     description:
-      "Simplify customer enquiries, follow-ups and daily work with AI agents, WhatsApp automation and connected business systems.",
+      "Automate WhatsApp replies, manage leads, and simplify daily business workflows.",
     images: ["https://www.thebusinesswork.com/opengraph-image"],
   },
 };
