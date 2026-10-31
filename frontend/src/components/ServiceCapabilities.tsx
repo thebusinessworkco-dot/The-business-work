@@ -246,7 +246,7 @@ export default function ServiceCapabilities({
               {/* 5. Benefit */}
               <div className="space-y-1">
                 <div className="font-headline text-[11px] font-bold uppercase tracking-wider text-[#7A756D]">
-                  How it helps your business
+                  How it helps your <span className="text-[#E4572E]">business</span>
                 </div>
                 <p className="font-body text-sm sm:text-[15px] leading-relaxed text-[#141413]">
                   {activeCapability.details.benefit}

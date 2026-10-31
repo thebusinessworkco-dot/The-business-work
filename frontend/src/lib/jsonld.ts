@@ -119,7 +119,7 @@ export function getHomeJsonLd(): HomeJsonLd {
     name: site.name,
     url: siteUrl,
     description: site.description,
-    logo: `${siteUrl}/icon`,
+    logo: `${siteUrl}/tbw-logo-horizontal-black.svg`,
     areaServed: {
       "@type": "Country",
       name: "India",

@@ -14,3 +14,7 @@ scratch/
 .env.production.local
 .env*.local
 frontend/tests/screenshots/
+proxy-3001.js
+final logo/
+*.zip
+*.log

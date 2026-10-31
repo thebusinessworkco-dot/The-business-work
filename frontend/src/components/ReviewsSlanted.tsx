@@ -133,7 +133,7 @@ export default function ReviewsSlanted() {
             EARLY ACCESS, REAL RESULTS
           </p>
           <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-medium tracking-tight text-white leading-[1.1]">
-            From the first <span className="italic font-normal">businesses to use it.</span>
+            From the first <span className="text-[#E4572E] italic font-normal">businesses</span> <span className="italic font-normal">to use it.</span>
           </h2>
         </div>
       </div>

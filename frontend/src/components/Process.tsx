@@ -1,333 +1,309 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import Image from "next/image";
 
-/* ════════════════════════════════════════════════
-   7 High-Fidelity WebP Cards (Alternating P-L-P-L-P-L-P)
-   From: /process-cards/ (Q88 WebP)
-   ════════════════════════════════════════════════ */
-const visualCards = [
+const cards = [
   {
     id: 1,
-    image: "/process-cards/01-whatsapp-booking-doctor.webp",
-    aspect: "portrait",
-    title: "Doctor & Clinic WhatsApp Booking",
-    glow: "rgba(46, 227, 142, 0.4)",
+    image: "/stacked-cards/tbw-hero-photo-3-metrics.png",
+    title: "Executive Overview & Real-Time WhatsApp CRM Metrics",
+    tab: "1. Operations & Metrics",
   },
   {
     id: 2,
-    image: "/process-cards/02-ai-sales-agent.webp",
-    aspect: "landscape",
-    title: "AI Sales & Lead Qualification Agent",
-    glow: "rgba(234, 88, 59, 0.4)",
+    image: "/stacked-cards/tbw-hero-photo-1-departments.png",
+    title: "Cross-Department Automation & Workflows",
+    tab: "2. Team Sync",
   },
   {
     id: 3,
-    image: "/process-cards/04-business-automation.webp",
-    aspect: "portrait",
-    title: "End-to-End Business Workflows",
-    glow: "rgba(56, 189, 248, 0.4)",
-  },
-  {
-    id: 4,
-    image: "/process-cards/03-crm-and-sales.webp",
-    aspect: "landscape",
-    title: "Automated CRM & Deals Pipeline",
-    glow: "rgba(245, 158, 11, 0.4)",
-  },
-  {
-    id: 5,
-    image: "/process-cards/06-social-automation.webp",
-    aspect: "portrait",
-    title: "Instagram, WhatsApp & Social Channels",
-    glow: "rgba(236, 72, 153, 0.4)",
-  },
-  {
-    id: 6,
-    image: "/process-cards/08-ai-customer-support-agent.webp",
-    aspect: "landscape",
-    title: "Custom AI Trained on Business Data",
-    glow: "rgba(99, 102, 241, 0.4)",
-  },
-  {
-    id: 7,
-    image: "/process-cards/07-automated-follow-ups.webp",
-    aspect: "portrait",
-    title: "Automated Retargeting & Reminders",
-    glow: "rgba(16, 185, 129, 0.4)",
+    image: "/stacked-cards/tbw-hero-photo-2-order-automation.png",
+    title: "Automated Order Processing & Workflow Builder",
+    tab: "3. Order Automation",
   },
 ];
 
 export default function Process() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const [animProgress, setAnimProgress] = useState(0);
-  const targetProgressRef = useRef(0);
-  const animProgressRef = useRef(0);
-  const [isMobile, setIsMobile] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const cardElementsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const [activeStep, setActiveStep] = useState(0);
 
-  const totalSteps = visualCards.length;
+  const scrollToStep = useCallback((stepIdx: number) => {
+    const container = containerRef.current;
+    if (!container) return;
+    const rect = container.getBoundingClientRect();
+    const pinTop = window.innerWidth < 640 ? 76 : 88;
+    const totalScrollable = rect.height - window.innerHeight;
+    if (totalScrollable <= 0) return;
 
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 640);
-    };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
+    let targetP = 0.05;
+    if (stepIdx === 1) targetP = 0.54;
+    if (stepIdx === 2) targetP = 0.98;
+
+    const targetScrollY = window.scrollY + rect.top - pinTop + targetP * totalScrollable;
+    window.scrollTo({ top: targetScrollY, behavior: "smooth" });
   }, []);
 
-  /* ─── Track scroll position and set target step progress (0 to totalSteps - 1) ─── */
   useEffect(() => {
-    let rAFId = 0;
-    let animId = 0;
-    let isRunning = false;
     let ticking = false;
 
-    const tick = () => {
-      const target = targetProgressRef.current;
-      const current = animProgressRef.current;
-      const diff = target - current;
+    const updateCards = () => {
+      const container = containerRef.current;
+      const section = sectionRef.current;
+      if (!container) {
+        ticking = false;
+        return;
+      }
 
-      if (Math.abs(diff) > 0.0005) {
-        const maxDeltaPerFrame = isMobile ? 0.038 : 0.032;
-        const delta = Math.sign(diff) * Math.min(Math.abs(diff * 0.085), maxDeltaPerFrame);
-        const nextVal = current + delta;
-        animProgressRef.current = nextVal;
-        setAnimProgress(nextVal);
-        animId = requestAnimationFrame(tick);
+      const rect = container.getBoundingClientRect();
+      const pinTop = window.innerWidth < 640 ? 76 : 88;
+      const totalScrollable = rect.height - window.innerHeight;
+
+      if (totalScrollable <= 0) {
+        ticking = false;
+        return;
+      }
+
+      // Progress p ranges from 0 (container top reaches pinTop) to 1 (container bottom reaches viewport bottom)
+      const scrolled = pinTop - rect.top;
+      const p = Math.max(0, Math.min(1, scrolled / totalScrollable));
+
+      // Active tab tracking
+      if (p < 0.48) {
+        setActiveStep(0);
+      } else if (p < 0.88) {
+        setActiveStep(1);
       } else {
-        if (current !== target) {
-          animProgressRef.current = target;
-          setAnimProgress(target);
-        }
-        isRunning = false;
-        animId = 0;
+        setActiveStep(2);
       }
-    };
 
-    const startLoop = () => {
-      if (!isRunning) {
-        isRunning = true;
-        animId = requestAnimationFrame(tick);
+      // Timing phases (Tight & continuous, zero dead space):
+      // Card 0: pinned [0.00, 0.12], slides UP [0.12, 0.48]
+      // Card 1: active [0.48, 0.60], slides UP [0.60, 0.96]
+      // Card 2: active [0.96, 1.00], then unpins with section into #industries
+      // Theme morph to #220B05: [0.70, 0.96]
+
+      // ─── Card 0 ───
+      let c0Y = 0;
+      let c0Opacity = 1;
+      if (p >= 0.12) {
+        const t0 = Math.max(0, Math.min(1, (p - 0.12) / 0.36));
+        c0Y = -t0 * 115; // in %
+        c0Opacity = t0 > 0.85 ? Math.max(0, 1 - (t0 - 0.85) / 0.15) : 1;
       }
+
+      // ─── Card 1 ───
+      let c1Scale = 0.96;
+      let c1Y = 16; // in px
+      let c1Brightness = 0.92;
+      let c1Opacity = 1;
+
+      if (p < 0.12) {
+        c1Scale = 0.96;
+        c1Y = 16;
+        c1Brightness = 0.92;
+      } else if (p < 0.48) {
+        const t0 = (p - 0.12) / 0.36;
+        c1Scale = 0.96 + t0 * 0.04;
+        c1Y = (1 - t0) * 16;
+        c1Brightness = 0.92 + t0 * 0.08;
+      } else if (p < 0.60) {
+        c1Scale = 1.0;
+        c1Y = 0;
+        c1Brightness = 1.0;
+      } else {
+        const t1 = Math.max(0, Math.min(1, (p - 0.60) / 0.36));
+        c1Scale = 1.0;
+        c1Y = -t1 * 115; // in %
+        c1Brightness = 1.0;
+        c1Opacity = t1 > 0.85 ? Math.max(0, 1 - (t1 - 0.85) / 0.15) : 1;
+      }
+
+      // ─── Card 2 ───
+      let c2Scale = 0.92;
+      let c2Y = 32; // in px
+      let c2Brightness = 0.85;
+
+      if (p < 0.12) {
+        c2Scale = 0.92;
+        c2Y = 32;
+        c2Brightness = 0.85;
+      } else if (p < 0.48) {
+        const t0 = (p - 0.12) / 0.36;
+        c2Scale = 0.92 + t0 * 0.04;
+        c2Y = 32 - t0 * 16;
+        c2Brightness = 0.85 + t0 * 0.07;
+      } else if (p < 0.60) {
+        c2Scale = 0.96;
+        c2Y = 16;
+        c2Brightness = 0.92;
+      } else if (p < 0.96) {
+        const t1 = (p - 0.60) / 0.36;
+        c2Scale = 0.96 + t1 * 0.04;
+        c2Y = (1 - t1) * 16;
+        c2Brightness = 0.92 + t1 * 0.08;
+      } else {
+        c2Scale = 1.0;
+        c2Y = 0;
+        c2Brightness = 1.0;
+      }
+
+      // ─── Seamless Background Color Morphing for Process Section ───
+      // Light: #FAF7E8 (250, 247, 232) -> Dark Chocolate: #220B05 (34, 11, 5)
+      if (section) {
+        if (p >= 0.70) {
+          const darkProgress = Math.min(1, (p - 0.70) / 0.26);
+          const bgR = Math.round(250 + (34 - 250) * darkProgress);
+          const bgG = Math.round(247 + (11 - 247) * darkProgress);
+          const bgB = Math.round(232 + (5 - 232) * darkProgress);
+          section.style.backgroundColor = `rgb(${bgR}, ${bgG}, ${bgB})`;
+          section.style.borderBottomColor = `rgb(${Math.round(232 + (74 - 232) * darkProgress)}, ${Math.round(226 + (32 - 226) * darkProgress)}, ${Math.round(213 + (20 - 213) * darkProgress)})`;
+        } else {
+          section.style.backgroundColor = "#FAF7E8";
+          section.style.borderBottomColor = "#E8E2D5";
+        }
+      }
+
+      // Apply transforms directly
+      const el0 = cardElementsRef.current[0];
+      if (el0) {
+        el0.style.transform = `translate3d(0, ${c0Y.toFixed(2)}%, 0) scale(1)`;
+        el0.style.opacity = c0Opacity.toFixed(3);
+        el0.style.filter = "brightness(1)";
+        el0.style.zIndex = "30";
+      }
+
+      const el1 = cardElementsRef.current[1];
+      if (el1) {
+        const yUnit = p >= 0.60 ? "%" : "px";
+        el1.style.transform = `translate3d(0, ${c1Y.toFixed(2)}${yUnit}, 0) scale(${c1Scale.toFixed(4)})`;
+        el1.style.opacity = c1Opacity.toFixed(3);
+        el1.style.filter = `brightness(${c1Brightness.toFixed(3)})`;
+        el1.style.zIndex = "20";
+      }
+
+      const el2 = cardElementsRef.current[2];
+      if (el2) {
+        el2.style.transform = `translate3d(0, ${c2Y.toFixed(2)}px, 0) scale(${c2Scale.toFixed(4)})`;
+        el2.style.opacity = "1";
+        el2.style.filter = `brightness(${c2Brightness.toFixed(3)})`;
+        el2.style.zIndex = "10";
+      }
+
+      ticking = false;
     };
 
     const onScroll = () => {
       if (!ticking) {
         ticking = true;
-        rAFId = requestAnimationFrame(() => {
-          if (sectionRef.current) {
-            const rect = sectionRef.current.getBoundingClientRect();
-            const totalScrollable = rect.height - window.innerHeight;
-            if (totalScrollable > 0) {
-              const scrolled = -rect.top;
-              const progress = Math.max(0, Math.min(1, scrolled / totalScrollable));
-              targetProgressRef.current = progress * (totalSteps - 1);
-              startLoop();
-            }
-          }
-          ticking = false;
-        });
+        requestAnimationFrame(updateCards);
       }
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
+    window.addEventListener("resize", onScroll, { passive: true });
+    updateCards();
 
     return () => {
       window.removeEventListener("scroll", onScroll);
-      if (rAFId) cancelAnimationFrame(rAFId);
-      if (animId) cancelAnimationFrame(animId);
+      window.removeEventListener("resize", onScroll);
     };
-  }, [totalSteps, isMobile]);
+  }, []);
 
   return (
     <section
-      id="how-we-work"
-      aria-label="How We Work"
       ref={sectionRef}
-      className="relative w-full border-y border-[#1E2321] bg-[#0C0E0D] text-white selection:bg-[#E05A47]/30"
-      style={{ minHeight: isMobile ? `${totalSteps * 65}vh` : `${totalSteps * 80}vh` }}
+      id="how-we-work"
+      className="relative w-full border-t border-[#E8E2D5] bg-[#FAF7E8] text-[#141413] selection:bg-[#EAE4D7] transition-colors duration-150"
     >
-      {/* Subtle ambient background glow & diagonal runway line */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden opacity-35">
-        <div
-          className="absolute -top-40 left-1/2 -translate-x-1/2 w-[900px] h-[550px] rounded-full blur-[140px]"
-          style={{
-            background: "radial-gradient(ellipse at center, rgba(37,211,102,0.1) 0%, rgba(234,88,59,0.08) 50%, transparent 80%)",
-          }}
-        />
-        {/* Subtle diagonal trajectory line */}
-        <svg className="absolute inset-0 w-full h-full stroke-white/[0.04] fill-none" preserveAspectRatio="none">
-          <line x1="10%" y1="90%" x2="90%" y2="10%" strokeWidth="1.5" strokeDasharray="6 6" />
-        </svg>
+      {/* Section Header */}
+      <div className="text-center max-w-3xl mx-auto pt-14 sm:pt-18 lg:pt-20 pb-5 px-4">
+        <div className="font-headline text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.24em] text-[#7A756D] mb-2.5">
+          HOW WE WORK
+        </div>
+        <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-normal leading-[1.14] tracking-tight text-[#141413]">
+          Designed for how your <span className="text-[#E4572E]">business</span> <span className="italic">actually runs.</span>
+        </h2>
+        <p className="mt-3 font-body text-sm sm:text-base text-[#555047] max-w-xl mx-auto leading-relaxed">
+          Watch how our automated workflows connect WhatsApp, spreadsheets, and CRM into one seamless system.
+        </p>
+
+        {/* 3 Step Indicator Tabs */}
+        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-6">
+          {cards.map((c, idx) => (
+            <button
+              key={c.id}
+              type="button"
+              onClick={() => scrollToStep(idx)}
+              className={`px-3.5 sm:px-4 py-1.5 rounded-full font-headline text-[11px] sm:text-xs font-semibold transition-all duration-300 shadow-xs cursor-pointer ${
+                activeStep === idx
+                  ? "bg-[#141413] text-white shadow-md scale-105"
+                  : "bg-white/80 text-[#555047] hover:bg-white hover:text-[#141413] border border-[#DDD6C5]"
+              }`}
+            >
+              {c.tab}
+            </button>
+          ))}
+        </div>
       </div>
 
-      {/* ═══════ STICKY PINNED VIEWPORT (100% Focused on Cards, Wispr Flow Exact) ═══════ */}
+      {/* Multi-screen Scroll Track: 210vh gives perfect comfortable pacing with ZERO empty gap */}
       <div
-        className="sticky top-0 w-full h-[100dvh] sm:h-screen flex items-center justify-center z-10 overflow-hidden bg-[#0C0E0D]"
-        style={{
-          WebkitBackfaceVisibility: "hidden",
-          backfaceVisibility: "hidden",
-          transform: "translate3d(0, 0, 0)",
-          willChange: "transform",
-        }}
+        ref={containerRef}
+        className="relative w-full"
+        style={{ height: "210vh" }}
       >
-        {/* ─── 3D Card Stage with Diagonal Runway ─── */}
-        <div
-          className="relative w-full h-full flex items-center justify-center overflow-visible px-4"
-          style={{ perspective: "1500px", perspectiveOrigin: "50% 50%" }}
-        >
-          {visualCards.map((card, idx) => {
-            const cardStyle = getCardDynamicStyle(idx, animProgress, isMobile);
-
-            return (
-              <div
-                key={card.id}
-                className="absolute inset-0 flex items-center justify-center pointer-events-none"
-              >
+        {/* Sticky Window pinned right below the Header */}
+        <div className="sticky top-[76px] sm:top-[88px] w-full flex flex-col items-center justify-start overflow-hidden pt-2 pb-2 sm:pb-4 pointer-events-none">
+          {/* Card Stage */}
+          <div className="relative w-full max-w-[940px] sm:max-w-[1020px] md:max-w-[1100px] lg:max-w-[1180px] xl:max-w-[1240px] px-3 sm:px-5">
+            <div className="relative w-full aspect-[2400/1343]">
+              {cards.map((card, idx) => (
                 <div
-                  className="pointer-events-auto relative select-none"
+                  key={card.id}
+                  ref={(el) => {
+                    cardElementsRef.current[idx] = el;
+                  }}
+                  className="absolute inset-0 w-full h-full pointer-events-auto transition-[box-shadow] duration-200"
                   style={{
-                    transformStyle: "preserve-3d",
-                    backfaceVisibility: "hidden",
-                    WebkitBackfaceVisibility: "hidden",
-                    willChange: "transform, opacity",
-                    ...cardStyle,
+                    transformOrigin: "center top",
+                    willChange: "transform, opacity, filter",
+                    zIndex: (3 - idx) * 10,
+                    transform:
+                      idx === 0
+                        ? "translate3d(0, 0%, 0) scale(1)"
+                        : idx === 1
+                        ? "translate3d(0, 16px, 0) scale(0.96)"
+                        : "translate3d(0, 32px, 0) scale(0.92)",
+                    filter:
+                      idx === 0
+                        ? "brightness(1)"
+                        : idx === 1
+                        ? "brightness(0.92)"
+                        : "brightness(0.85)",
                   }}
                 >
-                  <div
-                    className="relative rounded-[24px] sm:rounded-[34px] overflow-hidden transition-all duration-300"
-                    style={{
-                      boxShadow: `
-                        0 28px 70px -15px rgba(0, 0, 0, 0.88),
-                        0 12px 28px -8px rgba(0, 0, 0, 0.65),
-                        0 0 60px -12px ${card.glow}
-                      `,
-                    }}
-                  >
+                  <div className="relative w-full h-full rounded-[20px] sm:rounded-[28px] md:rounded-[34px] overflow-hidden border border-[#DCD5C3] bg-[#FAF7E8] shadow-[0_24px_70px_-14px_rgba(20,20,19,0.22),0_8px_24px_rgba(0,0,0,0.06)]">
                     <Image
                       src={card.image}
                       alt={card.title}
-                      width={card.aspect === "landscape" ? 1592 : 1200}
-                      height={card.aspect === "landscape" ? 990 : 1313}
+                      width={2400}
+                      height={1343}
                       priority={idx === 0}
                       loading={idx === 0 ? "eager" : "lazy"}
                       draggable={false}
-                      sizes="(max-width: 640px) 92vw, (max-width: 1024px) 660px, 660px"
-                      className={`block object-contain rounded-[24px] sm:rounded-[34px] w-auto h-auto ${
-                        card.aspect === "landscape"
-                          ? "w-[min(560px,92vw)] sm:w-[580px] md:w-[660px] max-h-[58vh] sm:max-h-[64vh]"
-                          : "w-[min(420px,82vw)] sm:w-[440px] md:w-[480px] max-h-[66vh] sm:max-h-[72vh]"
-                      }`}
+                      sizes="(max-width: 1024px) 95vw, 1240px"
+                      className="w-full h-full object-cover select-none pointer-events-none"
                     />
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>
   );
-}
-
-/* ════════════════════════════════════════════════
-   Continuous 3D Diagonal Runway Tilt Calculator:
-   - Aate time (incoming from bottom-left): Aage ka tilt (rotateX +20deg, leaning forward towards user)
-   - Screen centre mein: 100% straight and flat (rotateX 0deg, rotateY 0deg, scale 1)
-   - Jaate time (departing to top-right): Piche ka tilt (rotateX -20deg, leaning backward into distance)
-   ════════════════════════════════════════════════ */
-function getCardDynamicStyle(idx: number, animProgress: number, isMobile: boolean): React.CSSProperties {
-  const offset = idx - animProgress;
-
-  // ─── 1. ACTIVE CARD IN SCREEN CENTER: Straight, flat, crisp, 100% sharp ───
-  if (Math.abs(offset) < 0.005) {
-    return {
-      transform: "translate3d(0px, 0px, 0px) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1)",
-      opacity: 1,
-      zIndex: 35,
-      filter: "brightness(1)",
-      pointerEvents: "auto",
-    };
-  }
-
-  // ─── 2. INCOMING CARDS (offset > 0): Arriving from BOTTOM-LEFT ───
-  // Aate time: Aage ka tilt (top edge leans forward towards viewer!)
-  if (offset > 0) {
-    const clamped = Math.min(offset, 1.35);
-    const xDist = isMobile ? 260 : 600;
-    const yDist = isMobile ? 180 : 180;
-
-    const x = -clamped * xDist;
-    const y = clamped * yDist;
-    const z = -clamped * 140;
-
-    // Aage ka tilt: rotateX +20deg tilted forward, rotateY -14deg, rotateZ -6deg
-    const rx = clamped * 20;
-    const ry = -clamped * 14;
-    const rz = -clamped * 6;
-    const scale = 1 - clamped * 0.22;
-
-    let opacity = 0;
-    if (isMobile) {
-      // Mobile: smoothly fades in as it approaches center
-      opacity = Math.max(0, 1 - clamped * 1.5);
-    } else {
-      // Desktop: visible waiting in the bottom-left with generous Wispr Flow gap
-      if (clamped <= 1.05) {
-        opacity = Math.max(0, 0.95 - (clamped - 0.7) * 1.6);
-      } else {
-        opacity = 0;
-      }
-    }
-
-    const zIndex = Math.round(30 - clamped * 10);
-
-    return {
-      transform: `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, ${z.toFixed(1)}px) rotateX(${rx.toFixed(1)}deg) rotateY(${ry.toFixed(1)}deg) rotateZ(${rz.toFixed(1)}deg) scale(${scale.toFixed(3)})`,
-      opacity: Number(opacity.toFixed(2)),
-      zIndex,
-      filter: `brightness(${(1 - clamped * 0.25).toFixed(2)})`,
-      pointerEvents: "none",
-    };
-  }
-
-  // ─── 3. DEPARTING CARDS (offset < 0): Exiting to TOP-RIGHT ───
-  // Jaate time: Piche ka tilt (top edge leans backward into distance!)
-  const absOffset = Math.min(-offset, 1.35);
-  const xDist = isMobile ? 260 : 600;
-  const yDist = isMobile ? 180 : 180;
-
-  const x = absOffset * xDist;
-  const y = -absOffset * yDist;
-  const z = -absOffset * 140;
-
-  // Piche ka tilt: rotateX -20deg tilted backward into distance, rotateY +14deg, rotateZ +6deg
-  const rx = -absOffset * 20;
-  const ry = absOffset * 14;
-  const rz = absOffset * 6;
-  const scale = 1 - absOffset * 0.22;
-
-  let opacity = 0;
-  if (isMobile) {
-    opacity = Math.max(0, 1 - absOffset * 1.5);
-  } else {
-    if (absOffset <= 1.05) {
-      opacity = Math.max(0, 0.92 - (absOffset - 0.7) * 1.6);
-    } else {
-      opacity = 0;
-    }
-  }
-
-  const zIndex = Math.round(30 - absOffset * 10);
-
-  return {
-    transform: `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, ${z.toFixed(1)}px) rotateX(${rx.toFixed(1)}deg) rotateY(${ry.toFixed(1)}deg) rotateZ(${rz.toFixed(1)}deg) scale(${scale.toFixed(3)})`,
-    opacity: Number(opacity.toFixed(2)),
-    zIndex,
-    filter: `brightness(${(1 - absOffset * 0.25).toFixed(2)})`,
-    pointerEvents: "none",
-  };
 }

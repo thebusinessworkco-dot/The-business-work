@@ -21,7 +21,7 @@ export default function CTA() {
         </div>
 
         <h2 id="cta-title" className="font-serif text-2xl sm:text-4xl md:text-[44px] lg:text-[48px] font-normal tracking-tight text-[#141413] leading-[1.14]">
-          Ready to make business simpler,
+          Ready to make <span className="text-[#E4572E]">business</span> simpler,
           <span className="block italic mt-0.5 sm:mt-1 font-normal text-[#141413]">just automate.</span>
         </h2>
 

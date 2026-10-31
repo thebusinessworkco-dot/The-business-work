@@ -86,7 +86,7 @@ export default function Founder() {
                 {site.founder}
               </h2>
               <p className="font-body text-[11px] sm:text-xs text-[#7A756D] mt-0.5">
-                Founder &bull; The Business Work
+                Founder &bull; The <span className="text-[#E4572E]">Business</span> Work
               </p>
 
               {/* Contact actions */}

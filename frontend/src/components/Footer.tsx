@@ -12,7 +12,7 @@ export default function Footer() {
           <div className="space-y-3 sm:space-y-4">
             <Logo small fill="#141413" className="!text-[#141413]" />
             <p className="max-w-sm font-body text-sm leading-relaxed text-[#555047]">
-              Simple tools for your business, built around how your daily work runs.
+              Simple tools for your <span className="text-[#E4572E]">business</span>, built around how your daily work runs.
             </p>
             <a
               className="inline-block font-headline text-xs uppercase tracking-wider text-[#141413] underline decoration-[#141413]/30 underline-offset-4 hover:text-[#6D32A8]"

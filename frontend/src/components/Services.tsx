@@ -177,10 +177,10 @@ export default function Services({ items = [] }: { items?: HomeServiceItem[] }) 
             <div className="flex-1 flex flex-col justify-between min-w-0">
               <div>
                 <h3 className="font-headline text-lg sm:text-[19px] font-bold text-[#141413] tracking-tight leading-snug">
-                  Business Workflow Automation
+                  <span className="text-[#E4572E]">Business</span> Workflow Automation
                 </h3>
                 <p className="font-body text-xs sm:text-[13px] text-[#555047] leading-relaxed mt-1.5 mb-3.5">
-                  We connect your business apps. Software does repeat tasks so your team saves hours every week.
+                  We connect your <span className="text-[#E4572E]">business</span> apps. Software does repeat tasks so your team saves hours every week.
                 </p>
               </div>
               <Link
@@ -237,7 +237,7 @@ export default function Services({ items = [] }: { items?: HomeServiceItem[] }) 
               Not sure what you need?
             </h4>
             <p className="font-body text-sm sm:text-base leading-relaxed text-[#555047]">
-              Tell us what slows your team down. We will look at your daily work and build a simple tool that fits your business.
+              Tell us what slows your team down. We will look at your daily work and build a simple tool that fits your <span className="text-[#E4572E]">business</span>.
             </p>
           </div>
           <button

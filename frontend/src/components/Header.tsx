@@ -16,8 +16,7 @@ const nav = [
 
 export default function Header() {
   const [open, setOpen] = useState(false);
-  const [visible, setVisible] = useState(true);
-  const lastScrollY = useRef(0);
+  const [isDark, setIsDark] = useState(false);
   const { openModal } = useContactModal();
   const toggleBtnRef = useRef<HTMLButtonElement>(null);
   const mobileNavRef = useRef<HTMLDivElement>(null);
@@ -43,50 +42,50 @@ export default function Header() {
   }, [open]);
 
   useEffect(() => {
-    let rAFId = 0;
     let ticking = false;
 
+    const checkHeaderTheme = () => {
+      const industriesEl = document.getElementById("industries");
+      const howWeWorkEl = document.getElementById("how-we-work");
+      let overDark = false;
+
+      if (industriesEl) {
+        const rect = industriesEl.getBoundingClientRect();
+        // The floating header pill sits around top 8px to 75px
+        if (rect.top <= 100 && rect.bottom >= 55) {
+          overDark = true;
+        }
+      }
+
+      if (!overDark && howWeWorkEl) {
+        const rect = howWeWorkEl.getBoundingClientRect();
+        // If bottom of how-we-work is in the lower half (during dark theme handoff)
+        if (rect.bottom <= window.innerHeight * 0.65 && rect.bottom >= 0) {
+          overDark = true;
+        }
+      }
+
+      setIsDark(overDark);
+      ticking = false;
+    };
+
     const handleScroll = () => {
+      if (open) {
+        setOpen(false);
+      }
       if (!ticking) {
         ticking = true;
-        rAFId = requestAnimationFrame(() => {
-          const currentScrollY = window.scrollY;
-          const scrollDiff = Math.abs(currentScrollY - lastScrollY.current);
-
-          if (open && scrollDiff > 5) {
-            setOpen(false);
-          }
-
-          // If user is inside the 3D card section (#how-we-work) on mobile, keep header hidden so cards have 100% full immersion
-          const howWeWorkEl = document.getElementById("how-we-work");
-          if (howWeWorkEl && window.innerWidth < 768) {
-            const rect = howWeWorkEl.getBoundingClientRect();
-            if (rect.top <= 20 && rect.bottom >= window.innerHeight - 20) {
-              setVisible(false);
-              lastScrollY.current = currentScrollY;
-              ticking = false;
-              return;
-            }
-          }
-
-          if (currentScrollY <= 30) {
-            setVisible(true);
-          } else if (currentScrollY > lastScrollY.current && currentScrollY > 80) {
-            setVisible(false);
-          } else if (currentScrollY < lastScrollY.current) {
-            setVisible(true);
-          }
-
-          lastScrollY.current = currentScrollY;
-          ticking = false;
-        });
+        requestAnimationFrame(checkHeaderTheme);
       }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleScroll, { passive: true });
+    checkHeaderTheme();
+
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      if (rAFId) cancelAnimationFrame(rAFId);
+      window.removeEventListener("resize", handleScroll);
     };
   }, [open]);
 
@@ -102,34 +101,56 @@ export default function Header() {
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
-  const isVisible = visible || open;
-
   return (
-    <header
-      className={`fixed inset-x-0 top-0 z-50 p-2 sm:p-4 pointer-events-none transition-transform duration-300 ease-in-out flex justify-center ${isVisible ? "translate-y-0" : "-translate-y-full"
+    <header className="fixed inset-x-0 top-0 z-50 p-2 sm:p-4 pointer-events-none flex justify-center">
+      <div
+        className={`w-full max-w-5xl pointer-events-auto rounded-[22px] sm:rounded-full border px-3 sm:px-7 h-12 sm:h-14 flex items-center justify-between transition-all duration-500 ease-out ${
+          isDark
+            ? "border-[#4A2014] bg-[#220B05]/95 text-white shadow-[0_8px_30px_rgba(0,0,0,0.5)] backdrop-blur-md"
+            : "border-[#DDD6C5] bg-white/95 text-[#141413] shadow-[0_2px_14px_rgba(0,0,0,0.04)] backdrop-blur-md"
         }`}
-    >
-      <div className="w-full max-w-5xl pointer-events-auto rounded-[22px] sm:rounded-full border border-[#DDD6C5] bg-white/95 backdrop-blur-md px-3 sm:px-7 h-12 sm:h-14 flex items-center justify-between shadow-[0_2px_14px_rgba(0,0,0,0.04)]">
-
-        {/* Left: Brand Logo (Single One-line Slab Serif) */}
-        <Link href="/" aria-label="The Business Work, home" className="shrink-0 flex items-center group py-1">
+      >
+        {/* Left: Brand Logo */}
+        <Link
+          href="/"
+          aria-label="The Business Work, home"
+          className="shrink-0 flex items-center group py-1 relative"
+        >
+          {/* Black Logo (Default Light Theme) */}
           <Image
-            src="/thebusinesswork_svg/06-slab-serif-one-line-black.svg"
+            src="/tbw-logo-horizontal-black.svg"
             alt="The Business Work"
-            width={2618}
-            height={280}
+            width={1053}
+            height={116}
             priority
-            className="h-[18px] w-auto object-contain transition-opacity group-hover:opacity-80"
+            className={`h-[20px] xs:h-[22px] sm:h-[26px] w-auto object-contain transition-opacity duration-300 group-hover:opacity-80 ${
+              isDark ? "opacity-0 absolute pointer-events-none" : "opacity-100"
+            }`}
+          />
+          {/* Official White Logo with Orange Circle (Dark / Deep Orange Theme) */}
+          <Image
+            src="/tbw-logo-horizontal-white.svg"
+            alt="The Business Work"
+            width={1053}
+            height={116}
+            priority
+            className={`h-[20px] xs:h-[22px] sm:h-[26px] w-auto object-contain transition-opacity duration-300 group-hover:opacity-80 ${
+              isDark ? "opacity-100" : "opacity-0 absolute pointer-events-none"
+            }`}
           />
         </Link>
 
-        {/* Center Navigation Links: Clean, spacious, only what's useful */}
+        {/* Center Navigation Links */}
         <nav aria-label="Primary" className="hidden md:flex items-center gap-7 lg:gap-9">
           {nav.map((n) => (
             <Link
               key={n.href}
               href={n.href}
-              className="font-headline text-[13.5px] font-medium text-[#4A4742] transition-colors hover:text-[#141413]"
+              className={`font-headline text-[13.5px] font-medium transition-colors duration-300 ${
+                isDark
+                  ? "text-[#D5CEBB] hover:text-white"
+                  : "text-[#4A4742] hover:text-[#141413]"
+              }`}
             >
               {n.label}
             </Link>
@@ -138,19 +159,21 @@ export default function Header() {
 
         {/* Right CTA Button & Controls */}
         <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
-
-          {/* Wispr Flow Lavender CTA Button: Compact on mobile to fit perfectly without overlap */}
           <button
             type="button"
             onClick={() => openModal(undefined, "header")}
             aria-label="Discuss Your Project"
-            className="inline-flex h-8 sm:h-10 items-center justify-center gap-1.5 sm:gap-2 rounded-lg sm:rounded-xl border border-[#141413] bg-[#EBDDFE] px-2.5 sm:px-5 font-headline text-[11px] sm:text-[13px] font-bold text-[#141413] transition-all hover:bg-[#E2CEFF] active:scale-[0.98] shadow-xs whitespace-nowrap"
+            className={`inline-flex h-8 sm:h-10 items-center justify-center gap-1.5 sm:gap-2 rounded-lg sm:rounded-xl border px-2.5 sm:px-5 font-headline text-[11px] sm:text-[13px] font-bold transition-all active:scale-[0.98] shadow-xs whitespace-nowrap ${
+              isDark
+                ? "border-[#F59E0B] bg-[#F59E0B] text-[#141413] hover:bg-[#D97706]"
+                : "border-[#141413] bg-[#EBDDFE] text-[#141413] hover:bg-[#E2CEFF]"
+            }`}
           >
             <span className="grid grid-cols-2 gap-0.5 w-2.5 sm:w-3 h-2.5 sm:h-3" aria-hidden="true">
-              <span className="bg-[#141413] rounded-[0.5px]"></span>
-              <span className="bg-[#141413] rounded-[0.5px]"></span>
-              <span className="bg-[#141413] rounded-[0.5px]"></span>
-              <span className="bg-[#141413] rounded-[0.5px]"></span>
+              <span className={`rounded-[0.5px] ${isDark ? "bg-[#141413]" : "bg-[#141413]"}`}></span>
+              <span className={`rounded-[0.5px] ${isDark ? "bg-[#141413]" : "bg-[#141413]"}`}></span>
+              <span className={`rounded-[0.5px] ${isDark ? "bg-[#141413]" : "bg-[#141413]"}`}></span>
+              <span className={`rounded-[0.5px] ${isDark ? "bg-[#141413]" : "bg-[#141413]"}`}></span>
             </span>
             <span>
               <span className="inline sm:hidden">Discuss</span>
@@ -162,7 +185,9 @@ export default function Header() {
           <button
             type="button"
             ref={toggleBtnRef}
-            className="inline-flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-lg border border-transparent md:hidden shrink-0 active:scale-95 text-[#141413]"
+            className={`inline-flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-lg border border-transparent md:hidden shrink-0 active:scale-95 transition-colors duration-300 ${
+              isDark ? "text-white" : "text-[#141413]"
+            }`}
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
             aria-controls="mobile-nav"
@@ -170,16 +195,19 @@ export default function Header() {
           >
             <div className="flex h-3 w-3.5 sm:w-4 flex-col justify-between" aria-hidden="true">
               <span
-                className={`h-[1.5px] w-3.5 sm:w-4 rounded-full bg-[#141413] transition-all duration-300 ease-in-out ${open ? "translate-y-[5px] rotate-45" : ""
-                  }`}
+                className={`h-[1.5px] w-3.5 sm:w-4 rounded-full transition-all duration-300 ease-in-out ${
+                  isDark ? "bg-white" : "bg-[#141413]"
+                } ${open ? "translate-y-[5px] rotate-45" : ""}`}
               />
               <span
-                className={`h-[1.5px] w-3.5 sm:w-4 rounded-full bg-[#141413] transition-all duration-300 ease-in-out ${open ? "opacity-0" : ""
-                  }`}
+                className={`h-[1.5px] w-3.5 sm:w-4 rounded-full transition-all duration-300 ease-in-out ${
+                  isDark ? "bg-white" : "bg-[#141413]"
+                } ${open ? "opacity-0" : ""}`}
               />
               <span
-                className={`h-[1.5px] w-3.5 sm:w-4 rounded-full bg-[#141413] transition-all duration-300 ease-in-out ${open ? "-translate-y-[5px] -rotate-45" : ""
-                  }`}
+                className={`h-[1.5px] w-3.5 sm:w-4 rounded-full transition-all duration-300 ease-in-out ${
+                  isDark ? "bg-white" : "bg-[#141413]"
+                } ${open ? "-translate-y-[5px] -rotate-45" : ""}`}
               />
             </div>
           </button>
@@ -191,9 +219,9 @@ export default function Header() {
         id="mobile-nav"
         ref={mobileNavRef}
         aria-hidden={!open}
-        inert={!open ? true : undefined}
-        className={`fixed top-14 inset-x-2.5 sm:inset-x-4 max-w-4xl mx-auto pointer-events-auto rounded-2xl border border-[#D6D0C4] bg-[#FAF7E8] shadow-xl overflow-hidden transition-[grid-template-rows,opacity] duration-300 ease-in-out md:hidden ${open ? "grid grid-rows-[1fr] opacity-100" : "grid grid-rows-[0fr] opacity-0 pointer-events-none"
-          }`}
+        className={`fixed top-14 inset-x-2.5 sm:inset-x-4 max-w-4xl mx-auto pointer-events-auto rounded-2xl border border-[#D6D0C4] bg-[#FAF7E8] shadow-xl overflow-hidden transition-[grid-template-rows,opacity] duration-300 ease-in-out md:hidden ${
+          open ? "grid grid-rows-[1fr] opacity-100" : "grid grid-rows-[0fr] opacity-0 pointer-events-none"
+        }`}
       >
         <div className="overflow-hidden">
           <nav aria-label="Mobile" className="px-5 py-4 text-[#181716]">
@@ -203,35 +231,13 @@ export default function Header() {
                   <Link
                     href={n.href}
                     onClick={() => setOpen(false)}
-                    className="block border-b border-[#E8E2D5] py-2.5 font-body text-xs text-[#4A4742] transition-colors hover:text-[#181716]"
+                    className="block py-2.5 font-headline text-base font-semibold border-b border-[#E8E2D5] last:border-0 hover:text-[#6D32A8] transition-colors"
                   >
                     {n.label}
                   </Link>
                 </li>
               ))}
             </ul>
-            <div className="pt-3 flex items-center gap-2">
-              <a
-                href={whatsappLink()}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setOpen(false)}
-                className="flex-1 flex items-center justify-center gap-2 rounded-lg border border-[#D6D0C4] bg-white py-2 font-headline text-xs font-medium text-[#181716]"
-              >
-                <MessageCircle size={14} className="text-[#25D366]" />
-                <span>WhatsApp</span>
-              </a>
-              <a
-                href={site.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setOpen(false)}
-                className="flex-1 flex items-center justify-center gap-2 rounded-lg border border-[#D6D0C4] bg-white py-2 font-headline text-xs font-medium text-[#181716]"
-              >
-                <Instagram size={14} className="text-[#E1306C]" />
-                <span>Instagram</span>
-              </a>
-            </div>
           </nav>
         </div>
       </div>
