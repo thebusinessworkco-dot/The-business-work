@@ -91,7 +91,7 @@ export default function Industries() {
       ref={sectionRef}
       id="industries"
       aria-labelledby="industries-title"
-      className="relative w-full border-y pt-4 sm:pt-6 pb-16 sm:pb-24 overflow-hidden transition-[background-color,border-color,color] duration-150"
+      className="relative w-full border-y -mt-6 sm:mt-0 pt-2 sm:pt-6 pb-16 sm:pb-24 overflow-hidden transition-[background-color,border-color,color] duration-150"
       style={{
         backgroundColor: currentBg,
         borderColor: currentBorder,
@@ -109,7 +109,7 @@ export default function Industries() {
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-12 z-10">
         {/* Centered Editorial Header */}
-        <div className="text-center max-w-4xl mx-auto mb-8 sm:mb-12">
+        <div className="text-center max-w-4xl mx-auto mb-6 sm:mb-12">
           <div
             className="inline-block font-headline text-[10px] sm:text-xs font-semibold uppercase tracking-[0.24em] mb-4"
             style={{ color: currentBadge }}

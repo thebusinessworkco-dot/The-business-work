@@ -9,18 +9,21 @@ const cards = [
     image: "/stacked-cards/tbw-hero-photo-3-metrics.png",
     title: "Executive Overview & Real-Time WhatsApp CRM Metrics",
     tab: "1. Operations & Metrics",
+    shortDesc: "Live WhatsApp CRM & Lead Tracking",
   },
   {
     id: 2,
     image: "/stacked-cards/tbw-hero-photo-1-departments.png",
     title: "Cross-Department Automation & Workflows",
     tab: "2. Team Sync",
+    shortDesc: "Instant Sync Across Teams",
   },
   {
     id: 3,
     image: "/stacked-cards/tbw-hero-photo-2-order-automation.png",
     title: "Automated Order Processing & Workflow Builder",
     tab: "3. Order Automation",
+    shortDesc: "3-Day Order Flow Cut to 5 Mins",
   },
 ];
 
@@ -219,19 +222,19 @@ export default function Process() {
       className="relative w-full border-t border-[#E8E2D5] bg-[#FAF7E8] text-[#141413] selection:bg-[#EAE4D7] transition-colors duration-150"
     >
       {/* Section Header */}
-      <div className="text-center max-w-3xl mx-auto pt-14 sm:pt-18 lg:pt-20 pb-5 px-4">
-        <div className="font-headline text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.24em] text-[#7A756D] mb-2.5">
+      <div className="text-center max-w-3xl mx-auto pt-10 sm:pt-18 lg:pt-20 pb-3 sm:pb-5 px-4">
+        <div className="font-headline text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.24em] text-[#7A756D] mb-2">
           HOW WE WORK
         </div>
         <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-normal leading-[1.14] tracking-tight text-[#141413]">
           Designed for how your <span className="text-[#E4572E]">business</span> <span className="italic">actually runs.</span>
         </h2>
-        <p className="mt-3 font-body text-sm sm:text-base text-[#555047] max-w-xl mx-auto leading-relaxed">
+        <p className="mt-2.5 font-body text-xs sm:text-base text-[#555047] max-w-xl mx-auto leading-relaxed">
           Watch how our automated workflows connect WhatsApp, spreadsheets, and CRM into one seamless system.
         </p>
 
-        {/* 3 Step Indicator Tabs */}
-        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-6">
+        {/* Desktop 3 Step Indicator Tabs */}
+        <div className="hidden sm:flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-6">
           {cards.map((c, idx) => (
             <button
               key={c.id}
@@ -249,16 +252,33 @@ export default function Process() {
         </div>
       </div>
 
-      {/* Multi-screen Scroll Track: 210vh gives perfect comfortable pacing with ZERO empty gap */}
+      {/* Multi-screen Scroll Track: 150vh on mobile, 210vh on desktop for tight, zero-dead-space pacing */}
       <div
         ref={containerRef}
-        className="relative w-full"
-        style={{ height: "210vh" }}
+        className="relative w-full h-[150vh] sm:h-[210vh]"
       >
         {/* Sticky Window pinned right below the Header */}
-        <div className="sticky top-[76px] sm:top-[88px] w-full flex flex-col items-center justify-start overflow-hidden pt-2 pb-2 sm:pb-4 pointer-events-none">
+        <div className="sticky top-[76px] sm:top-[88px] w-full flex flex-col items-center justify-start overflow-hidden pt-1 sm:pt-2 pb-2 sm:pb-4 pointer-events-none">
+          {/* Mobile Sticky Step Tabs (Stay pinned with the card so user always has context) */}
+          <div className="sm:hidden flex items-center justify-center gap-1.5 mb-2 px-2 pointer-events-auto">
+            {cards.map((c, idx) => (
+              <button
+                key={c.id}
+                type="button"
+                onClick={() => scrollToStep(idx)}
+                className={`px-2.5 py-1 rounded-full font-headline text-[10px] font-semibold transition-all duration-300 shadow-xs cursor-pointer ${
+                  activeStep === idx
+                    ? "bg-[#141413] text-white shadow-sm scale-105"
+                    : "bg-white/85 text-[#555047] border border-[#DDD6C5]"
+                }`}
+              >
+                {c.tab}
+              </button>
+            ))}
+          </div>
+
           {/* Card Stage */}
-          <div className="relative w-full max-w-[940px] sm:max-w-[1020px] md:max-w-[1100px] lg:max-w-[1180px] xl:max-w-[1240px] px-3 sm:px-5">
+          <div className="relative w-full max-w-[940px] sm:max-w-[1020px] md:max-w-[1100px] lg:max-w-[1180px] xl:max-w-[1240px] px-2.5 sm:px-5">
             <div className="relative w-full aspect-[2400/1343]">
               {cards.map((card, idx) => (
                 <div
@@ -301,6 +321,17 @@ export default function Process() {
                 </div>
               ))}
             </div>
+          </div>
+
+          {/* Mobile Active Step Info Pill (Dynamically highlights active card summary) */}
+          <div className="sm:hidden mt-2.5 px-3.5 py-1.5 rounded-full bg-white/95 border border-[#DDD6C5] shadow-xs flex items-center gap-2 pointer-events-auto max-w-[92vw]">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#E4572E] animate-pulse shrink-0" />
+            <span className="font-headline text-[10px] font-bold text-[#141413] shrink-0">
+              {cards[activeStep].tab}:
+            </span>
+            <span className="font-body text-[10px] text-[#555047] truncate">
+              {cards[activeStep].shortDesc}
+            </span>
           </div>
         </div>
       </div>
