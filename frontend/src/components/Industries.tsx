@@ -322,11 +322,10 @@ export default function Industries() {
                   />
                 </svg>
                 <div
-                  className={`w-8 h-8 rounded-full border-2 flex items-center justify-center text-xs shadow-xs transition-colors duration-300 ${
-                    isDarkTone
+                  className={`w-8 h-8 rounded-full border-2 flex items-center justify-center text-xs shadow-xs transition-colors duration-300 ${isDarkTone
                       ? "border-[#FAF7E8] bg-emerald-950/80 text-emerald-300"
                       : "border-[#141413] bg-emerald-100"
-                  }`}
+                    }`}
                 >
                   ⚡
                 </div>
@@ -375,11 +374,10 @@ export default function Industries() {
                   />
                 </svg>
                 <div
-                  className={`w-8 h-8 rounded-full border-2 flex items-center justify-center text-xs shadow-xs transition-colors duration-300 ${
-                    isDarkTone
+                  className={`w-8 h-8 rounded-full border-2 flex items-center justify-center text-xs shadow-xs transition-colors duration-300 ${isDarkTone
                       ? "border-[#FAF7E8] bg-purple-950/80 text-purple-300"
                       : "border-[#141413] bg-purple-100"
-                  }`}
+                    }`}
                 >
                   📅
                 </div>
@@ -428,11 +426,10 @@ export default function Industries() {
                   />
                 </svg>
                 <div
-                  className={`w-8 h-8 rounded-full border-2 flex items-center justify-center text-xs font-bold shadow-xs transition-colors duration-300 ${
-                    isDarkTone
+                  className={`w-8 h-8 rounded-full border-2 flex items-center justify-center text-xs font-bold shadow-xs transition-colors duration-300 ${isDarkTone
                       ? "border-[#FAF7E8] bg-amber-950/80 text-amber-300"
                       : "border-[#141413] bg-amber-100"
-                  }`}
+                    }`}
                 >
                   ✓
                 </div>
