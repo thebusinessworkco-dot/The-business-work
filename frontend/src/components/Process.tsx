@@ -62,6 +62,7 @@ export default function Process() {
   const sectionRef = useRef<HTMLElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
+  const blendRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [activeStep, setActiveStep] = useState(0);
 
@@ -92,9 +93,12 @@ export default function Process() {
 
     const updateHeight = () => {
       const isMobile = window.innerWidth < 640;
-      // Scroll distance gives enough runway for 2 transitions without empty space
+      // On mobile: 0.75 * innerHeight ensures:
+      // - Card 1 has comfortable breathing space below (screenshot 3)
+      // - Card 2 progressively decreases the remaining space
+      // - Card 3 has 0 gap so next section starts immediately beneath final card (screenshot 4)
       const scrollDist = isMobile
-        ? Math.round(window.innerHeight * 0.65)
+        ? Math.round(window.innerHeight * 0.75)
         : Math.round(window.innerHeight * 0.95);
       wrapper.style.height = `${sticky.offsetHeight + scrollDist}px`;
     };
@@ -102,7 +106,8 @@ export default function Process() {
     let ticking = false;
 
     const update = () => {
-      const pinTop = window.innerWidth < 640 ? 76 : 88;
+      const isMobile = window.innerWidth < 640;
+      const pinTop = isMobile ? 76 : 88;
       const rect = wrapper.getBoundingClientRect();
       const range = Math.max(1, wrapper.offsetHeight - sticky.offsetHeight);
       const g = clamp01((pinTop - rect.top) / range);
@@ -135,24 +140,29 @@ export default function Process() {
         el.style.opacity = opacity.toFixed(3);
       }
 
-      // ─── Background Color Morph (Cream #FAF7E8 -> Dark Chocolate #220B05) ───
-      // Smoothly blends starting at Card 1 exit (g = 0.45) so it matches #industries 100%
-      if (g >= 0.45) {
-        const dp = Math.min(1, (g - 0.45) / 0.55);
-        // Background: #FAF7E8 (250, 247, 232) -> #220B05 (34, 11, 5)
-        const r = Math.round(250 + (34 - 250) * dp);
-        const gr = Math.round(247 + (11 - 247) * dp);
-        const b = Math.round(232 + (5 - 232) * dp);
-        section.style.backgroundColor = `rgb(${r},${gr},${b})`;
+      // ─── Seamless Background Color Morph (Cream #FAF7E8 -> Dark Chocolate #220B05) ───
+      // Smoothly blends starting at Card 1 exit (g = 0.18) up to Card 3 settle (g = 0.85)
+      let pTheme = 0;
+      if (g > 0.18) {
+        pTheme = Math.min(1, (g - 0.18) / 0.67);
+      }
 
-        // Border: #E8E2D5 -> #220B05
-        const br = Math.round(232 + (34 - 232) * dp);
-        const bg = Math.round(226 + (11 - 226) * dp);
-        const bb = Math.round(213 + (5 - 213) * dp);
-        section.style.borderBottomColor = `rgb(${br},${bg},${bb})`;
-      } else {
-        section.style.backgroundColor = "#FAF7E8";
-        section.style.borderBottomColor = "#E8E2D5";
+      const r = Math.round(250 + (34 - 250) * pTheme);
+      const gr = Math.round(247 + (11 - 247) * pTheme);
+      const b = Math.round(232 + (5 - 232) * pTheme);
+      const currentBg = `rgb(${r},${gr},${b})`;
+
+      section.style.backgroundColor = currentBg;
+
+      // Broadcast theme progress for synchronized #industries background transition
+      if (typeof document !== "undefined") {
+        document.documentElement.style.setProperty("--theme-progress", pTheme.toFixed(3));
+        document.documentElement.style.setProperty("--theme-bg", currentBg);
+      }
+
+      // Update bottom blend gradient opacity
+      if (blendRef.current) {
+        blendRef.current.style.opacity = pTheme > 0.15 ? Math.min(1, (pTheme - 0.15) / 0.65).toFixed(3) : "0";
       }
 
       ticking = false;
@@ -222,16 +232,17 @@ export default function Process() {
 
       {/* ──────────────────────────────────────────────────────────
           MAKE.COM FOLDER SCROLL WRAPPER
-          Scroll distance dynamically sized — zero dead space below!
+          Scroll distance dynamically sized — zero dead space below Card 3!
          ────────────────────────────────────────────────────────── */}
       <div
         ref={wrapperRef}
         className="relative w-full"
       >
-        {/* Sticky Window: pins right below the header */}
+        {/* Sticky Window: pins right below the header
+            pb-0 on mobile ensures next section starts IMMEDIATELY beneath final card */}
         <div
           ref={stickyRef}
-          className="sticky top-[76px] sm:top-[88px] w-full flex flex-col items-center justify-start pb-2 sm:pb-4 pointer-events-none"
+          className="sticky top-[76px] sm:top-[88px] w-full flex flex-col items-center justify-start pb-0 sm:pb-4 pointer-events-none"
         >
           {/* Card Stack:
               SAME LANDSCAPE ASPECT RATIO (2400/1343) ON BOTH PHONE & LAPTOP */}
@@ -282,6 +293,15 @@ export default function Process() {
           </div>
         </div>
       </div>
+
+      {/* Seamless blend gradient into #industries to eliminate harsh horizontal cuts */}
+      <div
+        ref={blendRef}
+        className="pointer-events-none absolute bottom-0 inset-x-0 h-28 sm:h-36 opacity-0 transition-opacity duration-300"
+        style={{
+          background: "linear-gradient(to bottom, transparent, rgba(34, 11, 5, 0.22))",
+        }}
+      />
     </section>
   );
 }

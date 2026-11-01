@@ -17,14 +17,18 @@ export default function Industries() {
       const rect = el.getBoundingClientRect();
       const vh = window.innerHeight;
 
-      // Top is ALWAYS 100% Dark Chocolate (#220B05) matching the stacked cards exit.
-      // Only transition back to light when exiting to the bottom (towards Principles).
+      // When entering from #how-we-work above, sync seamlessly with the theme progress
+      // When exiting to the bottom towards Principles, interpolate back to light
       let p = 1.0;
       if (rect.bottom < vh * 0.50) {
         // Exiting to the bottom (towards Principles / Core Principles section)
         p = Math.max(0, Math.min(1, rect.bottom / (vh * 0.50)));
+      } else if (rect.top > 0 && typeof document !== "undefined") {
+        // When entering from #how-we-work above, sync with theme progress
+        const themeVar = document.documentElement.style.getPropertyValue("--theme-progress");
+        p = themeVar !== "" ? parseFloat(themeVar) : 1.0;
       } else {
-        // In view & entering from stacked cards: 100% rich Dark Chocolate (#220B05)
+        // In view: 100% rich Dark Chocolate (#220B05)
         p = 1.0;
       }
 
@@ -89,13 +93,21 @@ export default function Industries() {
       ref={sectionRef}
       id="industries"
       aria-labelledby="industries-title"
-      className="relative w-full border-y pt-1 sm:pt-3 pb-16 sm:pb-24 overflow-hidden transition-[background-color,border-color,color] duration-150"
+      className="relative w-full border-b pt-1 sm:pt-3 pb-16 sm:pb-24 overflow-hidden transition-[background-color,border-color,color] duration-150"
       style={{
         backgroundColor: currentBg,
         borderColor: currentBorder,
         color: currentText,
       }}
     >
+      {/* Subtle blend gradient from previous section for seamless transition */}
+      <div
+        className="pointer-events-none absolute top-0 inset-x-0 h-28 sm:h-36 transition-opacity duration-300"
+        style={{
+          background: "linear-gradient(to bottom, rgba(34, 11, 5, 0.22), transparent)",
+          opacity: progress > 0.15 ? Math.min(1, (progress - 0.15) / 0.65).toFixed(3) : "0",
+        }}
+      />
       {/* Subtle Ambient Warm Light (Expands as dark mode deepens) */}
       <div
         className="pointer-events-none absolute inset-0 transition-opacity duration-300"
