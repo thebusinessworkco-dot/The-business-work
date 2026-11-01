@@ -9,246 +9,212 @@ const cards = [
     image: "/stacked-cards/tbw-hero-photo-3-metrics.png",
     title: "Executive Overview & Real-Time WhatsApp CRM Metrics",
     tab: "1. Operations & Metrics",
-    shortDesc: "Live WhatsApp CRM & Lead Tracking",
+    badge: "01 // OPERATIONS & METRICS",
+    cardTitle: "Executive Operations",
+    cardDesc: "Every lead, reply, and conversion — tracked in real time on WhatsApp CRM.",
   },
   {
     id: 2,
     image: "/stacked-cards/tbw-hero-photo-1-departments.png",
     title: "Cross-Department Automation & Workflows",
     tab: "2. Team Sync",
-    shortDesc: "Instant Sync Across Teams",
+    badge: "02 // TEAM SYNC",
+    cardTitle: "Cross-Team Sync",
+    cardDesc: "See what your team builds and runs — as it happens across departments.",
   },
   {
     id: 3,
     image: "/stacked-cards/tbw-hero-photo-2-order-automation.png",
     title: "Automated Order Processing & Workflow Builder",
     tab: "3. Order Automation",
-    shortDesc: "3-Day Order Flow Cut to 5 Mins",
+    badge: "03 // ORDER AUTOMATION",
+    cardTitle: "Visual Automation Builder",
+    cardDesc: "Build, test, debug and run automations in one visual environment.",
   },
 ];
+
+const STAGGER_PX = 18; // offset between stacked cards (peeking at bottom)
 
 export default function Process() {
   const sectionRef = useRef<HTMLElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const cardElementsRef = useRef<(HTMLDivElement | null)[]>([]);
-  const mobileCardRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const cardStageRef = useRef<HTMLDivElement>(null);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [activeStep, setActiveStep] = useState(0);
 
+  // Smooth scroll to a specific card tab
   const scrollToStep = useCallback((stepIdx: number) => {
-    if (typeof window !== "undefined" && window.innerWidth < 640) {
-      const targetEl = mobileCardRefs.current[stepIdx];
-      if (targetEl) {
-        const top = targetEl.getBoundingClientRect().top + window.scrollY - 76;
-        window.scrollTo({ top, behavior: "smooth" });
-      }
-      setActiveStep(stepIdx);
-      return;
-    }
-
     const container = containerRef.current;
-    if (!container) return;
-    const rect = container.getBoundingClientRect();
-    const pinTop = 88;
-    const totalScrollable = rect.height - window.innerHeight;
-    if (totalScrollable <= 0) return;
+    const cardStage = cardStageRef.current;
+    if (!container || !cardStage) return;
 
-    let targetP = 0.05;
-    if (stepIdx === 1) targetP = 0.54;
-    if (stepIdx === 2) targetP = 0.98;
+    const pinTop = window.innerWidth < 640 ? 76 : 88;
+    const cardH = cardStage.offsetHeight;
+    const pinnedDistance = container.offsetHeight - cardH;
+    if (pinnedDistance <= 0) return;
 
-    const targetScrollY = window.scrollY + rect.top - pinTop + targetP * totalScrollable;
+    const targetP = stepIdx === 0 ? 0.05 : stepIdx === 1 ? 0.50 : 0.98;
+    const containerTop = container.getBoundingClientRect().top + window.scrollY;
+    const targetScrollY = containerTop - pinTop + targetP * pinnedDistance;
+
     window.scrollTo({ top: targetScrollY, behavior: "smooth" });
   }, []);
 
   useEffect(() => {
     let ticking = false;
 
-    const updateCards = () => {
-      const section = sectionRef.current;
-
-      // ─── Mobile Scroll Handling: Track active card & theme morph ───
-      if (window.innerWidth < 640) {
-        let activeIdx = 0;
-        const vh = window.innerHeight;
-
-        mobileCardRefs.current.forEach((el, idx) => {
-          if (!el) return;
-          const r = el.getBoundingClientRect();
-          // Card is active when its top is near the sticky header
-          if (r.top <= 120) {
-            activeIdx = idx;
-          }
-        });
-        setActiveStep(activeIdx);
-
-        // Mobile theme morph as Card 3 reaches top or exit approaches
-        if (section) {
-          const card3 = mobileCardRefs.current[2];
-          const sectionRect = section.getBoundingClientRect();
-          if (card3) {
-            const r3 = card3.getBoundingClientRect();
-            // Morph into #220B05 as Card 3 approaches sticky position
-            if (r3.top < vh * 0.75) {
-              const darkProgress = Math.max(0, Math.min(1, (vh * 0.75 - r3.top) / (vh * 0.40)));
-              const bgR = Math.round(250 + (34 - 250) * darkProgress);
-              const bgG = Math.round(247 + (11 - 247) * darkProgress);
-              const bgB = Math.round(232 + (5 - 232) * darkProgress);
-              section.style.backgroundColor = `rgb(${bgR}, ${bgG}, ${bgB})`;
-              section.style.borderBottomColor = `rgb(${Math.round(232 + (74 - 232) * darkProgress)}, ${Math.round(226 + (32 - 226) * darkProgress)}, ${Math.round(213 + (20 - 213) * darkProgress)})`;
-            } else {
-              section.style.backgroundColor = "#FAF7E8";
-              section.style.borderBottomColor = "#E8E2D5";
-            }
-          } else if (sectionRect.bottom < vh * 0.9) {
-            const darkProgress = Math.max(0, Math.min(1, (vh * 0.9 - sectionRect.bottom) / (vh * 0.4)));
-            const bgR = Math.round(250 + (34 - 250) * darkProgress);
-            const bgG = Math.round(247 + (11 - 247) * darkProgress);
-            const bgB = Math.round(232 + (5 - 232) * darkProgress);
-            section.style.backgroundColor = `rgb(${bgR}, ${bgG}, ${bgB})`;
-            section.style.borderBottomColor = `rgb(${Math.round(232 + (74 - 232) * darkProgress)}, ${Math.round(226 + (32 - 226) * darkProgress)}, ${Math.round(213 + (20 - 213) * darkProgress)})`;
-          }
-        }
-
-        ticking = false;
-        return;
-      }
-
-      // ─── Desktop Stacked Cards Transform Updates ───
+    // Dynamically size container = cardHeight + scrollDistance
+    // This ensures ZERO empty space below the cards when animation ends
+    const syncContainerHeight = () => {
       const container = containerRef.current;
-      if (!container) {
+      const cardStage = cardStageRef.current;
+      if (!container || !cardStage) return;
+
+      const cardH = cardStage.offsetHeight;
+      const isMobile = window.innerWidth < 640;
+      // Scroll distance: how many pixels user scrolls through all 3 cards
+      const scrollDistance = isMobile
+        ? Math.round(window.innerHeight * 0.85)
+        : Math.round(window.innerHeight * 1.15);
+
+      container.style.height = `${cardH + scrollDistance}px`;
+    };
+
+    const animate = () => {
+      const container = containerRef.current;
+      const cardStage = cardStageRef.current;
+      const section = sectionRef.current;
+      if (!container || !cardStage || !section) {
         ticking = false;
         return;
       }
 
+      const isMobile = window.innerWidth < 640;
+      const pinTop = isMobile ? 76 : 88;
       const rect = container.getBoundingClientRect();
-      const pinTop = 88;
-      const totalScrollable = rect.height - window.innerHeight;
+      const cardH = cardStage.offsetHeight;
+      const pinnedDistance = rect.height - cardH;
 
-      if (totalScrollable <= 0) {
+      if (pinnedDistance <= 0) {
         ticking = false;
         return;
       }
 
-      // Progress p ranges from 0 to 1
+      // p goes from 0.0 (top reached pinTop) to 1.0 (bottom reached pinTop + cardH)
       const scrolled = pinTop - rect.top;
-      const p = Math.max(0, Math.min(1, scrolled / totalScrollable));
+      const p = Math.max(0, Math.min(1, scrolled / pinnedDistance));
 
-      // Active tab tracking for desktop
-      if (p < 0.48) {
+      // ─── Active Tab Update ───
+      if (p < 0.45) {
         setActiveStep(0);
-      } else if (p < 0.88) {
+      } else if (p < 0.85) {
         setActiveStep(1);
       } else {
         setActiveStep(2);
       }
 
-      // Timing phases (Desktop):
-      // Card 0: pinned [0.00, 0.12], slides UP [0.12, 0.48]
-      // Card 1: active [0.48, 0.60], slides UP [0.60, 0.96]
-      // Card 2: active [0.96, 1.00], then unpins with section into #industries
-
-      // ─── Card 0 ───
+      // ─── Card 0: Front -> Slides UP ───
       let c0Y = 0;
       let c0Opacity = 1;
-      if (p >= 0.12) {
-        const t0 = Math.max(0, Math.min(1, (p - 0.12) / 0.36));
-        c0Y = -t0 * 115; // in %
-        c0Opacity = t0 > 0.85 ? Math.max(0, 1 - (t0 - 0.85) / 0.15) : 1;
+      if (p > 0.05) {
+        const t0 = Math.min(1, (p - 0.05) / 0.40);
+        c0Y = -t0 * 115; // slide up percentage
+        c0Opacity = t0 > 0.80 ? Math.max(0, 1 - (t0 - 0.80) / 0.20) : 1;
       }
 
-      // ─── Card 1 ───
+      // ─── Card 1: Middle -> Front -> Slides UP ───
       let c1Scale = 0.96;
-      let c1Y = 16; // in px
-      let c1Brightness = 0.92;
+      let c1Y = STAGGER_PX;
+      let c1Brightness = 0.93;
       let c1Opacity = 1;
 
-      if (p < 0.12) {
+      if (p <= 0.05) {
         c1Scale = 0.96;
-        c1Y = 16;
-        c1Brightness = 0.92;
-      } else if (p < 0.48) {
-        const t0 = (p - 0.12) / 0.36;
+        c1Y = STAGGER_PX;
+        c1Brightness = 0.93;
+      } else if (p < 0.45) {
+        const t0 = (p - 0.05) / 0.40;
         c1Scale = 0.96 + t0 * 0.04;
-        c1Y = (1 - t0) * 16;
-        c1Brightness = 0.92 + t0 * 0.08;
-      } else if (p < 0.60) {
+        c1Y = (1 - t0) * STAGGER_PX;
+        c1Brightness = 0.93 + t0 * 0.07;
+      } else if (p < 0.55) {
         c1Scale = 1.0;
         c1Y = 0;
         c1Brightness = 1.0;
       } else {
-        const t1 = Math.max(0, Math.min(1, (p - 0.60) / 0.36));
+        const t1 = Math.min(1, (p - 0.55) / 0.40);
         c1Scale = 1.0;
-        c1Y = -t1 * 115; // in %
+        c1Y = -t1 * 115;
         c1Brightness = 1.0;
-        c1Opacity = t1 > 0.85 ? Math.max(0, 1 - (t1 - 0.85) / 0.15) : 1;
+        c1Opacity = t1 > 0.80 ? Math.max(0, 1 - (t1 - 0.80) / 0.20) : 1;
       }
 
-      // ─── Card 2 ───
+      // ─── Card 2: Back -> Middle -> Front ───
       let c2Scale = 0.92;
-      let c2Y = 32; // in px
-      let c2Brightness = 0.85;
+      let c2Y = STAGGER_PX * 2;
+      let c2Brightness = 0.86;
 
-      if (p < 0.12) {
+      if (p <= 0.05) {
         c2Scale = 0.92;
-        c2Y = 32;
-        c2Brightness = 0.85;
-      } else if (p < 0.48) {
-        const t0 = (p - 0.12) / 0.36;
+        c2Y = STAGGER_PX * 2;
+        c2Brightness = 0.86;
+      } else if (p < 0.45) {
+        const t0 = (p - 0.05) / 0.40;
         c2Scale = 0.92 + t0 * 0.04;
-        c2Y = 32 - t0 * 16;
-        c2Brightness = 0.85 + t0 * 0.07;
-      } else if (p < 0.60) {
+        c2Y = STAGGER_PX * 2 - t0 * STAGGER_PX;
+        c2Brightness = 0.86 + t0 * 0.07;
+      } else if (p < 0.55) {
         c2Scale = 0.96;
-        c2Y = 16;
-        c2Brightness = 0.92;
-      } else if (p < 0.96) {
-        const t1 = (p - 0.60) / 0.36;
+        c2Y = STAGGER_PX;
+        c2Brightness = 0.93;
+      } else if (p < 0.95) {
+        const t1 = (p - 0.55) / 0.40;
         c2Scale = 0.96 + t1 * 0.04;
-        c2Y = (1 - t1) * 16;
-        c2Brightness = 0.92 + t1 * 0.08;
+        c2Y = (1 - t1) * STAGGER_PX;
+        c2Brightness = 0.93 + t1 * 0.07;
       } else {
         c2Scale = 1.0;
         c2Y = 0;
         c2Brightness = 1.0;
       }
 
-      // ─── Seamless Background Color Morphing for Desktop Process Section ───
-      // Light: #FAF7E8 (250, 247, 232) -> Dark Chocolate: #220B05 (34, 11, 5)
-      if (section) {
-        if (p >= 0.70) {
-          const darkProgress = Math.min(1, (p - 0.70) / 0.26);
-          const bgR = Math.round(250 + (34 - 250) * darkProgress);
-          const bgG = Math.round(247 + (11 - 247) * darkProgress);
-          const bgB = Math.round(232 + (5 - 232) * darkProgress);
-          section.style.backgroundColor = `rgb(${bgR}, ${bgG}, ${bgB})`;
-          section.style.borderBottomColor = `rgb(${Math.round(232 + (74 - 232) * darkProgress)}, ${Math.round(226 + (32 - 226) * darkProgress)}, ${Math.round(213 + (20 - 213) * darkProgress)})`;
-        } else {
-          section.style.backgroundColor = "#FAF7E8";
-          section.style.borderBottomColor = "#E8E2D5";
-        }
+      // ─── Background Color Morph (Cream #FAF7E8 -> Dark Chocolate #220B05) ───
+      if (p >= 0.65) {
+        const dp = Math.min(1, (p - 0.65) / 0.35);
+        const r = Math.round(250 + (34 - 250) * dp);
+        const g = Math.round(247 + (11 - 247) * dp);
+        const b = Math.round(232 + (5 - 232) * dp);
+        section.style.backgroundColor = `rgb(${r},${g},${b})`;
+        const br = Math.round(232 + (74 - 232) * dp);
+        const bg = Math.round(226 + (32 - 226) * dp);
+        const bb = Math.round(213 + (20 - 213) * dp);
+        section.style.borderBottomColor = `rgb(${br},${bg},${bb})`;
+      } else {
+        section.style.backgroundColor = "#FAF7E8";
+        section.style.borderBottomColor = "#E8E2D5";
       }
 
-      // Apply transforms directly to desktop cards
-      const el0 = cardElementsRef.current[0];
+      // ─── Apply Transforms to Cards ───
+      const el0 = cardRefs.current[0];
       if (el0) {
-        el0.style.transform = `translate3d(0, ${c0Y.toFixed(2)}%, 0) scale(1)`;
+        el0.style.transform = `translate3d(0, ${c0Y.toFixed(1)}%, 0) scale(1)`;
         el0.style.opacity = c0Opacity.toFixed(3);
         el0.style.filter = "brightness(1)";
         el0.style.zIndex = "30";
       }
 
-      const el1 = cardElementsRef.current[1];
+      const el1 = cardRefs.current[1];
       if (el1) {
-        const yUnit = p >= 0.60 ? "%" : "px";
-        el1.style.transform = `translate3d(0, ${c1Y.toFixed(2)}${yUnit}, 0) scale(${c1Scale.toFixed(4)})`;
+        const unit = p >= 0.55 ? "%" : "px";
+        el1.style.transform = `translate3d(0, ${c1Y.toFixed(1)}${unit}, 0) scale(${c1Scale.toFixed(4)})`;
         el1.style.opacity = c1Opacity.toFixed(3);
         el1.style.filter = `brightness(${c1Brightness.toFixed(3)})`;
         el1.style.zIndex = "20";
       }
 
-      const el2 = cardElementsRef.current[2];
+      const el2 = cardRefs.current[2];
       if (el2) {
-        el2.style.transform = `translate3d(0, ${c2Y.toFixed(2)}px, 0) scale(${c2Scale.toFixed(4)})`;
+        el2.style.transform = `translate3d(0, ${c2Y.toFixed(1)}px, 0) scale(${c2Scale.toFixed(4)})`;
         el2.style.opacity = "1";
         el2.style.filter = `brightness(${c2Brightness.toFixed(3)})`;
         el2.style.zIndex = "10";
@@ -260,17 +226,24 @@ export default function Process() {
     const onScroll = () => {
       if (!ticking) {
         ticking = true;
-        requestAnimationFrame(updateCards);
+        requestAnimationFrame(animate);
       }
     };
 
+    const onResize = () => {
+      syncContainerHeight();
+      onScroll();
+    };
+
+    syncContainerHeight();
+    animate();
+
     window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll, { passive: true });
-    updateCards();
+    window.addEventListener("resize", onResize, { passive: true });
 
     return () => {
       window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
+      window.removeEventListener("resize", onResize);
     };
   }, []);
 
@@ -280,19 +253,20 @@ export default function Process() {
       id="how-we-work"
       className="relative w-full border-t border-[#E8E2D5] bg-[#FAF7E8] text-[#141413] selection:bg-[#EAE4D7] transition-colors duration-150"
     >
-      {/* Section Header */}
-      <div className="text-center max-w-3xl mx-auto pt-10 sm:pt-18 lg:pt-20 pb-4 sm:pb-5 px-4">
+      {/* ─── Section Header ─── */}
+      <div className="text-center max-w-3xl mx-auto pt-10 sm:pt-16 lg:pt-20 pb-4 sm:pb-6 px-4">
         <div className="font-headline text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.24em] text-[#7A756D] mb-2 sm:mb-2.5">
           HOW WE WORK
         </div>
         <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-normal leading-[1.14] tracking-tight text-[#141413]">
-          Designed for how your <span className="text-[#E4572E]">business</span> <span className="italic">actually runs.</span>
+          Designed for how your <span className="text-[#E4572E]">business</span>{" "}
+          <span className="italic">actually runs.</span>
         </h2>
         <p className="mt-2.5 sm:mt-3 font-body text-xs sm:text-base text-[#555047] max-w-xl mx-auto leading-relaxed">
           Watch how our automated workflows connect WhatsApp, spreadsheets, and CRM into one seamless system.
         </p>
 
-        {/* 3 Step Indicator Tabs */}
+        {/* Step Indicator Tabs */}
         <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-3 mt-4 sm:mt-6">
           {cards.map((c, idx) => (
             <button
@@ -312,75 +286,31 @@ export default function Process() {
       </div>
 
       {/* ──────────────────────────────────────────────────────────
-          MOBILE VIEW (< 640px): Pure Sticky Stacking with ZERO DEAD SPACE!
-          Each card stacks over the previous one on scroll.
-          #industries is placed directly below Card 3 with NO gap!
-         ────────────────────────────────────────────────────────── */}
-      <div className="sm:hidden px-3.5 pt-2 pb-6 space-y-4">
-        {cards.map((card, idx) => {
-          const stickyTopPx = 76 + idx * 8; // Slight top offset creates beautiful layered card stack
-          return (
-            <div
-              key={card.id}
-              ref={(el) => {
-                mobileCardRefs.current[idx] = el;
-              }}
-              className="sticky transition-transform duration-200"
-              style={{
-                top: `${stickyTopPx}px`,
-                zIndex: (idx + 1) * 10,
-              }}
-            >
-              <div className="relative w-full aspect-[2400/1343] rounded-[20px] overflow-hidden border border-[#DCD5C3] bg-[#FAF7E8] shadow-[0_16px_40px_-10px_rgba(20,20,19,0.22)]">
-                <Image
-                  src={card.image}
-                  alt={card.title}
-                  width={2400}
-                  height={1343}
-                  priority={idx === 0}
-                  loading={idx === 0 ? "eager" : "lazy"}
-                  draggable={false}
-                  sizes="95vw"
-                  className="w-full h-full object-cover select-none pointer-events-none"
-                />
-              </div>
-
-              {/* Active Step Details Pill */}
-              <div className="mt-2 px-3 py-1.5 rounded-full bg-white/95 border border-[#DDD6C5] shadow-xs flex items-center gap-2 max-w-[94vw] mx-auto">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#E4572E] animate-pulse shrink-0" />
-                <span className="font-headline text-[10px] font-bold text-[#141413] shrink-0">
-                  {card.tab}:
-                </span>
-                <span className="font-body text-[10px] text-[#555047] truncate">
-                  {card.shortDesc}
-                </span>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* ──────────────────────────────────────────────────────────
-          DESKTOP VIEW (>= 640px): Make.com-Style Sticky Stacked Cards
-          210vh Scroll Track with Zero Dead Space
+          SCROLL CONTAINER:
+          Height is cardHeight + scrollDistance (no dead space below!)
          ────────────────────────────────────────────────────────── */}
       <div
         ref={containerRef}
-        className="hidden sm:block relative w-full"
-        style={{ height: "210vh" }}
+        className="relative w-full"
       >
-        {/* Sticky Window pinned right below the Header */}
-        <div className="sticky top-[88px] w-full flex flex-col items-center justify-start overflow-hidden pt-2 pb-2 sm:pb-4 pointer-events-none">
-          {/* Card Stage */}
+        {/* Sticky Window: pins right below the header */}
+        <div
+          ref={cardStageRef}
+          className="sticky top-[76px] sm:top-[88px] w-full flex flex-col items-center justify-start pb-12 sm:pb-16"
+        >
+          {/* Card Stage with stacked cards */}
           <div className="relative w-full max-w-[940px] sm:max-w-[1020px] md:max-w-[1100px] lg:max-w-[1180px] xl:max-w-[1240px] px-3 sm:px-5">
-            <div className="relative w-full aspect-[2400/1343]">
+            {/* Aspect Ratio:
+                Mobile:  4:5 (portrait card like Make.com mobile)
+                Desktop: 2400/1343 (landscape card like Make.com desktop) */}
+            <div className="relative w-full aspect-[4/5] sm:aspect-[2400/1343]">
               {cards.map((card, idx) => (
                 <div
                   key={card.id}
                   ref={(el) => {
-                    cardElementsRef.current[idx] = el;
+                    cardRefs.current[idx] = el;
                   }}
-                  className="absolute inset-0 w-full h-full pointer-events-auto transition-[box-shadow] duration-200"
+                  className="absolute inset-0 w-full h-full"
                   style={{
                     transformOrigin: "center top",
                     willChange: "transform, opacity, filter",
@@ -389,17 +319,17 @@ export default function Process() {
                       idx === 0
                         ? "translate3d(0, 0%, 0) scale(1)"
                         : idx === 1
-                        ? "translate3d(0, 16px, 0) scale(0.96)"
-                        : "translate3d(0, 32px, 0) scale(0.92)",
+                        ? `translate3d(0, ${STAGGER_PX}px, 0) scale(0.96)`
+                        : `translate3d(0, ${STAGGER_PX * 2}px, 0) scale(0.92)`,
                     filter:
                       idx === 0
                         ? "brightness(1)"
                         : idx === 1
-                        ? "brightness(0.92)"
-                        : "brightness(0.85)",
+                        ? "brightness(0.93)"
+                        : "brightness(0.86)",
                   }}
                 >
-                  <div className="relative w-full h-full rounded-[20px] sm:rounded-[28px] md:rounded-[34px] overflow-hidden border border-[#DCD5C3] bg-[#FAF7E8] shadow-[0_24px_70px_-14px_rgba(20,20,19,0.22),0_8px_24px_rgba(0,0,0,0.06)]">
+                  <div className="relative w-full h-full rounded-[22px] sm:rounded-[28px] md:rounded-[34px] overflow-hidden border border-[#DCD5C3] bg-[#FAF7E8] shadow-[0_24px_70px_-14px_rgba(20,20,19,0.22),0_8px_24px_rgba(0,0,0,0.06)]">
                     <Image
                       src={card.image}
                       alt={card.title}
@@ -411,21 +341,23 @@ export default function Process() {
                       sizes="(max-width: 1024px) 95vw, 1240px"
                       className="w-full h-full object-cover select-none pointer-events-none"
                     />
+
+                    {/* Gradient overlay with title + description INSIDE card (Make.com style) */}
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/50 to-transparent px-4 sm:px-8 pb-4 sm:pb-7 pt-16 sm:pt-28 pointer-events-none">
+                      <div className="font-headline text-[9px] sm:text-xs font-bold uppercase tracking-[0.2em] text-[#F59E0B] mb-1">
+                        {card.badge}
+                      </div>
+                      <h3 className="font-serif text-lg sm:text-2xl md:text-3xl font-normal text-white leading-tight mb-1 sm:mb-2">
+                        {card.cardTitle}
+                      </h3>
+                      <p className="font-body text-[11px] sm:text-sm text-white/85 leading-relaxed max-w-lg">
+                        {card.cardDesc}
+                      </p>
+                    </div>
                   </div>
                 </div>
               ))}
             </div>
-          </div>
-
-          {/* Active Step Details Pill */}
-          <div className="mt-2.5 px-3.5 py-1.5 rounded-full bg-white/95 border border-[#DDD6C5] shadow-xs flex items-center gap-2 pointer-events-auto max-w-[92vw]">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#E4572E] animate-pulse shrink-0" />
-            <span className="font-headline text-[10px] sm:text-xs font-bold text-[#141413] shrink-0">
-              {cards[activeStep].tab}:
-            </span>
-            <span className="font-body text-[10px] sm:text-xs text-[#555047] truncate">
-              {cards[activeStep].shortDesc}
-            </span>
           </div>
         </div>
       </div>
