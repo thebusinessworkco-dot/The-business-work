@@ -74,10 +74,10 @@ export default function Process() {
       return;
     }
     const headerOffset = 64;
-    const cardH = sticky.offsetHeight || 215;
+    const cardH = sticky.offsetHeight || 235;
     const peek = 32;
     const free = window.innerHeight - headerOffset - cardH - peek;
-    const top = Math.round(headerOffset + Math.max(20, free / 2));
+    const top = Math.round(headerOffset + Math.max(16, free / 2));
     sticky.style.top = `${top}px`;
   }, []);
 
@@ -259,7 +259,7 @@ export default function Process() {
         {/* Sticky Window: centered on mobile below header, top: 88px on desktop */}
         <div
           ref={stickyRef}
-          className="sticky top-[88px] w-full flex flex-col items-center justify-start pb-0 sm:pb-4 pointer-events-none"
+          className="sticky top-[88px] w-full flex flex-col items-center justify-start pb-5 sm:pb-8 pointer-events-none"
         >
           {/* Card Stack:
               SAME LANDSCAPE ASPECT RATIO (2400/1343) ON BOTH PHONE & LAPTOP */}
@@ -303,6 +303,12 @@ export default function Process() {
                         {card.cardDesc}
                       </p>
                     </div>
+
+                    {/* Crisp white/cream border overlay on top of image and gradient - always visible on all 4 sides */}
+                    <div
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-0 rounded-[18px] sm:rounded-[26px] md:rounded-[32px] border border-[#DCD5C3] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.2)] z-10"
+                    />
                   </div>
                 </div>
               ))}
