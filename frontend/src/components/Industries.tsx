@@ -19,12 +19,12 @@ export default function Industries() {
 
       // Fully active dark theme while inside Industries or smoothly interpolating from stacked cards
       let p = 0;
-      if (rect.top > vh * 1.05) {
+      if (rect.top > vh * 1.1) {
         // Far below viewport
         p = 0;
-      } else if (rect.top > vh * 0.45) {
+      } else if (rect.top > vh * 0.7) {
         // Smoothly entering from the bottom (synchronized with #how-we-work exit)
-        p = Math.max(0, Math.min(1, (vh * 1.05 - rect.top) / (vh * 0.60)));
+        p = Math.max(0, Math.min(1, (vh * 1.1 - rect.top) / (vh * 0.40)));
       } else if (rect.bottom < vh * 0.45) {
         // Exiting to the bottom (towards Principles / Core Principles section)
         p = Math.max(0, Math.min(1, rect.bottom / (vh * 0.45)));

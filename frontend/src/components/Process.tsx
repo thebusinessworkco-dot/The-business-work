@@ -10,7 +10,6 @@ const cards = [
     title: "Executive Overview & Real-Time WhatsApp CRM Metrics",
     tab: "1. Operations & Metrics",
     shortDesc: "Live WhatsApp CRM & Lead Tracking",
-    highlights: ["⚡ 30s Auto-Replies", "📊 1,200+ Leads Handled", "📁 Live CRM Sync"],
   },
   {
     id: 2,
@@ -18,7 +17,6 @@ const cards = [
     title: "Cross-Department Automation & Workflows",
     tab: "2. Team Sync",
     shortDesc: "Instant Sync Across Teams",
-    highlights: ["👥 Cross-Team Alerts", "🔄 Two-Way Sync", "⚡ Zero Human Delays"],
   },
   {
     id: 3,
@@ -26,73 +24,30 @@ const cards = [
     title: "Automated Order Processing & Workflow Builder",
     tab: "3. Order Automation",
     shortDesc: "3-Day Order Flow Cut to 5 Mins",
-    highlights: ["⏱️ 3 Days → 5 Mins", "📦 Automated Orders", "🔒 100% Error-Free"],
   },
 ];
 
 export default function Process() {
   const sectionRef = useRef<HTMLElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const stickyWindowRef = useRef<HTMLDivElement>(null);
   const cardElementsRef = useRef<(HTMLDivElement | null)[]>([]);
   const [activeStep, setActiveStep] = useState(0);
 
-  // Mobile Touch Swipe Handling
-  const touchStartX = useRef<number | null>(null);
-  const touchEndX = useRef<number | null>(null);
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.targetTouches[0].clientX;
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    touchEndX.current = e.targetTouches[0].clientX;
-  };
-
-  const handleTouchEnd = () => {
-    if (touchStartX.current === null || touchEndX.current === null) return;
-    const distance = touchStartX.current - touchEndX.current;
-    const minSwipeDistance = 45;
-    if (distance > minSwipeDistance) {
-      // Swiped left -> next card
-      setActiveStep((prev) => (prev + 1) % cards.length);
-    } else if (distance < -minSwipeDistance) {
-      // Swiped right -> prev card
-      setActiveStep((prev) => (prev - 1 + cards.length) % cards.length);
-    }
-    touchStartX.current = null;
-    touchEndX.current = null;
-  };
-
-  // Auto-cycle for mobile preview when idle
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (window.innerWidth >= 640) return;
-
-    const timer = setInterval(() => {
-      setActiveStep((prev) => (prev + 1) % cards.length);
-    }, 5000);
-
-    return () => clearInterval(timer);
-  }, []);
-
   const scrollToStep = useCallback((stepIdx: number) => {
-    if (typeof window !== "undefined" && window.innerWidth < 640) {
-      setActiveStep(stepIdx);
-      return;
-    }
-
     const container = containerRef.current;
+    const stickyWindow = stickyWindowRef.current;
     if (!container) return;
     const rect = container.getBoundingClientRect();
-    const pinTop = 88;
-    const totalScrollable = rect.height - window.innerHeight;
-    if (totalScrollable <= 0) return;
+    const pinTop = window.innerWidth < 640 ? 76 : 88;
+    const stickyHeight = stickyWindow ? stickyWindow.offsetHeight : (window.innerWidth < 640 ? 280 : 720);
+    const maxScroll = Math.max(1, rect.height - stickyHeight);
 
     let targetP = 0.05;
     if (stepIdx === 1) targetP = 0.54;
-    if (stepIdx === 2) targetP = 0.98;
+    if (stepIdx === 2) targetP = 0.96;
 
-    const targetScrollY = window.scrollY + rect.top - pinTop + targetP * totalScrollable;
+    const targetScrollY = window.scrollY + rect.top - pinTop + targetP * maxScroll;
     window.scrollTo({ top: targetScrollY, behavior: "smooth" });
   }, []);
 
@@ -100,51 +55,26 @@ export default function Process() {
     let ticking = false;
 
     const updateCards = () => {
-      const section = sectionRef.current;
       const container = containerRef.current;
-
-      // Handle Mobile Background Transition into Dark Chocolate (#220B05)
-      if (window.innerWidth < 640) {
-        if (section) {
-          const rect = section.getBoundingClientRect();
-          const vh = window.innerHeight;
-          // As user scrolls towards bottom of #how-we-work, morph smoothly into #220B05
-          if (rect.bottom < vh * 1.05) {
-            const darkProgress = Math.max(0, Math.min(1, (vh * 1.05 - rect.bottom) / (vh * 0.45)));
-            const bgR = Math.round(250 + (34 - 250) * darkProgress);
-            const bgG = Math.round(247 + (11 - 247) * darkProgress);
-            const bgB = Math.round(232 + (5 - 232) * darkProgress);
-            section.style.backgroundColor = `rgb(${bgR}, ${bgG}, ${bgB})`;
-            section.style.borderBottomColor = `rgb(${Math.round(232 + (74 - 232) * darkProgress)}, ${Math.round(226 + (32 - 226) * darkProgress)}, ${Math.round(213 + (20 - 213) * darkProgress)})`;
-          } else {
-            section.style.backgroundColor = "#FAF7E8";
-            section.style.borderBottomColor = "#E8E2D5";
-          }
-        }
-        ticking = false;
-        return;
-      }
-
-      // Desktop Stacked Cards Transform Updates
+      const section = sectionRef.current;
+      const stickyWindow = stickyWindowRef.current;
       if (!container) {
         ticking = false;
         return;
       }
 
       const rect = container.getBoundingClientRect();
-      const pinTop = 88;
-      const totalScrollable = rect.height - window.innerHeight;
-
-      if (totalScrollable <= 0) {
-        ticking = false;
-        return;
-      }
+      const pinTop = window.innerWidth < 640 ? 76 : 88;
+      const stickyHeight = stickyWindow ? stickyWindow.offsetHeight : (window.innerWidth < 640 ? 280 : 720);
+      
+      // Exact sticky scroll distance: container ends precisely when sticky bottom touches container bottom
+      const maxScroll = Math.max(1, rect.height - stickyHeight);
 
       // Progress p ranges from 0 to 1
       const scrolled = pinTop - rect.top;
-      const p = Math.max(0, Math.min(1, scrolled / totalScrollable));
+      const p = Math.max(0, Math.min(1, scrolled / maxScroll));
 
-      // Active tab tracking for desktop
+      // Active tab tracking
       if (p < 0.48) {
         setActiveStep(0);
       } else if (p < 0.88) {
@@ -153,11 +83,10 @@ export default function Process() {
         setActiveStep(2);
       }
 
-      // Timing phases:
+      // Timing phases (Identical on both phone and laptop):
       // Card 0: pinned [0.00, 0.12], slides UP [0.12, 0.48]
       // Card 1: active [0.48, 0.60], slides UP [0.60, 0.96]
-      // Card 2: active [0.96, 1.00], then unpins with section into #industries
-      // Theme morph to #220B05: [0.70, 0.96]
+      // Card 2: active [0.96, 1.00], hands off directly to #industries with zero gap
 
       // ─── Card 0 ───
       let c0Y = 0;
@@ -224,7 +153,7 @@ export default function Process() {
         c2Brightness = 1.0;
       }
 
-      // ─── Seamless Background Color Morphing for Desktop Process Section ───
+      // ─── Seamless Background Color Morphing for Process Section ───
       // Light: #FAF7E8 (250, 247, 232) -> Dark Chocolate: #220B05 (34, 11, 5)
       if (section) {
         if (p >= 0.70) {
@@ -240,7 +169,7 @@ export default function Process() {
         }
       }
 
-      // Apply transforms directly to desktop cards
+      // Apply transforms directly to cards
       const el0 = cardElementsRef.current[0];
       if (el0) {
         el0.style.transform = `translate3d(0, ${c0Y.toFixed(2)}%, 0) scale(1)`;
@@ -293,7 +222,7 @@ export default function Process() {
       className="relative w-full border-t border-[#E8E2D5] bg-[#FAF7E8] text-[#141413] selection:bg-[#EAE4D7] transition-colors duration-150"
     >
       {/* Section Header */}
-      <div className="text-center max-w-3xl mx-auto pt-10 sm:pt-18 lg:pt-20 pb-3 sm:pb-5 px-4">
+      <div className="text-center max-w-3xl mx-auto pt-10 sm:pt-18 lg:pt-20 pb-4 sm:pb-5 px-4">
         <div className="font-headline text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.24em] text-[#7A756D] mb-2 sm:mb-2.5">
           HOW WE WORK
         </div>
@@ -324,88 +253,20 @@ export default function Process() {
       </div>
 
       {/* ──────────────────────────────────────────────────────────
-          MOBILE VIEW (< 640px): Compact, Interactive, ZERO Empty Space!
-          Directly connects to #industries with natural padding
-         ────────────────────────────────────────────────────────── */}
-      <div className="sm:hidden relative w-full px-3.5 pt-2 pb-6 flex flex-col items-center">
-        {/* Mobile Card Carousel with Touch-Swipe */}
-        <div
-          className="relative w-full aspect-[2400/1343] rounded-[20px] overflow-hidden border border-[#DCD5C3] bg-[#FAF7E8] shadow-[0_14px_36px_-10px_rgba(20,20,19,0.18)]"
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-        >
-          {cards.map((card, idx) => (
-            <div
-              key={card.id}
-              className={`absolute inset-0 w-full h-full transition-all duration-500 ease-out ${
-                activeStep === idx
-                  ? "opacity-100 scale-100 pointer-events-auto"
-                  : "opacity-0 scale-95 pointer-events-none"
-              }`}
-            >
-              <Image
-                src={card.image}
-                alt={card.title}
-                width={2400}
-                height={1343}
-                priority={idx === 0}
-                className="w-full h-full object-cover select-none pointer-events-none"
-              />
-            </div>
-          ))}
-        </div>
-
-        {/* Active Step Details Pill */}
-        <div className="mt-3 px-3.5 py-1.5 rounded-full bg-white/95 border border-[#DDD6C5] shadow-xs flex items-center gap-2 max-w-[94vw]">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#E4572E] animate-pulse shrink-0" />
-          <span className="font-headline text-[10px] font-bold text-[#141413] shrink-0">
-            {cards[activeStep].tab}:
-          </span>
-          <span className="font-body text-[10px] text-[#555047] truncate">
-            {cards[activeStep].shortDesc}
-          </span>
-        </div>
-
-        {/* Feature Highlights for Active Step */}
-        <div className="flex flex-wrap items-center justify-center gap-1.5 mt-2 px-1">
-          {cards[activeStep].highlights.map((h, i) => (
-            <span
-              key={i}
-              className="px-2.5 py-0.5 rounded-full bg-black/[0.04] border border-black/8 font-headline text-[10px] font-medium text-[#443F38]"
-            >
-              {h}
-            </span>
-          ))}
-        </div>
-
-        {/* Dot Indicators */}
-        <div className="flex items-center gap-1.5 mt-3">
-          {cards.map((_, i) => (
-            <button
-              key={i}
-              type="button"
-              onClick={() => setActiveStep(i)}
-              aria-label={`Go to step ${i + 1}`}
-              className={`h-1.5 rounded-full transition-all duration-300 ${
-                activeStep === i ? "w-6 bg-[#E4572E]" : "w-1.5 bg-[#DDD6C5]"
-              }`}
-            />
-          ))}
-        </div>
-      </div>
-
-      {/* ──────────────────────────────────────────────────────────
-          DESKTOP VIEW (>= 640px): Make.com-Style Sticky Stacked Cards
-          210vh Scroll Track with Zero Dead Space
+          Scroll-Driven Stacked Cards (Both Mobile & Laptop)
+          - On Mobile: 135vh track gives fast, responsive 2-swipe progression
+          - On Desktop: 210vh track gives comfortable mouse-wheel progression
+          - Zero dead space: Container unpins precisely when Card 2 finishes
          ────────────────────────────────────────────────────────── */}
       <div
         ref={containerRef}
-        className="hidden sm:block relative w-full"
-        style={{ height: "210vh" }}
+        className="relative w-full h-[135vh] sm:h-[210vh]"
       >
         {/* Sticky Window pinned right below the Header */}
-        <div className="sticky top-[88px] w-full flex flex-col items-center justify-start overflow-hidden pt-2 pb-2 sm:pb-4 pointer-events-none">
+        <div
+          ref={stickyWindowRef}
+          className="sticky top-[76px] sm:top-[88px] w-full flex flex-col items-center justify-start overflow-hidden pt-1 sm:pt-2 pb-2 sm:pb-4 pointer-events-none"
+        >
           {/* Card Stage */}
           <div className="relative w-full max-w-[940px] sm:max-w-[1020px] md:max-w-[1100px] lg:max-w-[1180px] xl:max-w-[1240px] px-3 sm:px-5">
             <div className="relative w-full aspect-[2400/1343]">
@@ -450,6 +311,17 @@ export default function Process() {
                 </div>
               ))}
             </div>
+          </div>
+
+          {/* Active Step Details Pill (Updates on scroll) */}
+          <div className="mt-2.5 px-3.5 py-1.5 rounded-full bg-white/95 border border-[#DDD6C5] shadow-xs flex items-center gap-2 pointer-events-auto max-w-[92vw]">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#E4572E] animate-pulse shrink-0" />
+            <span className="font-headline text-[10px] sm:text-xs font-bold text-[#141413] shrink-0">
+              {cards[activeStep].tab}:
+            </span>
+            <span className="font-body text-[10px] sm:text-xs text-[#555047] truncate">
+              {cards[activeStep].shortDesc}
+            </span>
           </div>
         </div>
       </div>
