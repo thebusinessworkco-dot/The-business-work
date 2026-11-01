@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function Industries() {
   const sectionRef = useRef<HTMLElement>(null);
-  const [progress, setProgress] = useState(1);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     let ticking = false;
@@ -17,15 +17,18 @@ export default function Industries() {
       const rect = el.getBoundingClientRect();
       const vh = window.innerHeight;
 
-      // Top is ALWAYS 100% rich Dark Chocolate (#220B05) seamlessly continuing from stacked cards exit.
-      // Never show white/cream in 03 // SECTORS WE SUPPORT.
-      // Only interpolate back to light when exiting to the bottom (towards Principles).
+      // Synchronize seamlessly with the stacked cards theme progress:
+      // When entering/visible below cards, match theme progress exactly
+      // When exiting to the bottom towards Principles, interpolate back to light
       let p = 1.0;
       if (rect.bottom < vh * 0.50) {
         // Exiting to the bottom (towards Principles / Core Principles section)
         p = Math.max(0, Math.min(1, rect.bottom / (vh * 0.50)));
+      } else if (rect.top > 0 && typeof document !== "undefined") {
+        const themeVar = document.documentElement.style.getPropertyValue("--theme-progress");
+        p = themeVar !== "" ? parseFloat(themeVar) : 0.0;
       } else {
-        // In view & entering from stacked cards: 100% rich Dark Chocolate (#220B05)
+        // In view: 100% rich Dark Chocolate (#220B05)
         p = 1.0;
       }
 

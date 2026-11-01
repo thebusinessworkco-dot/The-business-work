@@ -65,12 +65,28 @@ export default function Process() {
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [activeStep, setActiveStep] = useState(0);
 
+  const placeSticky = useCallback(() => {
+    const sticky = stickyRef.current;
+    if (!sticky) return;
+    const isMobile = window.innerWidth < 640;
+    if (!isMobile) {
+      sticky.style.top = "88px";
+      return;
+    }
+    const headerOffset = 64;
+    const cardH = sticky.offsetHeight || 215;
+    const peek = 32;
+    const free = window.innerHeight - headerOffset - cardH - peek;
+    const top = Math.round(headerOffset + Math.max(20, free / 2));
+    sticky.style.top = `${top}px`;
+  }, []);
+
   const scrollToStep = useCallback((stepIdx: number) => {
     const wrapper = wrapperRef.current;
     const sticky = stickyRef.current;
     if (!wrapper || !sticky) return;
 
-    const pinTop = window.innerWidth < 640 ? 76 : 88;
+    const pinTop = parseFloat(sticky.style.top) || (window.innerWidth < 640 ? 180 : 88);
     const range = Math.max(1, wrapper.offsetHeight - sticky.offsetHeight);
     const targetG = stepIdx === 0 ? 0.02 : stepIdx === 1 ? 0.52 : 0.98;
     const wrapperTop = wrapper.getBoundingClientRect().top + window.scrollY;
@@ -91,13 +107,12 @@ export default function Process() {
     });
 
     const updateHeight = () => {
+      placeSticky();
       const isMobile = window.innerWidth < 640;
-      // On mobile: 0.75 * innerHeight ensures:
-      // - Card 1 has comfortable breathing space below (screenshot 3)
-      // - Card 2 progressively decreases the remaining space
-      // - Card 3 has 0 gap so next section starts immediately beneath final card (screenshot 4)
+      // Scroll runway:
+      // On mobile & desktop, smooth scroll time so cards reveal naturally
       const scrollDist = isMobile
-        ? Math.round(window.innerHeight * 0.75)
+        ? Math.round(window.innerHeight * 0.95)
         : Math.round(window.innerHeight * 0.95);
       wrapper.style.height = `${sticky.offsetHeight + scrollDist}px`;
     };
@@ -105,8 +120,7 @@ export default function Process() {
     let ticking = false;
 
     const update = () => {
-      const isMobile = window.innerWidth < 640;
-      const pinTop = isMobile ? 76 : 88;
+      const pinTop = parseFloat(sticky.style.top) || (window.innerWidth < 640 ? 180 : 88);
       const rect = wrapper.getBoundingClientRect();
       const range = Math.max(1, wrapper.offsetHeight - sticky.offsetHeight);
       const g = clamp01((pinTop - rect.top) / range);
@@ -157,6 +171,16 @@ export default function Process() {
       if (typeof document !== "undefined") {
         document.documentElement.style.setProperty("--theme-progress", pTheme.toFixed(3));
         document.documentElement.style.setProperty("--theme-bg", currentBg);
+      }
+
+      // Synchronize #industries background in REAL TIME!
+      // When industries is touching or visible below the cards, it shares the exact same background color
+      const industriesEl = document.getElementById("industries");
+      if (industriesEl) {
+        const indRect = industriesEl.getBoundingClientRect();
+        if (indRect.top > -industriesEl.offsetHeight && indRect.bottom >= window.innerHeight * 0.50) {
+          industriesEl.style.backgroundColor = currentBg;
+        }
       }
 
       ticking = false;
@@ -232,11 +256,10 @@ export default function Process() {
         ref={wrapperRef}
         className="relative w-full"
       >
-        {/* Sticky Window: pins right below the header
-            pb-0 on mobile ensures next section starts IMMEDIATELY beneath final card */}
+        {/* Sticky Window: centered on mobile below header, top: 88px on desktop */}
         <div
           ref={stickyRef}
-          className="sticky top-[76px] sm:top-[88px] w-full flex flex-col items-center justify-start pb-0 sm:pb-4 pointer-events-none"
+          className="sticky top-[88px] w-full flex flex-col items-center justify-start pb-0 sm:pb-4 pointer-events-none"
         >
           {/* Card Stack:
               SAME LANDSCAPE ASPECT RATIO (2400/1343) ON BOTH PHONE & LAPTOP */}
