@@ -34,7 +34,7 @@ const cards = [
 ];
 
 /* ─────────────────────────────────────────────────────────────────────────────
-   MAKE.COM EXACT SCROLL-DRIVEN STACKED CARDS MATHEMATICAL MODEL (DESKTOP)
+   MAKE.COM EXACT SCROLL-DRIVEN STACKED CARDS MATHEMATICAL MODEL
    ───────────────────────────────────────────────────────────────────────────── */
 const N = cards.length;
 const STEP_PX = 16;
@@ -65,100 +65,19 @@ export default function Process() {
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [activeStep, setActiveStep] = useState(0);
 
-  // Touch swipe support on mobile (no empty runway needed)
-  const touchStartY = useRef(0);
-  const touchStartX = useRef(0);
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartY.current = e.touches[0].clientY;
-    touchStartX.current = e.touches[0].clientX;
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    const diffY = touchStartY.current - e.changedTouches[0].clientY;
-    const diffX = touchStartX.current - e.changedTouches[0].clientX;
-
-    if (Math.abs(diffX) > Math.abs(diffY)) {
-      if (diffX > 35) {
-        // Swiped left -> next card
-        setActiveStep((prev) => Math.min(N - 1, prev + 1));
-      } else if (diffX < -35) {
-        // Swiped right -> prev card
-        setActiveStep((prev) => Math.max(0, prev - 1));
-      }
-    } else {
-      if (diffY > 40) {
-        // Swiped up on card -> next card
-        setActiveStep((prev) => Math.min(N - 1, prev + 1));
-      } else if (diffY < -40) {
-        // Swiped down on card -> prev card
-        setActiveStep((prev) => Math.max(0, prev - 1));
-      }
-    }
-  };
-
   const scrollToStep = useCallback((stepIdx: number) => {
-    setActiveStep(stepIdx);
+    const wrapper = wrapperRef.current;
+    const sticky = stickyRef.current;
+    if (!wrapper || !sticky) return;
 
-    if (window.innerWidth >= 640) {
-      const wrapper = wrapperRef.current;
-      const sticky = stickyRef.current;
-      if (!wrapper || !sticky) return;
+    const pinTop = window.innerWidth < 640 ? 76 : 88;
+    const range = Math.max(1, wrapper.offsetHeight - sticky.offsetHeight);
+    const targetG = stepIdx === 0 ? 0.02 : stepIdx === 1 ? 0.52 : 0.98;
+    const wrapperTop = wrapper.getBoundingClientRect().top + window.scrollY;
+    const targetY = wrapperTop - pinTop + targetG * range;
 
-      const pinTop = 88;
-      const range = Math.max(1, wrapper.offsetHeight - sticky.offsetHeight);
-      const targetG = stepIdx === 0 ? 0.02 : stepIdx === 1 ? 0.52 : 0.98;
-      const wrapperTop = wrapper.getBoundingClientRect().top + window.scrollY;
-      const targetY = wrapperTop - pinTop + targetG * range;
-
-      window.scrollTo({ top: targetY, behavior: "smooth" });
-    }
+    window.scrollTo({ top: targetY, behavior: "smooth" });
   }, []);
-
-  // Update mobile card transforms when activeStep changes
-  useEffect(() => {
-    if (window.innerWidth >= 640) return;
-
-    cardRefs.current.forEach((el, idx) => {
-      if (!el) return;
-      el.style.transition = "transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease";
-
-      if (idx < activeStep) {
-        // Card already exited
-        el.style.transform = "translate3d(0, -115%, 0) scale(1)";
-        el.style.opacity = "0";
-        el.style.zIndex = "10";
-      } else if (idx === activeStep) {
-        // Front active card
-        el.style.transform = "translate3d(0, 0px, 0) scale(1)";
-        el.style.opacity = "1";
-        el.style.zIndex = "30";
-      } else {
-        // Cards behind
-        const diff = idx - activeStep;
-        el.style.transform = `translate3d(0, ${diff * 16}px, 0) scale(${(1 - diff * 0.03).toFixed(3)})`;
-        el.style.opacity = "1";
-        el.style.zIndex = `${(N - idx) * 10}`;
-      }
-    });
-
-    const section = sectionRef.current;
-    if (section) {
-      if (activeStep === 2) {
-        section.style.backgroundColor = "#220B05";
-        document.documentElement.style.setProperty("--theme-progress", "1.0");
-        document.documentElement.style.setProperty("--theme-bg", "#220B05");
-      } else if (activeStep === 1) {
-        section.style.backgroundColor = "rgb(142, 60, 32)";
-        document.documentElement.style.setProperty("--theme-progress", "0.5");
-        document.documentElement.style.setProperty("--theme-bg", "rgb(142, 60, 32)");
-      } else {
-        section.style.backgroundColor = "#FAF7E8";
-        document.documentElement.style.setProperty("--theme-progress", "0.0");
-        document.documentElement.style.setProperty("--theme-bg", "#FAF7E8");
-      }
-    }
-  }, [activeStep]);
 
   useEffect(() => {
     const wrapper = wrapperRef.current;
@@ -166,29 +85,28 @@ export default function Process() {
     const section = sectionRef.current;
     if (!wrapper || !sticky || !section) return;
 
-    // Set static z-indices once
+    // Set static z-indices once: Card 0 is top (30), Card 1 is middle (20), Card 2 is bottom (10)
     cardRefs.current.forEach((el, i) => {
       if (el) el.style.zIndex = `${(N - i) * 10}`;
     });
 
     const updateHeight = () => {
       const isMobile = window.innerWidth < 640;
-      if (isMobile) {
-        // ON MOBILE: Zero space! Container height matches cards exactly so #industries sits directly beneath
-        wrapper.style.height = "auto";
-      } else {
-        // ON DESKTOP: Make.com scroll-driven runway
-        const scrollDist = Math.round(window.innerHeight * 0.95);
-        wrapper.style.height = `${sticky.offsetHeight + scrollDist}px`;
-      }
+      // On mobile: 0.75 * innerHeight ensures:
+      // - Card 1 has comfortable breathing space below (screenshot 3)
+      // - Card 2 progressively decreases the remaining space
+      // - Card 3 has 0 gap so next section starts immediately beneath final card (screenshot 4)
+      const scrollDist = isMobile
+        ? Math.round(window.innerHeight * 0.75)
+        : Math.round(window.innerHeight * 0.95);
+      wrapper.style.height = `${sticky.offsetHeight + scrollDist}px`;
     };
 
     let ticking = false;
 
     const update = () => {
-      if (window.innerWidth < 640) return; // Mobile handled via activeStep / swipe
-
-      const pinTop = 88;
+      const isMobile = window.innerWidth < 640;
+      const pinTop = isMobile ? 76 : 88;
       const rect = wrapper.getBoundingClientRect();
       const range = Math.max(1, wrapper.offsetHeight - sticky.offsetHeight);
       const g = clamp01((pinTop - rect.top) / range);
@@ -207,7 +125,6 @@ export default function Process() {
       for (let i = 0; i < N; i++) {
         const el = cardRefs.current[i];
         if (!el) continue;
-        el.style.transition = ""; // no CSS transition on scroll update
 
         const lp = localP(i, g);
         const gap = STEP_PX + STEP_GROWTH * ease;
@@ -222,7 +139,8 @@ export default function Process() {
         el.style.opacity = opacity.toFixed(3);
       }
 
-      // Background Color Morph on Desktop
+      // ─── Seamless Background Color Morph (Cream #FAF7E8 -> Dark Chocolate #220B05) ───
+      // Smoothly blends starting at Card 1 exit (g = 0.18) up to Card 3 settle (g = 0.85)
       let pTheme = 0;
       if (g > 0.18) {
         pTheme = Math.min(1, (g - 0.18) / 0.67);
@@ -235,6 +153,7 @@ export default function Process() {
 
       section.style.backgroundColor = currentBg;
 
+      // Broadcast theme progress for synchronized #industries background transition
       if (typeof document !== "undefined") {
         document.documentElement.style.setProperty("--theme-progress", pTheme.toFixed(3));
         document.documentElement.style.setProperty("--theme-bg", currentBg);
@@ -271,7 +190,7 @@ export default function Process() {
     <section
       ref={sectionRef}
       id="how-we-work"
-      className="relative w-full border-t border-[#E8E2D5] bg-[#FAF7E8] text-[#141413] selection:bg-[#EAE4D7] transition-colors duration-150"
+      className="relative w-full border-t border-[#E8E2D5] bg-[#FAF7E8] text-[#141413] selection:bg-[#EAE4D7]"
     >
       {/* ─── Section Header ─── */}
       <div className="text-center max-w-3xl mx-auto pt-6 sm:pt-12 lg:pt-16 pb-3 sm:pb-5 px-4">
@@ -306,38 +225,30 @@ export default function Process() {
       </div>
 
       {/* ──────────────────────────────────────────────────────────
-          CARDS CONTAINER:
-          Directly connects to next section with zero dead space!
+          MAKE.COM FOLDER SCROLL WRAPPER
+          Scroll distance dynamically sized — zero dead space below Card 3!
          ────────────────────────────────────────────────────────── */}
       <div
         ref={wrapperRef}
-        className="relative w-full pb-0"
+        className="relative w-full"
       >
-        {/* Card Stage Window */}
+        {/* Sticky Window: pins right below the header
+            pb-0 on mobile ensures next section starts IMMEDIATELY beneath final card */}
         <div
           ref={stickyRef}
-          className="relative sm:sticky sm:top-[88px] w-full flex flex-col items-center justify-start pb-0 sm:pb-4 pointer-events-none"
+          className="sticky top-[76px] sm:top-[88px] w-full flex flex-col items-center justify-start pb-0 sm:pb-4 pointer-events-none"
         >
           {/* Card Stack:
               SAME LANDSCAPE ASPECT RATIO (2400/1343) ON BOTH PHONE & LAPTOP */}
           <div className="relative w-full max-w-[940px] sm:max-w-[1020px] md:max-w-[1100px] lg:max-w-[1180px] xl:max-w-[1240px] px-3 sm:px-5 pointer-events-auto">
-            <div
-              className="relative w-full aspect-[2400/1343] touch-pan-y"
-              onTouchStart={handleTouchStart}
-              onTouchEnd={handleTouchEnd}
-            >
+            <div className="relative w-full aspect-[2400/1343]">
               {cards.map((card, idx) => (
                 <div
                   key={card.id}
                   ref={(el) => {
                     cardRefs.current[idx] = el;
                   }}
-                  onClick={() => {
-                    if (window.innerWidth < 640 && idx === activeStep && activeStep < N - 1) {
-                      setActiveStep((prev) => prev + 1);
-                    }
-                  }}
-                  className="absolute inset-0 w-full h-full cursor-pointer sm:cursor-default"
+                  className="absolute inset-0 w-full h-full"
                   style={{
                     transformOrigin: "center bottom",
                     willChange: "transform, opacity",
