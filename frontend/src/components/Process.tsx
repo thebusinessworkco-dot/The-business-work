@@ -64,9 +64,8 @@ export default function Process() {
   const stickyRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [activeStep, setActiveStep] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
 
-  // Touch swipe gesture handling on mobile
+  // Touch swipe support on mobile (no empty runway needed)
   const touchStartY = useRef(0);
   const touchStartX = useRef(0);
 
@@ -79,64 +78,89 @@ export default function Process() {
     const diffY = touchStartY.current - e.changedTouches[0].clientY;
     const diffX = touchStartX.current - e.changedTouches[0].clientX;
 
-    // Swipe left or swipe up -> Next card
-    if (diffY > 35 || diffX > 35) {
-      setActiveStep((prev) => Math.min(N - 1, prev + 1));
-    }
-    // Swipe right or swipe down -> Previous card
-    else if (diffY < -35 || diffX < -35) {
-      setActiveStep((prev) => Math.max(0, prev - 1));
+    if (Math.abs(diffX) > Math.abs(diffY)) {
+      if (diffX > 35) {
+        // Swiped left -> next card
+        setActiveStep((prev) => Math.min(N - 1, prev + 1));
+      } else if (diffX < -35) {
+        // Swiped right -> prev card
+        setActiveStep((prev) => Math.max(0, prev - 1));
+      }
+    } else {
+      if (diffY > 40) {
+        // Swiped up on card -> next card
+        setActiveStep((prev) => Math.min(N - 1, prev + 1));
+      } else if (diffY < -40) {
+        // Swiped down on card -> prev card
+        setActiveStep((prev) => Math.max(0, prev - 1));
+      }
     }
   };
 
-  const scrollToStep = useCallback(
-    (stepIdx: number) => {
-      setActiveStep(stepIdx);
+  const scrollToStep = useCallback((stepIdx: number) => {
+    setActiveStep(stepIdx);
 
-      if (typeof window !== "undefined" && window.innerWidth >= 640) {
-        const wrapper = wrapperRef.current;
-        const sticky = stickyRef.current;
-        if (!wrapper || !sticky) return;
+    if (window.innerWidth >= 640) {
+      const wrapper = wrapperRef.current;
+      const sticky = stickyRef.current;
+      if (!wrapper || !sticky) return;
 
-        const pinTop = 88;
-        const range = Math.max(1, wrapper.offsetHeight - sticky.offsetHeight);
-        const targetG = stepIdx === 0 ? 0.02 : stepIdx === 1 ? 0.52 : 0.98;
-        const wrapperTop = wrapper.getBoundingClientRect().top + window.scrollY;
-        const targetY = wrapperTop - pinTop + targetG * range;
+      const pinTop = 88;
+      const range = Math.max(1, wrapper.offsetHeight - sticky.offsetHeight);
+      const targetG = stepIdx === 0 ? 0.02 : stepIdx === 1 ? 0.52 : 0.98;
+      const wrapperTop = wrapper.getBoundingClientRect().top + window.scrollY;
+      const targetY = wrapperTop - pinTop + targetG * range;
 
-        window.scrollTo({ top: targetY, behavior: "smooth" });
-      }
-    },
-    []
-  );
+      window.scrollTo({ top: targetY, behavior: "smooth" });
+    }
+  }, []);
 
-  // Sync mobile theme change when activeStep changes
+  // Update mobile card transforms when activeStep changes
   useEffect(() => {
-    if (typeof window !== "undefined" && window.innerWidth < 640) {
-      const section = sectionRef.current;
-      if (!section) return;
+    if (window.innerWidth >= 640) return;
 
-      const pTheme = activeStep === 2 ? 1.0 : activeStep === 1 ? 0.45 : 0.0;
-      const r = Math.round(250 + (34 - 250) * pTheme);
-      const gr = Math.round(247 + (11 - 247) * pTheme);
-      const b = Math.round(232 + (5 - 232) * pTheme);
-      const currentBg = `rgb(${r},${gr},${b})`;
+    cardRefs.current.forEach((el, idx) => {
+      if (!el) return;
+      el.style.transition = "transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease";
 
-      section.style.backgroundColor = currentBg;
-      document.documentElement.style.setProperty("--theme-progress", pTheme.toFixed(3));
-      document.documentElement.style.setProperty("--theme-bg", currentBg);
+      if (idx < activeStep) {
+        // Card already exited
+        el.style.transform = "translate3d(0, -115%, 0) scale(1)";
+        el.style.opacity = "0";
+        el.style.zIndex = "10";
+      } else if (idx === activeStep) {
+        // Front active card
+        el.style.transform = "translate3d(0, 0px, 0) scale(1)";
+        el.style.opacity = "1";
+        el.style.zIndex = "30";
+      } else {
+        // Cards behind
+        const diff = idx - activeStep;
+        el.style.transform = `translate3d(0, ${diff * 16}px, 0) scale(${(1 - diff * 0.03).toFixed(3)})`;
+        el.style.opacity = "1";
+        el.style.zIndex = `${(N - idx) * 10}`;
+      }
+    });
+
+    const section = sectionRef.current;
+    if (section) {
+      if (activeStep === 2) {
+        section.style.backgroundColor = "#220B05";
+        document.documentElement.style.setProperty("--theme-progress", "1.0");
+        document.documentElement.style.setProperty("--theme-bg", "#220B05");
+      } else if (activeStep === 1) {
+        section.style.backgroundColor = "rgb(142, 60, 32)";
+        document.documentElement.style.setProperty("--theme-progress", "0.5");
+        document.documentElement.style.setProperty("--theme-bg", "rgb(142, 60, 32)");
+      } else {
+        section.style.backgroundColor = "#FAF7E8";
+        document.documentElement.style.setProperty("--theme-progress", "0.0");
+        document.documentElement.style.setProperty("--theme-bg", "#FAF7E8");
+      }
     }
   }, [activeStep]);
 
   useEffect(() => {
-    const checkMobile = () => {
-      const mobile = window.innerWidth < 640;
-      setIsMobile(mobile);
-      return mobile;
-    };
-
-    checkMobile();
-
     const wrapper = wrapperRef.current;
     const sticky = stickyRef.current;
     const section = sectionRef.current;
@@ -148,15 +172,12 @@ export default function Process() {
     });
 
     const updateHeight = () => {
-      const mobile = window.innerWidth < 640;
-      setIsMobile(mobile);
-
-      if (mobile) {
-        // ON MOBILE: Remove artificial scroll height completely!
-        // This ensures div.relative.w-full directly attaches to Industries section with ZERO space!
+      const isMobile = window.innerWidth < 640;
+      if (isMobile) {
+        // ON MOBILE: Zero space! Container height matches cards exactly so #industries sits directly beneath
         wrapper.style.height = "auto";
       } else {
-        // ON DESKTOP: Full Make.com scroll pinning runway
+        // ON DESKTOP: Make.com scroll-driven runway
         const scrollDist = Math.round(window.innerHeight * 0.95);
         wrapper.style.height = `${sticky.offsetHeight + scrollDist}px`;
       }
@@ -165,18 +186,15 @@ export default function Process() {
     let ticking = false;
 
     const update = () => {
-      if (window.innerWidth < 640) {
-        ticking = false;
-        return;
-      }
+      if (window.innerWidth < 640) return; // Mobile handled via activeStep / swipe
 
-      // Desktop scroll-driven updates
       const pinTop = 88;
       const rect = wrapper.getBoundingClientRect();
       const range = Math.max(1, wrapper.offsetHeight - sticky.offsetHeight);
       const g = clamp01((pinTop - rect.top) / range);
       const ease = enterEase(g);
 
+      // Active tab tracking
       if (g < 0.45) {
         setActiveStep(0);
       } else if (g < 0.85) {
@@ -185,9 +203,11 @@ export default function Process() {
         setActiveStep(2);
       }
 
+      // Apply Make.com card transforms
       for (let i = 0; i < N; i++) {
         const el = cardRefs.current[i];
         if (!el) continue;
+        el.style.transition = ""; // no CSS transition on scroll update
 
         const lp = localP(i, g);
         const gap = STEP_PX + STEP_GROWTH * ease;
@@ -202,6 +222,7 @@ export default function Process() {
         el.style.opacity = opacity.toFixed(3);
       }
 
+      // Background Color Morph on Desktop
       let pTheme = 0;
       if (g > 0.18) {
         pTheme = Math.min(1, (g - 0.18) / 0.67);
@@ -213,8 +234,11 @@ export default function Process() {
       const currentBg = `rgb(${r},${gr},${b})`;
 
       section.style.backgroundColor = currentBg;
-      document.documentElement.style.setProperty("--theme-progress", pTheme.toFixed(3));
-      document.documentElement.style.setProperty("--theme-bg", currentBg);
+
+      if (typeof document !== "undefined") {
+        document.documentElement.style.setProperty("--theme-progress", pTheme.toFixed(3));
+        document.documentElement.style.setProperty("--theme-bg", currentBg);
+      }
 
       ticking = false;
     };
@@ -282,114 +306,72 @@ export default function Process() {
       </div>
 
       {/* ──────────────────────────────────────────────────────────
-          WRAPPER:
-          On mobile: h-auto so div.relative.w-full touches Industries with 0 space!
-          On desktop: sticky scroll runway.
+          CARDS CONTAINER:
+          Directly connects to next section with zero dead space!
          ────────────────────────────────────────────────────────── */}
       <div
         ref={wrapperRef}
-        className="relative w-full"
+        className="relative w-full pb-0"
       >
-        {/* Sticky Window:
-            On mobile: relative, pb-0 so it directly touches Industries
-            On desktop: sticky top-[88px] */}
+        {/* Card Stage Window */}
         <div
           ref={stickyRef}
           className="relative sm:sticky sm:top-[88px] w-full flex flex-col items-center justify-start pb-0 sm:pb-4 pointer-events-none"
         >
           {/* Card Stack:
               SAME LANDSCAPE ASPECT RATIO (2400/1343) ON BOTH PHONE & LAPTOP */}
-          <div
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}
-            className="relative w-full max-w-[940px] sm:max-w-[1020px] md:max-w-[1100px] lg:max-w-[1180px] xl:max-w-[1240px] px-3 sm:px-5 pointer-events-auto touch-pan-y"
-          >
-            <div className="relative w-full aspect-[2400/1343]">
-              {cards.map((card, idx) => {
-                // Mobile transform logic (swipe / tab driven)
-                let mobileTransform = "";
-                let mobileOpacity = 1;
-                let mobileZIndex = (N - idx) * 10;
-
-                if (isMobile) {
-                  if (idx < activeStep) {
-                    mobileTransform = "translate3d(0, -115%, 0) scale(1)";
-                    mobileOpacity = 0;
-                  } else if (idx === activeStep) {
-                    mobileTransform = "translate3d(0, 0px, 0) scale(1)";
-                    mobileOpacity = 1;
-                    mobileZIndex = 30;
-                  } else if (idx === activeStep + 1) {
-                    mobileTransform = "translate3d(0, 16px, 0) scale(0.97)";
-                    mobileOpacity = 1;
-                    mobileZIndex = 20;
-                  } else {
-                    mobileTransform = "translate3d(0, 32px, 0) scale(0.94)";
-                    mobileOpacity = 1;
-                    mobileZIndex = 10;
-                  }
-                }
-
-                return (
-                  <div
-                    key={card.id}
-                    ref={(el) => {
-                      cardRefs.current[idx] = el;
-                    }}
-                    onClick={() => {
-                      if (isMobile && idx === activeStep && activeStep < N - 1) {
-                        setActiveStep((prev) => prev + 1);
-                      }
-                    }}
-                    className={`absolute inset-0 w-full h-full ${
-                      isMobile
-                        ? "cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
-                        : ""
-                    }`}
-                    style={
-                      isMobile
-                        ? {
-                            transform: mobileTransform,
-                            opacity: mobileOpacity,
-                            zIndex: mobileZIndex,
-                            transformOrigin: "center bottom",
-                          }
-                        : {
-                            transformOrigin: "center bottom",
-                            willChange: "transform, opacity",
-                            zIndex: (N - idx) * 10,
-                          }
+          <div className="relative w-full max-w-[940px] sm:max-w-[1020px] md:max-w-[1100px] lg:max-w-[1180px] xl:max-w-[1240px] px-3 sm:px-5 pointer-events-auto">
+            <div
+              className="relative w-full aspect-[2400/1343] touch-pan-y"
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
+            >
+              {cards.map((card, idx) => (
+                <div
+                  key={card.id}
+                  ref={(el) => {
+                    cardRefs.current[idx] = el;
+                  }}
+                  onClick={() => {
+                    if (window.innerWidth < 640 && idx === activeStep && activeStep < N - 1) {
+                      setActiveStep((prev) => prev + 1);
                     }
-                  >
-                    <div className="relative w-full h-full rounded-[18px] sm:rounded-[26px] md:rounded-[32px] overflow-hidden border border-[#DCD5C3] bg-[#FAF7E8] shadow-[0_20px_60px_-12px_rgba(20,20,19,0.22),0_6px_20px_rgba(0,0,0,0.06)]">
-                      <Image
-                        src={card.image}
-                        alt={card.title}
-                        width={2400}
-                        height={1343}
-                        priority={idx === 0}
-                        loading={idx === 0 ? "eager" : "lazy"}
-                        draggable={false}
-                        sizes="(max-width: 1024px) 95vw, 1240px"
-                        className="w-full h-full object-cover select-none pointer-events-none"
-                      />
+                  }}
+                  className="absolute inset-0 w-full h-full cursor-pointer sm:cursor-default"
+                  style={{
+                    transformOrigin: "center bottom",
+                    willChange: "transform, opacity",
+                    zIndex: (N - idx) * 10,
+                  }}
+                >
+                  <div className="relative w-full h-full rounded-[18px] sm:rounded-[26px] md:rounded-[32px] overflow-hidden border border-[#DCD5C3] bg-[#FAF7E8] shadow-[0_20px_60px_-12px_rgba(20,20,19,0.22),0_6px_20px_rgba(0,0,0,0.06)]">
+                    <Image
+                      src={card.image}
+                      alt={card.title}
+                      width={2400}
+                      height={1343}
+                      priority={idx === 0}
+                      loading={idx === 0 ? "eager" : "lazy"}
+                      draggable={false}
+                      sizes="(max-width: 1024px) 95vw, 1240px"
+                      className="w-full h-full object-cover select-none pointer-events-none"
+                    />
 
-                      {/* Gradient overlay with title + description INSIDE card (Make.com style) */}
-                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent px-3.5 sm:px-8 pb-3 sm:pb-7 pt-10 sm:pt-28 pointer-events-none">
-                        <div className="font-headline text-[8px] sm:text-xs font-bold uppercase tracking-[0.2em] text-[#F59E0B] mb-0.5 sm:mb-1">
-                          {card.badge}
-                        </div>
-                        <h3 className="font-serif text-sm sm:text-2xl md:text-3xl font-normal text-white leading-tight mb-0.5 sm:mb-2">
-                          {card.cardTitle}
-                        </h3>
-                        <p className="font-body text-[10px] sm:text-sm text-white/85 leading-relaxed max-w-lg hidden xs:block sm:block">
-                          {card.cardDesc}
-                        </p>
+                    {/* Gradient overlay with title + description INSIDE card (Make.com style) */}
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent px-3.5 sm:px-8 pb-3 sm:pb-7 pt-10 sm:pt-28 pointer-events-none">
+                      <div className="font-headline text-[8px] sm:text-xs font-bold uppercase tracking-[0.2em] text-[#F59E0B] mb-0.5 sm:mb-1">
+                        {card.badge}
                       </div>
+                      <h3 className="font-serif text-sm sm:text-2xl md:text-3xl font-normal text-white leading-tight mb-0.5 sm:mb-2">
+                        {card.cardTitle}
+                      </h3>
+                      <p className="font-body text-[10px] sm:text-sm text-white/85 leading-relaxed max-w-lg hidden xs:block sm:block">
+                        {card.cardDesc}
+                      </p>
                     </div>
                   </div>
-                );
-              })}
+                </div>
+              ))}
             </div>
           </div>
         </div>
