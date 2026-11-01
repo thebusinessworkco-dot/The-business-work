@@ -1,38 +1,34 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 
 export default function Industries() {
   const sectionRef = useRef<HTMLElement>(null);
-  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+
     let ticking = false;
+    let lastBg = "";
 
     const onScroll = () => {
-      const el = sectionRef.current;
-      if (!el) return;
-
       const rect = el.getBoundingClientRect();
       const vh = window.innerHeight;
 
-      // Synchronize seamlessly with the stacked cards theme progress:
-      // When entering/visible below cards, match theme progress exactly
-      // When exiting to the bottom towards Principles, interpolate back to light
-      let p = 1.0;
+      // Only interpolate when exiting towards Principles at the bottom
       if (rect.bottom < vh * 0.50) {
-        // Exiting to the bottom (towards Principles / Core Principles section)
-        p = Math.max(0, Math.min(1, rect.bottom / (vh * 0.50)));
-      } else if (rect.top > 0 && typeof document !== "undefined") {
-        const themeVar = document.documentElement.style.getPropertyValue("--theme-progress");
-        p = themeVar !== "" ? parseFloat(themeVar) : 0.0;
-      } else {
-        // In view: 100% rich Dark Chocolate (#220B05)
-        p = 1.0;
+        const p = Math.max(0, Math.min(1, rect.bottom / (vh * 0.50)));
+        const r = Math.round(250 + (34 - 250) * p);
+        const g = Math.round(247 + (11 - 247) * p);
+        const b = Math.round(232 + (5 - 232) * p);
+        const bg = `rgb(${r},${g},${b})`;
+        if (bg !== lastBg) {
+          lastBg = bg;
+          el.style.backgroundColor = bg;
+        }
       }
-
-      setProgress(p);
       ticking = false;
     };
 
@@ -44,65 +40,27 @@ export default function Industries() {
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    window.addEventListener("resize", handleScroll, { passive: true });
-    onScroll();
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("resize", handleScroll);
-    };
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Real-time interpolated theme values:
-  // Light: #FAF7E8 (250, 247, 232) -> Dark Chocolate: #220B05 (34, 11, 5)
-  const bgR = Math.round(250 + (34 - 250) * progress);
-  const bgG = Math.round(247 + (11 - 247) * progress);
-  const bgB = Math.round(232 + (5 - 232) * progress);
-  const currentBg = `rgb(${bgR}, ${bgG}, ${bgB})`;
-
-  const textR = Math.round(20 + (255 - 20) * progress);
-  const textG = Math.round(20 + (255 - 20) * progress);
-  const textB = Math.round(19 + (255 - 19) * progress);
-  const currentText = `rgb(${textR}, ${textG}, ${textB})`;
-
-  const borderR = Math.round(232 + (74 - 232) * progress);
-  const borderG = Math.round(226 + (32 - 226) * progress);
-  const borderB = Math.round(213 + (20 - 213) * progress);
-  const currentBorder = `rgb(${borderR}, ${borderG}, ${borderB})`;
-
-  // Subtitle badge color: #7A756D (122, 117, 109) -> #F59E0B (245, 158, 11)
-  const badgeR = Math.round(122 + (245 - 122) * progress);
-  const badgeG = Math.round(117 + (158 - 117) * progress);
-  const badgeB = Math.round(109 + (11 - 109) * progress);
-  const currentBadge = `rgb(${badgeR}, ${badgeG}, ${badgeB})`;
-
-  // Card background: white/40 (light) -> #2D1007/55 (dark)
-  const cardBg =
-    progress > 0.05
-      ? `rgba(45, 16, 7, ${(0.15 + progress * 0.45).toFixed(2)})`
-      : "rgba(255, 255, 255, 0.4)";
-  const cardBorder =
-    progress > 0.05
-      ? `rgba(74, 32, 20, ${(0.2 + progress * 0.6).toFixed(2)})`
-      : "rgba(232, 226, 213, 0.7)";
-
-  const isDarkTone = progress >= 0.45;
+  // Premium Dark Chocolate theme (#220B05)
+  const currentText = "#FFFFFF";
+  const currentBadge = "#F59E0B";
+  const cardBg = "rgba(45, 16, 7, 0.60)";
+  const cardBorder = "rgba(74, 32, 20, 0.80)";
+  const isDarkTone = true;
 
   return (
     <section
       ref={sectionRef}
       id="industries"
       aria-labelledby="industries-title"
-      className="relative w-full border-0 border-transparent pt-8 sm:pt-16 pb-16 sm:pb-24 overflow-hidden"
-      style={{
-        backgroundColor: currentBg,
-        color: currentText,
-      }}
+      className="relative w-full border-0 border-transparent bg-[#220B05] text-white pt-8 sm:pt-16 pb-16 sm:pb-24 overflow-hidden"
     >
-      {/* Subtle Ambient Warm Light (Expands as dark mode deepens) */}
+      {/* Subtle Ambient Warm Light */}
       <div
         className="pointer-events-none absolute inset-0 transition-opacity duration-300"
-        style={{ opacity: progress.toFixed(2) }}
+        style={{ opacity: 1 }}
       >
         <div className="absolute top-1/4 -left-20 h-96 w-96 rounded-full bg-[#EA580C]/15 blur-[120px]" />
         <div className="absolute bottom-1/4 -right-20 h-96 w-96 rounded-full bg-[#F59E0B]/12 blur-[130px]" />

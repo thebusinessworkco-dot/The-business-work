@@ -86,8 +86,11 @@ export default function Process() {
     const sticky = stickyRef.current;
     if (!wrapper || !sticky) return;
 
-    const pinTop = parseFloat(sticky.style.top) || (window.innerWidth < 640 ? 180 : 88);
-    const range = Math.max(1, wrapper.offsetHeight - sticky.offsetHeight);
+    const isMobile = window.innerWidth < 640;
+    const pinTop = parseFloat(sticky.style.top) || (isMobile ? 180 : 88);
+    const scrollPerCard = isMobile ? 1.15 : 1.35;
+    const scrollDist = Math.round((N - 1) * scrollPerCard * window.innerHeight);
+    const range = Math.max(1, scrollDist);
     const targetG = stepIdx === 0 ? 0.02 : stepIdx === 1 ? 0.52 : 0.98;
     const wrapperTop = wrapper.getBoundingClientRect().top + window.scrollY;
     const targetY = wrapperTop - pinTop + targetG * range;
@@ -106,33 +109,37 @@ export default function Process() {
       if (el) el.style.zIndex = `${(N - i) * 10}`;
     });
 
-    const updateHeight = () => {
+    let cachedStickyTop = 0;
+    let cachedRange = 1;
+
+    const measure = () => {
       placeSticky();
       const isMobile = window.innerWidth < 640;
-      // Scroll runway:
-      // On mobile & desktop, smooth scroll time so cards reveal naturally
-      const scrollDist = isMobile
-        ? Math.round(window.innerHeight * 0.95)
-        : Math.round(window.innerHeight * 0.95);
+      // Make.com exact scroll runway: (N - 1) * SCROLL_PER_CARD * window.innerHeight
+      // Mobile: 1.15 per card transition = 2.3 * window.innerHeight (smooth, relaxed swipe pace)
+      // Desktop: 1.35 per card transition = 2.7 * window.innerHeight
+      const scrollPerCard = isMobile ? 1.15 : 1.35;
+      const scrollDist = Math.round((N - 1) * scrollPerCard * window.innerHeight);
       wrapper.style.height = `${sticky.offsetHeight + scrollDist}px`;
+
+      cachedStickyTop = parseFloat(sticky.style.top) || (isMobile ? 180 : 88);
+      cachedRange = Math.max(1, scrollDist);
     };
 
     let ticking = false;
+    let activeStepVal = 0;
+    let lastPTheme = -1;
 
     const update = () => {
-      const pinTop = parseFloat(sticky.style.top) || (window.innerWidth < 640 ? 180 : 88);
       const rect = wrapper.getBoundingClientRect();
-      const range = Math.max(1, wrapper.offsetHeight - sticky.offsetHeight);
-      const g = clamp01((pinTop - rect.top) / range);
+      const g = clamp01((cachedStickyTop - rect.top) / cachedRange);
       const ease = enterEase(g);
 
-      // Active tab tracking
-      if (g < 0.45) {
-        setActiveStep(0);
-      } else if (g < 0.85) {
-        setActiveStep(1);
-      } else {
-        setActiveStep(2);
+      // Active tab tracking - only update React state when step changes!
+      const nextStep = g < 0.45 ? 0 : g < 0.85 ? 1 : 2;
+      if (activeStepVal !== nextStep) {
+        activeStepVal = nextStep;
+        setActiveStep(nextStep);
       }
 
       // Apply Make.com card transforms
@@ -154,31 +161,23 @@ export default function Process() {
       }
 
       // ─── Seamless Background Color Morph (Cream #FAF7E8 -> Dark Chocolate #220B05) ───
-      // Smoothly blends starting at Card 1 exit (g = 0.18) up to Card 3 settle (g = 0.85)
       let pTheme = 0;
-      if (g > 0.18) {
-        pTheme = Math.min(1, (g - 0.18) / 0.67);
+      if (g > 0.15) {
+        pTheme = Math.min(1, (g - 0.15) / 0.70);
       }
 
-      const r = Math.round(250 + (34 - 250) * pTheme);
-      const gr = Math.round(247 + (11 - 247) * pTheme);
-      const b = Math.round(232 + (5 - 232) * pTheme);
-      const currentBg = `rgb(${r},${gr},${b})`;
+      // Only update DOM background styles when pTheme changes meaningfully (prevents layout thrashing)
+      if (Math.abs(pTheme - lastPTheme) > 0.003) {
+        lastPTheme = pTheme;
+        const r = Math.round(250 + (34 - 250) * pTheme);
+        const gr = Math.round(247 + (11 - 247) * pTheme);
+        const b = Math.round(232 + (5 - 232) * pTheme);
+        const currentBg = `rgb(${r},${gr},${b})`;
 
-      section.style.backgroundColor = currentBg;
+        section.style.backgroundColor = currentBg;
 
-      // Broadcast theme progress for synchronized #industries background transition
-      if (typeof document !== "undefined") {
-        document.documentElement.style.setProperty("--theme-progress", pTheme.toFixed(3));
-        document.documentElement.style.setProperty("--theme-bg", currentBg);
-      }
-
-      // Synchronize #industries background in REAL TIME!
-      // When industries is touching or visible below the cards, it shares the exact same background color
-      const industriesEl = document.getElementById("industries");
-      if (industriesEl) {
-        const indRect = industriesEl.getBoundingClientRect();
-        if (indRect.top > -industriesEl.offsetHeight && indRect.bottom >= window.innerHeight * 0.50) {
+        const industriesEl = document.getElementById("industries");
+        if (industriesEl) {
           industriesEl.style.backgroundColor = currentBg;
         }
       }
@@ -186,29 +185,41 @@ export default function Process() {
       ticking = false;
     };
 
+    let isActive = false;
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          isActive = entry.isIntersecting;
+          if (isActive) update();
+        });
+      },
+      { rootMargin: "300px 0px 300px 0px", threshold: 0 }
+    );
+    io.observe(wrapper);
+
     const onScroll = () => {
-      if (!ticking) {
-        ticking = true;
-        requestAnimationFrame(update);
-      }
+      if (!isActive || ticking) return;
+      ticking = true;
+      requestAnimationFrame(update);
     };
 
     const onResize = () => {
-      updateHeight();
+      measure();
       update();
     };
 
-    updateHeight();
+    measure();
     update();
 
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize, { passive: true });
 
     return () => {
+      io.disconnect();
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
     };
-  }, []);
+  }, [placeSticky]);
 
   return (
     <section
@@ -275,10 +286,12 @@ export default function Process() {
                   style={{
                     transformOrigin: "center bottom",
                     willChange: "transform, opacity",
+                    backfaceVisibility: "hidden",
+                    WebkitBackfaceVisibility: "hidden",
                     zIndex: (N - idx) * 10,
                   }}
                 >
-                  <div className="relative w-full h-full rounded-[18px] sm:rounded-[26px] md:rounded-[32px] overflow-hidden border border-[#DCD5C3] bg-[#FAF7E8] shadow-[0_20px_60px_-12px_rgba(20,20,19,0.22),0_6px_20px_rgba(0,0,0,0.06)]">
+                  <div className="relative w-full h-full rounded-[18px] sm:rounded-[26px] md:rounded-[32px] overflow-hidden border border-[#DCD5C3] bg-[#FAF7E8] shadow-[0_12px_32px_-8px_rgba(0,0,0,0.28)]">
                     <Image
                       src={card.image}
                       alt={card.title}
