@@ -93,7 +93,7 @@ export default function Industries() {
       ref={sectionRef}
       id="industries"
       aria-labelledby="industries-title"
-      className="relative w-full border-b pt-1 sm:pt-3 pb-16 sm:pb-24 overflow-hidden transition-[background-color,border-color,color] duration-150"
+      className="relative w-full border-b pt-0 sm:pt-3 pb-16 sm:pb-24 overflow-hidden transition-[background-color,border-color,color] duration-150"
       style={{
         backgroundColor: currentBg,
         borderColor: currentBorder,
