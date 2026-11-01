@@ -33,7 +33,7 @@ const cards = [
   },
 ];
 
-const STAGGER_PX = 18; // offset between stacked cards (peeking at bottom)
+const STAGGER_PX = 22; // offset between stacked cards (peeking at bottom)
 
 export default function Process() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -64,7 +64,7 @@ export default function Process() {
     let ticking = false;
 
     // Dynamically size container = cardHeight + scrollDistance
-    // This ensures ZERO empty space below the cards when animation ends
+    // Tight scroll distance so the next section (#industries) sits directly below with zero dead space
     const syncContainerHeight = () => {
       const container = containerRef.current;
       const cardStage = cardStageRef.current;
@@ -72,10 +72,10 @@ export default function Process() {
 
       const cardH = cardStage.offsetHeight;
       const isMobile = window.innerWidth < 640;
-      // Scroll distance: how many pixels user scrolls through all 3 cards
+      // Snappy scroll distance: brings next section UP directly below the card
       const scrollDistance = isMobile
-        ? Math.round(window.innerHeight * 0.85)
-        : Math.round(window.innerHeight * 1.15);
+        ? Math.round(window.innerHeight * 0.32)
+        : Math.round(window.innerHeight * 0.55);
 
       container.style.height = `${cardH + scrollDistance}px`;
     };
@@ -118,7 +118,7 @@ export default function Process() {
       let c0Opacity = 1;
       if (p > 0.05) {
         const t0 = Math.min(1, (p - 0.05) / 0.40);
-        c0Y = -t0 * 115; // slide up percentage
+        c0Y = -t0 * 115;
         c0Opacity = t0 > 0.80 ? Math.max(0, 1 - (t0 - 0.80) / 0.20) : 1;
       }
 
@@ -179,8 +179,8 @@ export default function Process() {
       }
 
       // ─── Background Color Morph (Cream #FAF7E8 -> Dark Chocolate #220B05) ───
-      if (p >= 0.65) {
-        const dp = Math.min(1, (p - 0.65) / 0.35);
+      if (p >= 0.55) {
+        const dp = Math.min(1, (p - 0.55) / 0.45);
         const r = Math.round(250 + (34 - 250) * dp);
         const g = Math.round(247 + (11 - 247) * dp);
         const b = Math.round(232 + (5 - 232) * dp);
@@ -254,20 +254,20 @@ export default function Process() {
       className="relative w-full border-t border-[#E8E2D5] bg-[#FAF7E8] text-[#141413] selection:bg-[#EAE4D7] transition-colors duration-150"
     >
       {/* ─── Section Header ─── */}
-      <div className="text-center max-w-3xl mx-auto pt-10 sm:pt-16 lg:pt-20 pb-4 sm:pb-6 px-4">
-        <div className="font-headline text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.24em] text-[#7A756D] mb-2 sm:mb-2.5">
+      <div className="text-center max-w-3xl mx-auto pt-6 sm:pt-12 lg:pt-16 pb-3 sm:pb-5 px-4">
+        <div className="font-headline text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.24em] text-[#7A756D] mb-1.5 sm:mb-2">
           HOW WE WORK
         </div>
         <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-normal leading-[1.14] tracking-tight text-[#141413]">
           Designed for how your <span className="text-[#E4572E]">business</span>{" "}
           <span className="italic">actually runs.</span>
         </h2>
-        <p className="mt-2.5 sm:mt-3 font-body text-xs sm:text-base text-[#555047] max-w-xl mx-auto leading-relaxed">
+        <p className="mt-2 font-body text-xs sm:text-base text-[#555047] max-w-xl mx-auto leading-relaxed">
           Watch how our automated workflows connect WhatsApp, spreadsheets, and CRM into one seamless system.
         </p>
 
         {/* Step Indicator Tabs */}
-        <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-3 mt-4 sm:mt-6">
+        <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2.5 mt-3 sm:mt-5">
           {cards.map((c, idx) => (
             <button
               key={c.id}
@@ -296,7 +296,7 @@ export default function Process() {
         {/* Sticky Window: pins right below the header */}
         <div
           ref={cardStageRef}
-          className="sticky top-[76px] sm:top-[88px] w-full flex flex-col items-center justify-start pb-12 sm:pb-16"
+          className="sticky top-[76px] sm:top-[88px] w-full flex flex-col items-center justify-start pb-2 sm:pb-4"
         >
           {/* Card Stage with stacked cards */}
           <div className="relative w-full max-w-[940px] sm:max-w-[1020px] md:max-w-[1100px] lg:max-w-[1180px] xl:max-w-[1240px] px-3 sm:px-5">
@@ -319,8 +319,8 @@ export default function Process() {
                       idx === 0
                         ? "translate3d(0, 0%, 0) scale(1)"
                         : idx === 1
-                        ? `translate3d(0, ${STAGGER_PX}px, 0) scale(0.96)`
-                        : `translate3d(0, ${STAGGER_PX * 2}px, 0) scale(0.92)`,
+                        ? `translate3d(0, ${STAGGER_PX}px, 0) scale(0.97)`
+                        : `translate3d(0, ${STAGGER_PX * 2}px, 0) scale(0.94)`,
                     filter:
                       idx === 0
                         ? "brightness(1)"
