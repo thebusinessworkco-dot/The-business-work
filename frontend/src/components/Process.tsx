@@ -30,24 +30,33 @@ const cards = [
 export default function Process() {
   const sectionRef = useRef<HTMLElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const stickyWindowRef = useRef<HTMLDivElement>(null);
   const cardElementsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const mobileCardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [activeStep, setActiveStep] = useState(0);
 
   const scrollToStep = useCallback((stepIdx: number) => {
+    if (typeof window !== "undefined" && window.innerWidth < 640) {
+      const targetEl = mobileCardRefs.current[stepIdx];
+      if (targetEl) {
+        const top = targetEl.getBoundingClientRect().top + window.scrollY - 76;
+        window.scrollTo({ top, behavior: "smooth" });
+      }
+      setActiveStep(stepIdx);
+      return;
+    }
+
     const container = containerRef.current;
-    const stickyWindow = stickyWindowRef.current;
     if (!container) return;
     const rect = container.getBoundingClientRect();
-    const pinTop = window.innerWidth < 640 ? 76 : 88;
-    const stickyHeight = stickyWindow ? stickyWindow.offsetHeight : (window.innerWidth < 640 ? 280 : 720);
-    const maxScroll = Math.max(1, rect.height - stickyHeight);
+    const pinTop = 88;
+    const totalScrollable = rect.height - window.innerHeight;
+    if (totalScrollable <= 0) return;
 
     let targetP = 0.05;
     if (stepIdx === 1) targetP = 0.54;
-    if (stepIdx === 2) targetP = 0.96;
+    if (stepIdx === 2) targetP = 0.98;
 
-    const targetScrollY = window.scrollY + rect.top - pinTop + targetP * maxScroll;
+    const targetScrollY = window.scrollY + rect.top - pinTop + targetP * totalScrollable;
     window.scrollTo({ top: targetScrollY, behavior: "smooth" });
   }, []);
 
@@ -55,26 +64,76 @@ export default function Process() {
     let ticking = false;
 
     const updateCards = () => {
-      const container = containerRef.current;
       const section = sectionRef.current;
-      const stickyWindow = stickyWindowRef.current;
+
+      // ─── Mobile Scroll Handling: Track active card & theme morph ───
+      if (window.innerWidth < 640) {
+        let activeIdx = 0;
+        const vh = window.innerHeight;
+
+        mobileCardRefs.current.forEach((el, idx) => {
+          if (!el) return;
+          const r = el.getBoundingClientRect();
+          // Card is active when its top is near the sticky header
+          if (r.top <= 120) {
+            activeIdx = idx;
+          }
+        });
+        setActiveStep(activeIdx);
+
+        // Mobile theme morph as Card 3 reaches top or exit approaches
+        if (section) {
+          const card3 = mobileCardRefs.current[2];
+          const sectionRect = section.getBoundingClientRect();
+          if (card3) {
+            const r3 = card3.getBoundingClientRect();
+            // Morph into #220B05 as Card 3 approaches sticky position
+            if (r3.top < vh * 0.75) {
+              const darkProgress = Math.max(0, Math.min(1, (vh * 0.75 - r3.top) / (vh * 0.40)));
+              const bgR = Math.round(250 + (34 - 250) * darkProgress);
+              const bgG = Math.round(247 + (11 - 247) * darkProgress);
+              const bgB = Math.round(232 + (5 - 232) * darkProgress);
+              section.style.backgroundColor = `rgb(${bgR}, ${bgG}, ${bgB})`;
+              section.style.borderBottomColor = `rgb(${Math.round(232 + (74 - 232) * darkProgress)}, ${Math.round(226 + (32 - 226) * darkProgress)}, ${Math.round(213 + (20 - 213) * darkProgress)})`;
+            } else {
+              section.style.backgroundColor = "#FAF7E8";
+              section.style.borderBottomColor = "#E8E2D5";
+            }
+          } else if (sectionRect.bottom < vh * 0.9) {
+            const darkProgress = Math.max(0, Math.min(1, (vh * 0.9 - sectionRect.bottom) / (vh * 0.4)));
+            const bgR = Math.round(250 + (34 - 250) * darkProgress);
+            const bgG = Math.round(247 + (11 - 247) * darkProgress);
+            const bgB = Math.round(232 + (5 - 232) * darkProgress);
+            section.style.backgroundColor = `rgb(${bgR}, ${bgG}, ${bgB})`;
+            section.style.borderBottomColor = `rgb(${Math.round(232 + (74 - 232) * darkProgress)}, ${Math.round(226 + (32 - 226) * darkProgress)}, ${Math.round(213 + (20 - 213) * darkProgress)})`;
+          }
+        }
+
+        ticking = false;
+        return;
+      }
+
+      // ─── Desktop Stacked Cards Transform Updates ───
+      const container = containerRef.current;
       if (!container) {
         ticking = false;
         return;
       }
 
       const rect = container.getBoundingClientRect();
-      const pinTop = window.innerWidth < 640 ? 76 : 88;
-      const stickyHeight = stickyWindow ? stickyWindow.offsetHeight : (window.innerWidth < 640 ? 280 : 720);
-      
-      // Exact sticky scroll distance: container ends precisely when sticky bottom touches container bottom
-      const maxScroll = Math.max(1, rect.height - stickyHeight);
+      const pinTop = 88;
+      const totalScrollable = rect.height - window.innerHeight;
+
+      if (totalScrollable <= 0) {
+        ticking = false;
+        return;
+      }
 
       // Progress p ranges from 0 to 1
       const scrolled = pinTop - rect.top;
-      const p = Math.max(0, Math.min(1, scrolled / maxScroll));
+      const p = Math.max(0, Math.min(1, scrolled / totalScrollable));
 
-      // Active tab tracking
+      // Active tab tracking for desktop
       if (p < 0.48) {
         setActiveStep(0);
       } else if (p < 0.88) {
@@ -83,10 +142,10 @@ export default function Process() {
         setActiveStep(2);
       }
 
-      // Timing phases (Identical on both phone and laptop):
+      // Timing phases (Desktop):
       // Card 0: pinned [0.00, 0.12], slides UP [0.12, 0.48]
       // Card 1: active [0.48, 0.60], slides UP [0.60, 0.96]
-      // Card 2: active [0.96, 1.00], hands off directly to #industries with zero gap
+      // Card 2: active [0.96, 1.00], then unpins with section into #industries
 
       // ─── Card 0 ───
       let c0Y = 0;
@@ -153,7 +212,7 @@ export default function Process() {
         c2Brightness = 1.0;
       }
 
-      // ─── Seamless Background Color Morphing for Process Section ───
+      // ─── Seamless Background Color Morphing for Desktop Process Section ───
       // Light: #FAF7E8 (250, 247, 232) -> Dark Chocolate: #220B05 (34, 11, 5)
       if (section) {
         if (p >= 0.70) {
@@ -169,7 +228,7 @@ export default function Process() {
         }
       }
 
-      // Apply transforms directly to cards
+      // Apply transforms directly to desktop cards
       const el0 = cardElementsRef.current[0];
       if (el0) {
         el0.style.transform = `translate3d(0, ${c0Y.toFixed(2)}%, 0) scale(1)`;
@@ -253,20 +312,65 @@ export default function Process() {
       </div>
 
       {/* ──────────────────────────────────────────────────────────
-          Scroll-Driven Stacked Cards (Both Mobile & Laptop)
-          - On Mobile: 135vh track gives fast, responsive 2-swipe progression
-          - On Desktop: 210vh track gives comfortable mouse-wheel progression
-          - Zero dead space: Container unpins precisely when Card 2 finishes
+          MOBILE VIEW (< 640px): Pure Sticky Stacking with ZERO DEAD SPACE!
+          Each card stacks over the previous one on scroll.
+          #industries is placed directly below Card 3 with NO gap!
+         ────────────────────────────────────────────────────────── */}
+      <div className="sm:hidden px-3.5 pt-2 pb-6 space-y-4">
+        {cards.map((card, idx) => {
+          const stickyTopPx = 76 + idx * 8; // Slight top offset creates beautiful layered card stack
+          return (
+            <div
+              key={card.id}
+              ref={(el) => {
+                mobileCardRefs.current[idx] = el;
+              }}
+              className="sticky transition-transform duration-200"
+              style={{
+                top: `${stickyTopPx}px`,
+                zIndex: (idx + 1) * 10,
+              }}
+            >
+              <div className="relative w-full aspect-[2400/1343] rounded-[20px] overflow-hidden border border-[#DCD5C3] bg-[#FAF7E8] shadow-[0_16px_40px_-10px_rgba(20,20,19,0.22)]">
+                <Image
+                  src={card.image}
+                  alt={card.title}
+                  width={2400}
+                  height={1343}
+                  priority={idx === 0}
+                  loading={idx === 0 ? "eager" : "lazy"}
+                  draggable={false}
+                  sizes="95vw"
+                  className="w-full h-full object-cover select-none pointer-events-none"
+                />
+              </div>
+
+              {/* Active Step Details Pill */}
+              <div className="mt-2 px-3 py-1.5 rounded-full bg-white/95 border border-[#DDD6C5] shadow-xs flex items-center gap-2 max-w-[94vw] mx-auto">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#E4572E] animate-pulse shrink-0" />
+                <span className="font-headline text-[10px] font-bold text-[#141413] shrink-0">
+                  {card.tab}:
+                </span>
+                <span className="font-body text-[10px] text-[#555047] truncate">
+                  {card.shortDesc}
+                </span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* ──────────────────────────────────────────────────────────
+          DESKTOP VIEW (>= 640px): Make.com-Style Sticky Stacked Cards
+          210vh Scroll Track with Zero Dead Space
          ────────────────────────────────────────────────────────── */}
       <div
         ref={containerRef}
-        className="relative w-full h-[135vh] sm:h-[210vh]"
+        className="hidden sm:block relative w-full"
+        style={{ height: "210vh" }}
       >
         {/* Sticky Window pinned right below the Header */}
-        <div
-          ref={stickyWindowRef}
-          className="sticky top-[76px] sm:top-[88px] w-full flex flex-col items-center justify-start overflow-hidden pt-1 sm:pt-2 pb-2 sm:pb-4 pointer-events-none"
-        >
+        <div className="sticky top-[88px] w-full flex flex-col items-center justify-start overflow-hidden pt-2 pb-2 sm:pb-4 pointer-events-none">
           {/* Card Stage */}
           <div className="relative w-full max-w-[940px] sm:max-w-[1020px] md:max-w-[1100px] lg:max-w-[1180px] xl:max-w-[1240px] px-3 sm:px-5">
             <div className="relative w-full aspect-[2400/1343]">
@@ -313,7 +417,7 @@ export default function Process() {
             </div>
           </div>
 
-          {/* Active Step Details Pill (Updates on scroll) */}
+          {/* Active Step Details Pill */}
           <div className="mt-2.5 px-3.5 py-1.5 rounded-full bg-white/95 border border-[#DDD6C5] shadow-xs flex items-center gap-2 pointer-events-auto max-w-[92vw]">
             <span className="w-1.5 h-1.5 rounded-full bg-[#E4572E] animate-pulse shrink-0" />
             <span className="font-headline text-[10px] sm:text-xs font-bold text-[#141413] shrink-0">
