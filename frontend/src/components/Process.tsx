@@ -33,191 +33,126 @@ const cards = [
   },
 ];
 
-const STAGGER_PX = 22; // offset between stacked cards (peeking at bottom)
+/* ─────────────────────────────────────────────────────────────────────────────
+   MAKE.COM EXACT SCROLL-DRIVEN STACKED CARDS MATHEMATICAL MODEL
+   ───────────────────────────────────────────────────────────────────────────── */
+const N = cards.length;
+const STEP_PX = 16;
+const STEP_GROWTH = 20;
+const SCALE_BASE = 0.03;
+const SCALE_GROWTH = 0.02;
+const SCALE_BOOST = 0.035;
+const EXIT_TRANSLATE = 1120;
+const ENTER_PHASE = 0.08;
+
+const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
+const smooth = (t: number) => t * t * (3 - 2 * t);
+const enterEase = (p: number) => (p < ENTER_PHASE ? smooth(p / ENTER_PHASE) : 1);
+
+function localP(i: number, g: number) {
+  const segs = N - 1;
+  if (segs <= 0) return 0;
+  const n = clamp01((g - ENTER_PHASE) / (1 - ENTER_PHASE));
+  const seg = Math.min(segs - 1, Math.floor(n * segs));
+  const t = clamp01(n * segs - seg);
+  return i - seg - smooth(t);
+}
 
 export default function Process() {
   const sectionRef = useRef<HTMLElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const cardStageRef = useRef<HTMLDivElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const stickyRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [activeStep, setActiveStep] = useState(0);
 
-  // Smooth scroll to a specific card tab
   const scrollToStep = useCallback((stepIdx: number) => {
-    const container = containerRef.current;
-    const cardStage = cardStageRef.current;
-    if (!container || !cardStage) return;
+    const wrapper = wrapperRef.current;
+    const sticky = stickyRef.current;
+    if (!wrapper || !sticky) return;
 
     const pinTop = window.innerWidth < 640 ? 76 : 88;
-    const cardH = cardStage.offsetHeight;
-    const pinnedDistance = container.offsetHeight - cardH;
-    if (pinnedDistance <= 0) return;
+    const range = Math.max(1, wrapper.offsetHeight - sticky.offsetHeight);
+    const targetG = stepIdx === 0 ? 0.02 : stepIdx === 1 ? 0.52 : 0.98;
+    const wrapperTop = wrapper.getBoundingClientRect().top + window.scrollY;
+    const targetY = wrapperTop - pinTop + targetG * range;
 
-    const targetP = stepIdx === 0 ? 0.05 : stepIdx === 1 ? 0.50 : 0.98;
-    const containerTop = container.getBoundingClientRect().top + window.scrollY;
-    const targetScrollY = containerTop - pinTop + targetP * pinnedDistance;
-
-    window.scrollTo({ top: targetScrollY, behavior: "smooth" });
+    window.scrollTo({ top: targetY, behavior: "smooth" });
   }, []);
 
   useEffect(() => {
-    let ticking = false;
+    const wrapper = wrapperRef.current;
+    const sticky = stickyRef.current;
+    const section = sectionRef.current;
+    if (!wrapper || !sticky || !section) return;
 
-    // Dynamically size container = cardHeight + scrollDistance
-    // Tight scroll distance so the next section (#industries) sits directly below with zero dead space
-    const syncContainerHeight = () => {
-      const container = containerRef.current;
-      const cardStage = cardStageRef.current;
-      if (!container || !cardStage) return;
+    // Set static z-indices once: Card 0 is top (30), Card 1 is middle (20), Card 2 is bottom (10)
+    cardRefs.current.forEach((el, i) => {
+      if (el) el.style.zIndex = `${(N - i) * 10}`;
+    });
 
-      const cardH = cardStage.offsetHeight;
+    const updateHeight = () => {
       const isMobile = window.innerWidth < 640;
-      // Snappy scroll distance: brings next section UP directly below the card
-      const scrollDistance = isMobile
-        ? Math.round(window.innerHeight * 0.32)
-        : Math.round(window.innerHeight * 0.55);
-
-      container.style.height = `${cardH + scrollDistance}px`;
+      // Scroll distance gives enough runway for 2 transitions without empty space
+      const scrollDist = isMobile
+        ? Math.round(window.innerHeight * 0.65)
+        : Math.round(window.innerHeight * 0.95);
+      wrapper.style.height = `${sticky.offsetHeight + scrollDist}px`;
     };
 
-    const animate = () => {
-      const container = containerRef.current;
-      const cardStage = cardStageRef.current;
-      const section = sectionRef.current;
-      if (!container || !cardStage || !section) {
-        ticking = false;
-        return;
-      }
+    let ticking = false;
 
-      const isMobile = window.innerWidth < 640;
-      const pinTop = isMobile ? 76 : 88;
-      const rect = container.getBoundingClientRect();
-      const cardH = cardStage.offsetHeight;
-      const pinnedDistance = rect.height - cardH;
+    const update = () => {
+      const pinTop = window.innerWidth < 640 ? 76 : 88;
+      const rect = wrapper.getBoundingClientRect();
+      const range = Math.max(1, wrapper.offsetHeight - sticky.offsetHeight);
+      const g = clamp01((pinTop - rect.top) / range);
+      const ease = enterEase(g);
 
-      if (pinnedDistance <= 0) {
-        ticking = false;
-        return;
-      }
-
-      // p goes from 0.0 (top reached pinTop) to 1.0 (bottom reached pinTop + cardH)
-      const scrolled = pinTop - rect.top;
-      const p = Math.max(0, Math.min(1, scrolled / pinnedDistance));
-
-      // ─── Active Tab Update ───
-      if (p < 0.45) {
+      // Active tab tracking
+      if (g < 0.45) {
         setActiveStep(0);
-      } else if (p < 0.85) {
+      } else if (g < 0.85) {
         setActiveStep(1);
       } else {
         setActiveStep(2);
       }
 
-      // ─── Card 0: Front -> Slides UP ───
-      let c0Y = 0;
-      let c0Opacity = 1;
-      if (p > 0.05) {
-        const t0 = Math.min(1, (p - 0.05) / 0.40);
-        c0Y = -t0 * 115;
-        c0Opacity = t0 > 0.80 ? Math.max(0, 1 - (t0 - 0.80) / 0.20) : 1;
-      }
+      // Apply Make.com card transforms
+      for (let i = 0; i < N; i++) {
+        const el = cardRefs.current[i];
+        if (!el) continue;
 
-      // ─── Card 1: Middle -> Front -> Slides UP ───
-      let c1Scale = 0.96;
-      let c1Y = STAGGER_PX;
-      let c1Brightness = 0.93;
-      let c1Opacity = 1;
+        const lp = localP(i, g);
+        const gap = STEP_PX + STEP_GROWTH * ease;
+        const outEase = smooth(clamp01(-lp));
+        const y = Math.max(0, lp) * gap - outEase * EXIT_TRANSLATE;
+        const scaleLp = Math.max(-0.6, lp);
+        const scaleRate = SCALE_BASE + SCALE_GROWTH * ease;
+        const scale = 1 + ease * SCALE_BOOST - scaleLp * scaleRate;
+        const opacity = 1 - clamp01((smooth(clamp01(-lp)) - 0.85) / 0.15);
 
-      if (p <= 0.05) {
-        c1Scale = 0.96;
-        c1Y = STAGGER_PX;
-        c1Brightness = 0.93;
-      } else if (p < 0.45) {
-        const t0 = (p - 0.05) / 0.40;
-        c1Scale = 0.96 + t0 * 0.04;
-        c1Y = (1 - t0) * STAGGER_PX;
-        c1Brightness = 0.93 + t0 * 0.07;
-      } else if (p < 0.55) {
-        c1Scale = 1.0;
-        c1Y = 0;
-        c1Brightness = 1.0;
-      } else {
-        const t1 = Math.min(1, (p - 0.55) / 0.40);
-        c1Scale = 1.0;
-        c1Y = -t1 * 115;
-        c1Brightness = 1.0;
-        c1Opacity = t1 > 0.80 ? Math.max(0, 1 - (t1 - 0.80) / 0.20) : 1;
-      }
-
-      // ─── Card 2: Back -> Middle -> Front ───
-      let c2Scale = 0.92;
-      let c2Y = STAGGER_PX * 2;
-      let c2Brightness = 0.86;
-
-      if (p <= 0.05) {
-        c2Scale = 0.92;
-        c2Y = STAGGER_PX * 2;
-        c2Brightness = 0.86;
-      } else if (p < 0.45) {
-        const t0 = (p - 0.05) / 0.40;
-        c2Scale = 0.92 + t0 * 0.04;
-        c2Y = STAGGER_PX * 2 - t0 * STAGGER_PX;
-        c2Brightness = 0.86 + t0 * 0.07;
-      } else if (p < 0.55) {
-        c2Scale = 0.96;
-        c2Y = STAGGER_PX;
-        c2Brightness = 0.93;
-      } else if (p < 0.95) {
-        const t1 = (p - 0.55) / 0.40;
-        c2Scale = 0.96 + t1 * 0.04;
-        c2Y = (1 - t1) * STAGGER_PX;
-        c2Brightness = 0.93 + t1 * 0.07;
-      } else {
-        c2Scale = 1.0;
-        c2Y = 0;
-        c2Brightness = 1.0;
+        el.style.transform = `translate3d(0, ${y.toFixed(2)}px, 0) scale(${scale.toFixed(4)})`;
+        el.style.opacity = opacity.toFixed(3);
       }
 
       // ─── Background Color Morph (Cream #FAF7E8 -> Dark Chocolate #220B05) ───
-      if (p >= 0.55) {
-        const dp = Math.min(1, (p - 0.55) / 0.45);
+      // Smoothly blends starting at Card 1 exit (g = 0.45) so it matches #industries 100%
+      if (g >= 0.45) {
+        const dp = Math.min(1, (g - 0.45) / 0.55);
+        // Background: #FAF7E8 (250, 247, 232) -> #220B05 (34, 11, 5)
         const r = Math.round(250 + (34 - 250) * dp);
-        const g = Math.round(247 + (11 - 247) * dp);
+        const gr = Math.round(247 + (11 - 247) * dp);
         const b = Math.round(232 + (5 - 232) * dp);
-        section.style.backgroundColor = `rgb(${r},${g},${b})`;
-        const br = Math.round(232 + (74 - 232) * dp);
-        const bg = Math.round(226 + (32 - 226) * dp);
-        const bb = Math.round(213 + (20 - 213) * dp);
+        section.style.backgroundColor = `rgb(${r},${gr},${b})`;
+
+        // Border: #E8E2D5 -> #220B05
+        const br = Math.round(232 + (34 - 232) * dp);
+        const bg = Math.round(226 + (11 - 226) * dp);
+        const bb = Math.round(213 + (5 - 213) * dp);
         section.style.borderBottomColor = `rgb(${br},${bg},${bb})`;
       } else {
         section.style.backgroundColor = "#FAF7E8";
         section.style.borderBottomColor = "#E8E2D5";
-      }
-
-      // ─── Apply Transforms to Cards ───
-      const el0 = cardRefs.current[0];
-      if (el0) {
-        el0.style.transform = `translate3d(0, ${c0Y.toFixed(1)}%, 0) scale(1)`;
-        el0.style.opacity = c0Opacity.toFixed(3);
-        el0.style.filter = "brightness(1)";
-        el0.style.zIndex = "30";
-      }
-
-      const el1 = cardRefs.current[1];
-      if (el1) {
-        const unit = p >= 0.55 ? "%" : "px";
-        el1.style.transform = `translate3d(0, ${c1Y.toFixed(1)}${unit}, 0) scale(${c1Scale.toFixed(4)})`;
-        el1.style.opacity = c1Opacity.toFixed(3);
-        el1.style.filter = `brightness(${c1Brightness.toFixed(3)})`;
-        el1.style.zIndex = "20";
-      }
-
-      const el2 = cardRefs.current[2];
-      if (el2) {
-        el2.style.transform = `translate3d(0, ${c2Y.toFixed(1)}px, 0) scale(${c2Scale.toFixed(4)})`;
-        el2.style.opacity = "1";
-        el2.style.filter = `brightness(${c2Brightness.toFixed(3)})`;
-        el2.style.zIndex = "10";
       }
 
       ticking = false;
@@ -226,17 +161,17 @@ export default function Process() {
     const onScroll = () => {
       if (!ticking) {
         ticking = true;
-        requestAnimationFrame(animate);
+        requestAnimationFrame(update);
       }
     };
 
     const onResize = () => {
-      syncContainerHeight();
-      onScroll();
+      updateHeight();
+      update();
     };
 
-    syncContainerHeight();
-    animate();
+    updateHeight();
+    update();
 
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize, { passive: true });
@@ -286,24 +221,22 @@ export default function Process() {
       </div>
 
       {/* ──────────────────────────────────────────────────────────
-          SCROLL CONTAINER:
-          Height is cardHeight + scrollDistance (no dead space below!)
+          MAKE.COM FOLDER SCROLL WRAPPER
+          Scroll distance dynamically sized — zero dead space below!
          ────────────────────────────────────────────────────────── */}
       <div
-        ref={containerRef}
+        ref={wrapperRef}
         className="relative w-full"
       >
         {/* Sticky Window: pins right below the header */}
         <div
-          ref={cardStageRef}
-          className="sticky top-[76px] sm:top-[88px] w-full flex flex-col items-center justify-start pb-2 sm:pb-4"
+          ref={stickyRef}
+          className="sticky top-[76px] sm:top-[88px] w-full flex flex-col items-center justify-start pb-2 sm:pb-4 pointer-events-none"
         >
-          {/* Card Stage with stacked cards */}
-          <div className="relative w-full max-w-[940px] sm:max-w-[1020px] md:max-w-[1100px] lg:max-w-[1180px] xl:max-w-[1240px] px-3 sm:px-5">
-            {/* Aspect Ratio:
-                Mobile:  4:5 (portrait card like Make.com mobile)
-                Desktop: 2400/1343 (landscape card like Make.com desktop) */}
-            <div className="relative w-full aspect-[4/5] sm:aspect-[2400/1343]">
+          {/* Card Stack:
+              SAME LANDSCAPE ASPECT RATIO (2400/1343) ON BOTH PHONE & LAPTOP */}
+          <div className="relative w-full max-w-[940px] sm:max-w-[1020px] md:max-w-[1100px] lg:max-w-[1180px] xl:max-w-[1240px] px-3 sm:px-5 pointer-events-auto">
+            <div className="relative w-full aspect-[2400/1343]">
               {cards.map((card, idx) => (
                 <div
                   key={card.id}
@@ -312,24 +245,12 @@ export default function Process() {
                   }}
                   className="absolute inset-0 w-full h-full"
                   style={{
-                    transformOrigin: "center top",
-                    willChange: "transform, opacity, filter",
-                    zIndex: (3 - idx) * 10,
-                    transform:
-                      idx === 0
-                        ? "translate3d(0, 0%, 0) scale(1)"
-                        : idx === 1
-                        ? `translate3d(0, ${STAGGER_PX}px, 0) scale(0.97)`
-                        : `translate3d(0, ${STAGGER_PX * 2}px, 0) scale(0.94)`,
-                    filter:
-                      idx === 0
-                        ? "brightness(1)"
-                        : idx === 1
-                        ? "brightness(0.93)"
-                        : "brightness(0.86)",
+                    transformOrigin: "center bottom",
+                    willChange: "transform, opacity",
+                    zIndex: (N - idx) * 10,
                   }}
                 >
-                  <div className="relative w-full h-full rounded-[22px] sm:rounded-[28px] md:rounded-[34px] overflow-hidden border border-[#DCD5C3] bg-[#FAF7E8] shadow-[0_24px_70px_-14px_rgba(20,20,19,0.22),0_8px_24px_rgba(0,0,0,0.06)]">
+                  <div className="relative w-full h-full rounded-[18px] sm:rounded-[26px] md:rounded-[32px] overflow-hidden border border-[#DCD5C3] bg-[#FAF7E8] shadow-[0_20px_60px_-12px_rgba(20,20,19,0.22),0_6px_20px_rgba(0,0,0,0.06)]">
                     <Image
                       src={card.image}
                       alt={card.title}
@@ -343,14 +264,14 @@ export default function Process() {
                     />
 
                     {/* Gradient overlay with title + description INSIDE card (Make.com style) */}
-                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/50 to-transparent px-4 sm:px-8 pb-4 sm:pb-7 pt-16 sm:pt-28 pointer-events-none">
-                      <div className="font-headline text-[9px] sm:text-xs font-bold uppercase tracking-[0.2em] text-[#F59E0B] mb-1">
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent px-3.5 sm:px-8 pb-3 sm:pb-7 pt-10 sm:pt-28 pointer-events-none">
+                      <div className="font-headline text-[8px] sm:text-xs font-bold uppercase tracking-[0.2em] text-[#F59E0B] mb-0.5 sm:mb-1">
                         {card.badge}
                       </div>
-                      <h3 className="font-serif text-lg sm:text-2xl md:text-3xl font-normal text-white leading-tight mb-1 sm:mb-2">
+                      <h3 className="font-serif text-sm sm:text-2xl md:text-3xl font-normal text-white leading-tight mb-0.5 sm:mb-2">
                         {card.cardTitle}
                       </h3>
-                      <p className="font-body text-[11px] sm:text-sm text-white/85 leading-relaxed max-w-lg">
+                      <p className="font-body text-[10px] sm:text-sm text-white/85 leading-relaxed max-w-lg hidden xs:block sm:block">
                         {card.cardDesc}
                       </p>
                     </div>

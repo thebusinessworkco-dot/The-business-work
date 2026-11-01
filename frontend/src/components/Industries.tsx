@@ -17,19 +17,14 @@ export default function Industries() {
       const rect = el.getBoundingClientRect();
       const vh = window.innerHeight;
 
-      // Fully active dark theme while inside Industries or smoothly interpolating from stacked cards
-      let p = 0;
-      if (rect.top > vh * 1.1) {
-        // Far below viewport
-        p = 0;
-      } else if (rect.top > vh * 0.7) {
-        // Smoothly entering from the bottom (synchronized with #how-we-work exit)
-        p = Math.max(0, Math.min(1, (vh * 1.1 - rect.top) / (vh * 0.40)));
-      } else if (rect.bottom < vh * 0.45) {
+      // Top is ALWAYS 100% Dark Chocolate (#220B05) matching the stacked cards exit.
+      // Only transition back to light when exiting to the bottom (towards Principles).
+      let p = 1.0;
+      if (rect.bottom < vh * 0.50) {
         // Exiting to the bottom (towards Principles / Core Principles section)
-        p = Math.max(0, Math.min(1, rect.bottom / (vh * 0.45)));
+        p = Math.max(0, Math.min(1, rect.bottom / (vh * 0.50)));
       } else {
-        // In view: 100% rich Dark Chocolate (#220B05)
+        // In view & entering from stacked cards: 100% rich Dark Chocolate (#220B05)
         p = 1.0;
       }
 
