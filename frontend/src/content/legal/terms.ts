@@ -156,7 +156,7 @@ export const termsSections: LegalSection[] = [
     heading: "18. Changes to Terms and Contact Information",
     paragraphs: [
       "We reserve the right to revise or modify these Terms at any time. Any changes will become effective immediately upon posting on this website with an updated 'Last Updated' date. Your continued use of the website following such changes constitutes your acceptance of the updated Terms.",
-      "If you have questions regarding these Terms, please contact us at thebusinesswork.co@gmail.com.",
+      "If you have questions regarding these Terms, please contact us at hello@thebusinesswork.com.",
     ],
   },
 ];

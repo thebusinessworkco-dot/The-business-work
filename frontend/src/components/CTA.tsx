@@ -65,9 +65,9 @@ export default function CTA() {
           Or write directly to{" "}
           <a
             className="text-[#141413] font-medium underline decoration-[#141413]/30 underline-offset-4 hover:text-[#6D32A8]"
-            href={`mailto:${site.email}`}
+            href={`mailto:${site.emails.sales}`}
           >
-            {site.email}
+            {site.emails.sales}
           </a>{" "}
           · {site.location}
         </p>

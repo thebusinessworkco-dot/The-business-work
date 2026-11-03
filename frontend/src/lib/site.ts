@@ -9,7 +9,17 @@ export const site = {
   description:
     "Automate WhatsApp replies, manage leads, and simplify daily business workflows.",
   url: "https://www.thebusinesswork.com",
-  email: "thebusinesswork.co@gmail.com",
+  email: "hello@thebusinesswork.com",
+  emails: {
+    hello: "hello@thebusinesswork.com",
+    sales: "sales@thebusinesswork.com",
+    support: "support@thebusinesswork.com",
+    help: "help@thebusinesswork.com",
+    founder: "founder@thebusinesswork.com",
+    aman: "aman@thebusinesswork.com",
+    careers: "careers@thebusinesswork.com",
+    billing: "billing@thebusinesswork.com",
+  },
   phone: "+91 79720 20292",
   phoneHref: "tel:+917972020292",
   whatsappNumber: "917972020292", // digits only, with country code, no "+"

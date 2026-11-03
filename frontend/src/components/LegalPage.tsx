@@ -12,6 +12,28 @@ interface LegalPageProps {
   summaryNote?: string;
 }
 
+function renderTextWithLinks(text: string) {
+  const emailRegex = /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g;
+  const parts = text.split(emailRegex);
+  if (parts.length === 1) return text;
+
+  return parts.map((part, i) => {
+    if (emailRegex.test(part)) {
+      emailRegex.lastIndex = 0;
+      return (
+        <a
+          key={i}
+          href={`mailto:${part}`}
+          className="text-[#141413] font-medium underline decoration-[#141413]/30 underline-offset-4 hover:text-[#6D32A8] transition-colors"
+        >
+          {part}
+        </a>
+      );
+    }
+    return part;
+  });
+}
+
 export default function LegalPage({
   title,
   lastUpdated,
@@ -126,7 +148,7 @@ export default function LegalPage({
                     key={idx}
                     className="font-body text-base leading-relaxed text-ink"
                   >
-                    {p}
+                    {renderTextWithLinks(p)}
                   </p>
                 ))}
 
@@ -136,7 +158,7 @@ export default function LegalPage({
                       <li key={idx} className="flex items-start gap-3">
                         <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent-ochre" />
                         <span className="font-body text-sm leading-relaxed text-ink">
-                          {item}
+                          {renderTextWithLinks(item)}
                         </span>
                       </li>
                     ))}

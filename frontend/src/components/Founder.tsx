@@ -102,11 +102,11 @@ export default function Founder() {
                 </a>
                 <span className="text-[#D6D0C4]">•</span>
                 <a
-                  href={`mailto:${site.email}`}
+                  href={`mailto:${site.emails.aman}`}
                   className="inline-flex items-center gap-1.5 font-headline text-xs font-semibold text-[#141413] transition-colors hover:text-[#6D32A8]"
                 >
                   <Mail size={13} className="text-[#6D32A8]" />
-                  <span>{site.email}</span>
+                  <span>{site.emails.aman}</span>
                 </a>
               </div>
             </div>

@@ -13,7 +13,7 @@ export const privacySections: LegalSection[] = [
     list: [
       "Brand name: The Business Work",
       "Founder: Aman Rajbhar",
-      "Email: thebusinesswork.co@gmail.com",
+      "Email: hello@thebusinesswork.com",
       "Phone / WhatsApp: +91 79720 20292",
       "Website: https://www.thebusinesswork.com",
     ],
@@ -111,7 +111,7 @@ export const privacySections: LegalSection[] = [
       "Right to Correction: You may ask us to update, complete, or correct inaccurate personal information.",
       "Right to Erasure: You may request the deletion of your personal data, subject to any statutory retention requirements.",
       "Right to Withdraw Consent: You may withdraw your consent for future communication at any time by contacting us.",
-      "How to Request: To exercise any of these rights, email us at thebusinesswork.co@gmail.com. We will review and respond within a reasonable timeframe.",
+      "How to Request: To exercise any of these rights, email us at hello@thebusinesswork.com. We will review and respond within a reasonable timeframe.",
     ],
   },
   {
@@ -150,7 +150,7 @@ export const privacySections: LegalSection[] = [
     heading: "14. Changes to this Policy",
     paragraphs: [
       "We may update this Privacy Policy periodically to reflect operational, technical, or legal changes. Any updates will be posted on this page with an updated 'Last Updated' date.",
-      "If you have any questions or concerns regarding the processing of your personal data, please contact us at thebusinesswork.co@gmail.com.",
+      "If you have any questions or concerns regarding the processing of your personal data, please contact us at hello@thebusinesswork.com.",
     ],
   },
 ];

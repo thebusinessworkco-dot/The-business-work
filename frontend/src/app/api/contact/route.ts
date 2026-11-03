@@ -56,6 +56,22 @@ function getDeliveryFailedMessage(): string {
 }
 
 
+function getFormRecipient(service?: string, cta?: string): string {
+  const s = (service || "").toLowerCase();
+  const c = (cta || "").toLowerCase();
+
+  if (s.includes("billing") || c.includes("billing") || s.includes("invoice") || s.includes("payment")) {
+    return "billing@thebusinesswork.com";
+  }
+  if (s.includes("career") || s.includes("job") || s.includes("hiring") || s.includes("internship") || c.includes("career")) {
+    return "careers@thebusinesswork.com";
+  }
+  if (s.includes("support") || s.includes("help") || s.includes("complaint") || c.includes("support")) {
+    return "support@thebusinesswork.com";
+  }
+  return "sales@thebusinesswork.com";
+}
+
 export async function POST(req: Request) {
   // 1. Content-Type check
   const contentType = req.headers.get("content-type") || "";
@@ -278,7 +294,10 @@ export async function POST(req: Request) {
   const secret = process.env.LEAD_WEBHOOK_SECRET;
   const secretMode = process.env.LEAD_WEBHOOK_SECRET_MODE || "header";
   const headers: Record<string, string> = { "Content-Type": "application/json" };
-  const payload: Record<string, unknown> = { ...lead };
+  const payload: Record<string, unknown> = {
+    ...lead,
+    notificationRecipient: getFormRecipient(lead.service, lead.cta),
+  };
 
   if (secret) {
     headers["x-webhook-secret"] = secret;

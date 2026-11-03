@@ -16,9 +16,9 @@ export default function Footer() {
             </p>
             <a
               className="inline-block font-headline text-xs uppercase tracking-wider text-[#141413] underline decoration-[#141413]/30 underline-offset-4 hover:text-[#6D32A8]"
-              href={`mailto:${site.email}`}
+              href={`mailto:${site.emails.hello}`}
             >
-              {site.email}
+              {site.emails.hello}
             </a>
           </div>
 
@@ -66,8 +66,8 @@ export default function Footer() {
                 </a>
               </div>
               <div>
-                <a href={`mailto:${site.email}`} className="transition-colors hover:text-[#141413]">
-                  {site.email}
+                <a href={`mailto:${site.emails.hello}`} className="transition-colors hover:text-[#141413]">
+                  {site.emails.hello}
                 </a>
               </div>
               <div>{site.location}</div>
