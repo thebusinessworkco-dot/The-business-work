@@ -4,9 +4,9 @@ const cspHeader = `
   default-src 'self';
   script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://challenges.cloudflare.com;
   style-src 'self' 'unsafe-inline';
-  img-src 'self' data: blob: https://www.googletagmanager.com https://www.google-analytics.com;
+  img-src 'self' data: blob: https://www.googletagmanager.com https://www.google-analytics.com https://images.unsplash.com;
   font-src 'self' data:;
-  connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://*.upstash.io;
+  connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://*.upstash.io https://*.supabase.co wss://*.supabase.co;
   frame-src 'self' https://challenges.cloudflare.com;
   frame-ancestors 'none';
   base-uri 'self';
@@ -38,6 +38,30 @@ const nextConfig = {
       };
     }
     return config;
+  },
+  async rewrites() {
+    const rawCafeOrigin =
+      process.env.CAFE_DEMO_ORIGIN || "https://cafe-demo-lovat-sigma.vercel.app";
+    const cafeOrigin = rawCafeOrigin.replace(/\/+$/, "");
+
+    return {
+      beforeFiles: [
+        {
+          source: "/demo/cafe",
+          destination: `${cafeOrigin}/demo/cafe`,
+        },
+        {
+          source: "/demo/cafe/:path*",
+          destination: `${cafeOrigin}/demo/cafe/:path*`,
+        },
+        {
+          source: "/cafe-static/:path*",
+          destination: `${cafeOrigin}/cafe-static/:path*`,
+        },
+      ],
+      afterFiles: [],
+      fallback: [],
+    };
   },
   async headers() {
     return [

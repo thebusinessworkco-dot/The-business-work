@@ -52,3 +52,4 @@ describe("Demos Content Configuration", () => {
     expect(categories).not.toContain("AI Agents");
   });
 });
+

@@ -76,3 +76,4 @@ export function getAvailableCategories(): string[] {
   const activeCategories = Array.from(new Set(demos.map((d) => d.category)));
   return ["All", ...activeCategories];
 }
+
