@@ -29,6 +29,7 @@ export default function Footer() {
                 ["/#services", "Services"],
                 ["/#how-we-work", "How We Work"],
                 ["/#industries", "Industries"],
+                ["/demo", "Live Demos"],
                 ["/#contact", "Contact"],
               ].map(([href, label]) => (
                 <Link

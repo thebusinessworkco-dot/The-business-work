@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { MessageCircle } from "lucide-react";
 import { whatsappLink } from "@/lib/site";
 import { useContactModal } from "./ContactModal";
@@ -42,15 +43,16 @@ export default function Hero() {
               <span>Discuss Your Project</span>
             </button>
 
-            <a
-              href={whatsappLink("Hi! I would like to try a live demo of The Business Work automation tools.")}
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href="/demo"
               className="group inline-flex w-full sm:w-auto items-center justify-center gap-2.5 rounded-xl sm:rounded-lg border-2 border-[#141413] bg-white px-7 sm:px-9 py-3 sm:py-3.5 font-headline text-xs sm:text-sm font-bold tracking-wide text-[#141413] shadow-[0_1px_3px_rgba(0,0,0,0.08)] transition-all hover:bg-[#F6F3EC] active:scale-[0.97] cursor-pointer"
             >
-              <MessageCircle size={17} className="text-[#25D366] shrink-0" />
-              <span>Try Live Demo</span>
-            </a>
+              <span className="relative flex h-2.5 w-2.5" aria-hidden="true">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#10B981] opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#10B981]"></span>
+              </span>
+              <span>Explore Live Demos</span>
+            </Link>
           </div>
 
           <p className="font-body text-xs sm:text-sm text-[#4A4742] font-semibold mt-1">

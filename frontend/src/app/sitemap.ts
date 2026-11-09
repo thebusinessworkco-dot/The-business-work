@@ -15,6 +15,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 1.0,
   };
 
+  const demoEntry: MetadataRoute.Sitemap[number] = {
+    url: `${siteUrl}/demo`,
+    lastModified,
+    changeFrequency: "weekly",
+    priority: 0.9,
+  };
+
   const serviceEntries: MetadataRoute.Sitemap = services.map((s) => ({
     url: `${siteUrl}/services/${s.id}`,
     lastModified,
@@ -51,5 +58,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     });
   }
 
-  return [homeEntry, ...serviceEntries, ...solutionEntries, ...legalEntries];
+  return [homeEntry, demoEntry, ...serviceEntries, ...solutionEntries, ...legalEntries];
 }
