@@ -7,7 +7,7 @@ const cspHeader = `
   img-src 'self' data: blob: https://www.googletagmanager.com https://www.google-analytics.com https://images.unsplash.com;
   font-src 'self' data:;
   connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://*.upstash.io https://*.supabase.co wss://*.supabase.co;
-  frame-src 'self' https://challenges.cloudflare.com;
+  frame-src 'self' https://challenges.cloudflare.com https://cafe-demo-lovat-sigma.vercel.app;
   frame-ancestors 'none';
   base-uri 'self';
   form-action 'self';
@@ -44,24 +44,20 @@ const nextConfig = {
       process.env.CAFE_DEMO_ORIGIN || "https://cafe-demo-lovat-sigma.vercel.app";
     const cafeOrigin = rawCafeOrigin.replace(/\/+$/, "");
 
-    return {
-      beforeFiles: [
-        {
-          source: "/demo/cafe",
-          destination: `${cafeOrigin}/demo/cafe`,
-        },
-        {
-          source: "/demo/cafe/:path*",
-          destination: `${cafeOrigin}/demo/cafe/:path*`,
-        },
-        {
-          source: "/cafe-static/:path*",
-          destination: `${cafeOrigin}/cafe-static/:path*`,
-        },
-      ],
-      afterFiles: [],
-      fallback: [],
-    };
+    return [
+      {
+        source: "/demo/cafe",
+        destination: `${cafeOrigin}/demo/cafe`,
+      },
+      {
+        source: "/demo/cafe/:path*",
+        destination: `${cafeOrigin}/demo/cafe/:path*`,
+      },
+      {
+        source: "/cafe-static/:path*",
+        destination: `${cafeOrigin}/cafe-static/:path*`,
+      },
+    ];
   },
   async headers() {
     return [

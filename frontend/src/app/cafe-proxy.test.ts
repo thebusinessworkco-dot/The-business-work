@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
+// @ts-expect-error next.config.mjs is an ES module without declaration file
 import nextConfig from "../../next.config.mjs";
 import { demos, getDemoLink } from "@/content/demos";
 
@@ -84,3 +85,4 @@ describe("Café Demo Reverse Proxy Rewrites Configuration", () => {
     }
   });
 });
+

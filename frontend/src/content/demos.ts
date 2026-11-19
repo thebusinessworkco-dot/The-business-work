@@ -1,4 +1,13 @@
-export type DemoCategory = "Restaurant" | "AI Agents" | "CRM" | "Automation";
+import { whatsappLink } from "@/lib/site";
+
+export type DemoCategory =
+  | "Restaurant"
+  | "Salon & Wellness"
+  | "Real Estate"
+  | "Healthcare"
+  | "AI Agents"
+  | "CRM"
+  | "Automation";
 
 export type DemoStatus = "LIVE DEMO" | "COMING SOON";
 
@@ -35,7 +44,7 @@ export const demos: DemoItem[] = [
     badgeLabel: "Live Interactive Demo",
     eyebrow: "01 // RESTAURANT OS",
     description:
-      "An all-in-one digital solution for cafés and restaurants, bringing QR ordering, kitchen operations, billing, customer management and loyalty together.",
+      "An all-in-one digital operating system for cafés and restaurants, bringing contactless QR table ordering, live kitchen display (KDS), split billing, automated inventory alerts, and instant loyalty rewards together.",
     capabilities: [
       "QR Table Ordering",
       "Customer Dashboard",
@@ -46,10 +55,88 @@ export const demos: DemoItem[] = [
     ],
     targetUrl: "https://cafe-demo-lovat-sigma.vercel.app",
     preferredPath: "/demo/cafe",
-    routingMode: "direct",
+    routingMode: "proxy",
     image: "/demos/cafe-preview.webp",
     imageAlt: "Café & Restaurant Management System — Table ordering and live operations preview",
     featured: true,
+  },
+  {
+    id: "salon-spa-os",
+    slug: "salon",
+    code: "DEMO-02",
+    title: "Salon & Luxury Spa Client & Booking Engine",
+    category: "Salon & Wellness",
+    status: "LIVE DEMO",
+    badgeLabel: "WhatsApp Booking Demo",
+    eyebrow: "02 // SALON & SPA AUTOMATION",
+    description:
+      "Effortless appointment booking and client management engineered for salons, barbershops, and wellness spas. Eliminates no-shows with automated WhatsApp reminders, stylist chair scheduling, and client treatment history.",
+    capabilities: [
+      "WhatsApp Appointment Booking",
+      "Stylist & Chair Scheduling",
+      "Automated Reminder Notifications",
+      "Package & Membership Billing",
+      "Client History & Preferences",
+      "Review & Re-booking Triggers",
+    ],
+    targetUrl: whatsappLink("Hi! I would like to try the Salon & Spa Appointment Booking Demo for my salon business."),
+    preferredPath: "/demo#salon",
+    routingMode: "direct",
+    image: "/process-cards/06-social-automation.webp",
+    imageAlt: "Salon & Luxury Spa Appointment and Client Management System preview",
+    featured: true,
+  },
+  {
+    id: "real-estate-crm",
+    slug: "real-estate",
+    code: "DEMO-03",
+    title: "Real Estate Inbound Lead & Site Visit CRM",
+    category: "Real Estate",
+    status: "LIVE DEMO",
+    badgeLabel: "Property Engine Demo",
+    eyebrow: "03 // REAL ESTATE CRM",
+    description:
+      "High-converting lead engine built for real estate developers, agencies, and brokers. Instantly qualifies buyer budgets on WhatsApp, shares project brochures, and books scheduled site visits directly into your calendar.",
+    capabilities: [
+      "Instant Lead Qualification",
+      "WhatsApp Site-Visit Scheduling",
+      "Project Brochure Delivery",
+      "Broker & Agent Pipeline CRM",
+      "Unit Inventory & Price Calculator",
+      "Automated Deal Follow-up Sequences",
+    ],
+    targetUrl: whatsappLink("Hi! I would like to experience the Real Estate Inbound Lead & Site Visit CRM Demo."),
+    preferredPath: "/demo#real-estate",
+    routingMode: "direct",
+    image: "/process-cards/03-crm-and-sales.webp",
+    imageAlt: "Real Estate Lead Qualification and Site Visit Scheduling CRM preview",
+    featured: true,
+  },
+  {
+    id: "clinic-patient-os",
+    slug: "clinic",
+    code: "DEMO-04",
+    title: "Clinic & Healthcare Patient Flow Automation",
+    category: "Healthcare",
+    status: "LIVE DEMO",
+    badgeLabel: "Clinic Intake Demo",
+    eyebrow: "04 // CLINIC AUTOMATION",
+    description:
+      "Smart front-desk and patient flow system for clinics and specialized doctors. Patients book slots over WhatsApp, receive token numbers, access digital prescriptions, and get routine follow-up care reminders automatically.",
+    capabilities: [
+      "Doctor Token & Slot Booking",
+      "Pre-Visit Intake & Triage",
+      "Automated WhatsApp Reminders",
+      "Digital Prescription Delivery",
+      "Post-Consultation Follow-ups",
+      "Multi-Doctor Clinic Dashboard",
+    ],
+    targetUrl: whatsappLink("Hi! I would like to try the Healthcare & Clinic Appointment Booking Demo."),
+    preferredPath: "/solutions/whatsapp-appointment-booking-clinics",
+    routingMode: "direct",
+    image: "/process-cards/01-whatsapp-booking-doctor.webp",
+    imageAlt: "Healthcare Clinic WhatsApp Booking and Patient Flow preview",
+    featured: false,
   },
 ];
 
