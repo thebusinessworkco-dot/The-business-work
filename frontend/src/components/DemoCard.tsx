@@ -125,17 +125,17 @@ export default function DemoCard({ demo }: DemoCardProps) {
           </div>
 
           {/* Action CTAs */}
-          <div className="flex flex-col gap-3 pt-2 sm:flex-row">
+          <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:items-center sm:flex-wrap">
             <a
               href={link.href}
               target={link.isExternal ? "_blank" : undefined}
               rel={link.isExternal ? "noopener noreferrer" : undefined}
-              className="group/btn inline-flex items-center justify-center gap-2 rounded-xl border-2 border-[#141413] bg-[#141413] px-6 py-3.5 font-headline text-xs font-bold tracking-wide text-[#FAF7E8] shadow-sm transition-all hover:bg-[#2B2927] hover:shadow-md active:scale-[0.98] sm:text-sm"
+              className="group/btn inline-flex items-center justify-center gap-2 rounded-xl border-2 border-[#141413] bg-[#141413] px-4.5 py-3 font-headline text-xs sm:text-[13px] font-bold tracking-wide text-[#FAF7E8] shadow-sm transition-all hover:bg-[#2B2927] hover:shadow-md active:scale-[0.98] whitespace-nowrap"
             >
-              <span>Explore Live Demo</span>
+              <span className="whitespace-nowrap">Explore Live Demo</span>
               <ExternalLink
-                size={15}
-                className="transition-transform group-hover/btn:-translate-y-0.5 group-hover/btn:translate-x-0.5"
+                size={14}
+                className="transition-transform group-hover/btn:-translate-y-0.5 group-hover/btn:translate-x-0.5 shrink-0"
                 aria-hidden="true"
               />
             </a>
@@ -145,14 +145,14 @@ export default function DemoCard({ demo }: DemoCardProps) {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`Chat on WhatsApp about ${demo.title}`}
-              className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-[#141413] bg-[#EBDDFE] px-5 py-3.5 font-headline text-xs font-bold tracking-wide text-[#141413] shadow-xs transition-all hover:bg-[#E2CEFF] active:scale-[0.98] sm:text-sm cursor-pointer"
+              className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-[#141413] bg-[#EBDDFE] px-4.5 py-3 font-headline text-xs sm:text-[13px] font-bold tracking-wide text-[#141413] shadow-xs transition-all hover:bg-[#E2CEFF] active:scale-[0.98] cursor-pointer whitespace-nowrap"
             >
               <MessageCircle
-                size={17}
+                size={16}
                 className="text-[#25D366] fill-[#25D366]/20 shrink-0"
                 aria-hidden="true"
               />
-              <span>Discuss on WhatsApp</span>
+              <span className="whitespace-nowrap">Discuss on WhatsApp</span>
             </a>
           </div>
 
