@@ -88,38 +88,12 @@ export default function DemoPage() {
       <Header />
 
       <main id="main" className="min-h-screen bg-[#FAF7E8] pt-20 sm:pt-24 lg:pt-28">
-        {/* Hero Section */}
-        <section
-          aria-labelledby="demo-hero-title"
-          className="relative mx-auto max-w-5xl px-4 pb-12 pt-8 text-center sm:px-6 sm:pb-16 sm:pt-12 lg:px-8"
-        >
-          {/* Eyebrow Label */}
-          <div className="mb-3 inline-block font-headline text-[11px] font-bold uppercase tracking-[0.24em] text-[#141413] sm:text-xs">
-            01 // LIVE EXPERIENCES
-          </div>
-
-          {/* Main Headline */}
-          <h1
-            id="demo-hero-title"
-            className="mx-auto max-w-4xl font-serif text-[34px] font-medium leading-[1.1] tracking-tight text-[#141413] sm:text-5xl md:text-6xl lg:text-[68px]"
-          >
-            Don&apos;t just see what we build.{" "}
-            <span className="block font-normal italic text-[#E4572E] sm:inline">
-              Experience it.
-            </span>
-          </h1>
-
-          {/* Description */}
-          <p className="mx-auto mt-4 max-w-2xl font-body text-base leading-relaxed text-[#555047] sm:mt-6 sm:text-lg">
-            Explore real, interactive business software built by The Business Work. Try the
-            systems yourself and see how they simplify everyday operations.
-          </p>
-        </section>
+        <h1 className="sr-only">Live Interactive Business Software Demos</h1>
 
         {/* Demo Listing Section */}
         <section
           aria-label="Interactive Software Demos"
-          className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 sm:pb-28 lg:px-12"
+          className="mx-auto max-w-7xl px-4 pb-20 pt-4 sm:px-6 sm:pb-28 sm:pt-6 lg:px-12"
         >
           <DemoList initialDemos={demos} />
         </section>
