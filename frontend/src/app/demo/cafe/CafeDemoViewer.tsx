@@ -8,8 +8,9 @@ import {
   Smartphone,
   ExternalLink,
   RotateCw,
-  Sparkles,
+  MessageCircle,
 } from "lucide-react";
+import { whatsappLink } from "@/lib/site";
 import { useContactModal } from "@/components/ContactModal";
 
 interface CafeDemoViewerProps {
@@ -97,19 +98,18 @@ export default function CafeDemoViewer({ demoUrl }: CafeDemoViewerProps) {
 
         {/* Right: Actions */}
         <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={() =>
-              openModal(
-                "Café & Restaurant Management System",
-                "demo-cafe-embedded-bar"
-              )
-            }
-            className="inline-flex items-center gap-1.5 rounded-lg border border-[#F59E0B] bg-[#F59E0B] px-3 py-1.5 text-xs font-bold text-[#141413] transition-all hover:bg-[#D97706] active:scale-95 shadow-xs whitespace-nowrap"
+          <a
+            href={whatsappLink(
+              "Hi! I am testing the Café & Restaurant Management System demo on The Business Work website and would like to discuss building a similar system for my business."
+            )}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Discuss on WhatsApp"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-[#25D366] bg-[#25D366] px-3 py-1.5 text-xs font-bold text-white transition-all hover:bg-[#1EBE5D] active:scale-95 shadow-xs whitespace-nowrap"
           >
-            <Sparkles size={13} aria-hidden="true" />
-            <span>Discuss Build</span>
-          </button>
+            <MessageCircle size={13} aria-hidden="true" />
+            <span>WhatsApp Us</span>
+          </a>
 
           <a
             href={demoUrl}

@@ -1,9 +1,25 @@
 "use client";
 
 import Image from "next/image";
-import { ExternalLink, Check, Sparkles } from "lucide-react";
+import { ExternalLink, Check, MessageCircle } from "lucide-react";
 import { type DemoItem, getDemoLink } from "@/content/demos";
+import { whatsappLink } from "@/lib/site";
 import { useContactModal } from "./ContactModal";
+
+function getDemoWhatsAppMessage(demo: DemoItem): string {
+  switch (demo.slug) {
+    case "cafe":
+      return "Hi! I checked out the Café & Restaurant Management System demo on The Business Work website and would like to discuss building a similar system for my cafe / restaurant.";
+    case "salon":
+      return "Hi! I checked out the Salon & Luxury Spa Booking Engine demo on The Business Work website and would like to discuss building a similar system for my salon / spa.";
+    case "real-estate":
+      return "Hi! I checked out the Real Estate Inbound Lead & Site Visit CRM demo on The Business Work website and would like to discuss building a similar system for our real estate business.";
+    case "clinic":
+      return "Hi! I checked out the Clinic & Healthcare Patient Flow Automation demo on The Business Work website and would like to discuss building a similar system for our clinic.";
+    default:
+      return `Hi! I checked out the "${demo.title}" demo on The Business Work website and would like to discuss building a similar system for my business.`;
+  }
+}
 
 interface DemoCardProps {
   demo: DemoItem;
@@ -124,19 +140,20 @@ export default function DemoCard({ demo }: DemoCardProps) {
               />
             </a>
 
-            <button
-              type="button"
-              onClick={() => openModal(demo.title, "demo-card")}
-              className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-[#141413] bg-[#EBDDFE] px-5 py-3.5 font-headline text-xs font-bold tracking-wide text-[#141413] shadow-xs transition-all hover:bg-[#E2CEFF] active:scale-[0.98] sm:text-sm"
+            <a
+              href={whatsappLink(getDemoWhatsAppMessage(demo))}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Chat on WhatsApp about ${demo.title}`}
+              className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-[#141413] bg-[#EBDDFE] px-5 py-3.5 font-headline text-xs font-bold tracking-wide text-[#141413] shadow-xs transition-all hover:bg-[#E2CEFF] active:scale-[0.98] sm:text-sm cursor-pointer"
             >
-              <span className="grid h-3 w-3 grid-cols-2 gap-0.5" aria-hidden="true">
-                <span className="rounded-[0.5px] bg-[#141413]" />
-                <span className="rounded-[0.5px] bg-[#141413]" />
-                <span className="rounded-[0.5px] bg-[#141413]" />
-                <span className="rounded-[0.5px] bg-[#141413]" />
-              </span>
-              <span>Discuss Similar Build</span>
-            </button>
+              <MessageCircle
+                size={17}
+                className="text-[#25D366] fill-[#25D366]/20 shrink-0"
+                aria-hidden="true"
+              />
+              <span>Discuss on WhatsApp</span>
+            </a>
           </div>
 
           <p className="pt-1 font-body text-[11px] text-[#7A756D]">
