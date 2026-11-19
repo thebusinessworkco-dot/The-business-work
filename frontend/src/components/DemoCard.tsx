@@ -35,9 +35,9 @@ export default function DemoCard({ demo }: DemoCardProps) {
       aria-labelledby={`${demo.id}-title`}
       className="group relative rounded-[24px] sm:rounded-[32px] border border-[#E5DFD1] bg-white p-5 sm:p-8 lg:p-10 shadow-[0_4px_24px_rgba(0,0,0,0.03)] transition-all duration-300 hover:border-[#CDC5B3] hover:shadow-[0_12px_40px_rgba(0,0,0,0.07)]"
     >
-      <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-12 lg:gap-12">
-        {/* Left: Software Preview Mockup (lg:col-span-7) */}
-        <div className="lg:col-span-7">
+      <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-12 lg:gap-10 xl:gap-12">
+        {/* Left: Software Preview Mockup */}
+        <div className="lg:col-span-6 xl:col-span-7">
           <div className="overflow-hidden rounded-2xl border border-[#E8E2D5] bg-[#FAF8F5] shadow-xs transition-transform duration-500 group-hover:scale-[1.008]">
             {/* Browser / Application Top Bar */}
             <div className="flex items-center justify-between border-b border-[#E8E2D5] bg-[#F2EDE2]/70 px-4 py-2.5">
@@ -76,8 +76,8 @@ export default function DemoCard({ demo }: DemoCardProps) {
           </div>
         </div>
 
-        {/* Right: Software Details & Actions (lg:col-span-5) */}
-        <div className="flex flex-col space-y-5 lg:col-span-5">
+        {/* Right: Software Details & Actions */}
+        <div className="flex flex-col space-y-5 lg:col-span-6 xl:col-span-5">
           {/* Top Metadata: Status Badge & Category */}
           <div className="flex flex-wrap items-center gap-3">
             <div className="inline-flex items-center gap-2 rounded-full border border-emerald-300/80 bg-emerald-50 px-3 py-1 font-headline text-[11px] font-bold uppercase tracking-widest text-emerald-800">
@@ -125,12 +125,12 @@ export default function DemoCard({ demo }: DemoCardProps) {
           </div>
 
           {/* Action CTAs */}
-          <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:items-center sm:flex-wrap">
+          <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 pt-2">
             <a
               href={link.href}
               target={link.isExternal ? "_blank" : undefined}
               rel={link.isExternal ? "noopener noreferrer" : undefined}
-              className="group/btn inline-flex items-center justify-center gap-2 rounded-xl border-2 border-[#141413] bg-[#141413] px-4.5 py-3 font-headline text-xs sm:text-[13px] font-bold tracking-wide text-[#FAF7E8] shadow-sm transition-all hover:bg-[#2B2927] hover:shadow-md active:scale-[0.98] whitespace-nowrap"
+              className="group/btn inline-flex items-center justify-center gap-2 rounded-xl border-2 border-[#141413] bg-[#141413] px-5 py-3 sm:py-3.5 font-headline text-xs sm:text-[13px] font-bold tracking-wide text-[#FAF7E8] shadow-sm transition-all hover:bg-[#2B2927] hover:shadow-md active:scale-[0.98] whitespace-nowrap shrink-0"
             >
               <span className="whitespace-nowrap">Explore Live Demo</span>
               <ExternalLink
@@ -145,7 +145,7 @@ export default function DemoCard({ demo }: DemoCardProps) {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`Chat on WhatsApp about ${demo.title}`}
-              className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-[#141413] bg-[#EBDDFE] px-4.5 py-3 font-headline text-xs sm:text-[13px] font-bold tracking-wide text-[#141413] shadow-xs transition-all hover:bg-[#E2CEFF] active:scale-[0.98] cursor-pointer whitespace-nowrap"
+              className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-[#141413] bg-[#EBDDFE] px-5 py-3 sm:py-3.5 font-headline text-xs sm:text-[13px] font-bold tracking-wide text-[#141413] shadow-xs transition-all hover:bg-[#E2CEFF] active:scale-[0.98] cursor-pointer whitespace-nowrap shrink-0"
             >
               <MessageCircle
                 size={16}
