@@ -145,7 +145,7 @@ export default function CafeDemoViewer({ demoUrl }: CafeDemoViewerProps) {
               title="Café & Restaurant Management System Interactive Demo"
               className="h-full w-full border-0 bg-white"
               onLoad={() => setIsLoading(false)}
-              allow="clipboard-write"
+              allow="camera; microphone; clipboard-write; display-capture"
             />
           </div>
         ) : (
@@ -162,7 +162,7 @@ export default function CafeDemoViewer({ demoUrl }: CafeDemoViewerProps) {
                 title="Café & Restaurant QR Table Ordering Mobile View"
                 className="h-full w-full border-0 bg-white pt-2"
                 onLoad={() => setIsLoading(false)}
-                allow="clipboard-write"
+                allow="camera; microphone; clipboard-write; display-capture"
               />
             </div>
           </div>

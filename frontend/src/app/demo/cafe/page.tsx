@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import CafeDemoViewer from "./CafeDemoViewer";
 
 const DEMO_URL =
-  process.env.CAFE_DEMO_ORIGIN || "https://cafe-demo-lovat-sigma.vercel.app";
+  process.env.CAFE_DEMO_ORIGIN || "https://cafe.thebusinesswork.com";
 
 export const metadata: Metadata = {
   title: "Café & Restaurant OS Live Demo | The Business Work",
