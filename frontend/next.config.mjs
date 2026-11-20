@@ -7,7 +7,7 @@ const cspHeader = `
   img-src 'self' data: blob: https://www.googletagmanager.com https://www.google-analytics.com https://images.unsplash.com;
   font-src 'self' data:;
   connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://*.upstash.io https://*.supabase.co wss://*.supabase.co;
-  frame-src 'self' https://challenges.cloudflare.com https://cafe-demo-lovat-sigma.vercel.app;
+  frame-src 'self' https://challenges.cloudflare.com https://cafe-demo-lovat-sigma.vercel.app https://cafe.thebusinesswork.com;
   frame-ancestors 'none';
   base-uri 'self';
   form-action 'self';
@@ -62,6 +62,12 @@ const nextConfig = {
   async headers() {
     return [
       {
+        source: "/demo/cafe",
+        headers: [
+          { key: "Permissions-Policy", value: "camera=*, microphone=(), geolocation=()" },
+        ],
+      },
+      {
         source: "/(.*)",
         headers: [
           { key: "Content-Security-Policy", value: cspHeader },
@@ -69,7 +75,7 @@ const nextConfig = {
           { key: "X-Content-Type-Options", value: "nosniff" },
           { key: "X-Frame-Options", value: "DENY" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-          { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
+          { key: "Permissions-Policy", value: "camera=(self \"https://cafe.thebusinesswork.com\" \"https://cafe-demo-lovat-sigma.vercel.app\"), microphone=(), geolocation=()" },
         ],
       },
     ];
