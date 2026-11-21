@@ -26,9 +26,9 @@ export interface AssistantEntry {
  */
 export function buildAssistantKnowledge(): AssistantEntry[] {
   const s1 = services.find((s) => s.id === "ai-agents-chatbots") || services[0];
-  const s2 = services.find((s) => s.id === "crm-sales-automation") || services[1];
-  const s3 = services.find((s) => s.id === "business-workflow-automation") || services[2];
-  const s4 = services.find((s) => s.id === "whatsapp-social-automation") || services[3];
+  const s2 = services.find((s) => s.id === "whatsapp-social-automation") || services[1];
+  const s3 = services.find((s) => s.id === "crm-workflow-automation") || services[2];
+  const s4 = services.find((s) => s.id === "restaurant-cafe-table-ordering") || services[3];
 
   const clinicDemo = demos.find((d) => d.id === "hospital-appointments") || demos[0];
   const botDemo = demos.find((d) => d.id === "website-chatbot") || demos[1];
@@ -137,45 +137,8 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
       followUps: ["Custom solutions", "Pricing", "How a project works"],
     },
     {
-      id: "service-crm-sales",
-      title: s2.title,
-      keywords: [
-        "crm",
-        "sales automation",
-        "pipeline",
-        "lead follow up",
-        "lead management",
-        "lead tracking",
-        "nurturing",
-        "sales pipeline",
-        "leads",
-      ],
-      answer:
-        `${s2.title}: ${s2.summary} It solves: ${s2.solves} We work with your CRM or suggest one that fits your team and budget.`,
-      followUps: ["Our services", "Pricing", "How a project works"],
-    },
-    {
-      id: "service-workflow",
-      title: s3.title,
-      keywords: [
-        "workflow automation",
-        "business workflow",
-        "n8n",
-        "make",
-        "zapier",
-        "google sheets",
-        "webhook",
-        "api integration",
-        "data entry",
-        "system integration",
-      ],
-      answer:
-        `${s3.title}: ${s3.summary} It solves: ${s3.solves} We prefer simple rule-based tools over AI whenever they are simpler and more reliable.`,
-      followUps: ["Our services", "Pricing", "How a project works"],
-    },
-    {
       id: "service-whatsapp-social",
-      title: s4.title,
+      title: s2.title,
       keywords: [
         "whatsapp",
         "whatsapp automation",
@@ -188,8 +151,58 @@ export function buildAssistantKnowledge(): AssistantEntry[] {
         "whatsapp bot chahiye",
       ],
       answer:
-        `${s4.title}: ${s4.summary} It solves: ${s4.solves} All messaging features require Meta approval, approved templates, and customer consent.`,
+        `${s2.title}: ${s2.summary} It solves: ${s2.solves} All messaging features require Meta approval, approved templates, and customer consent.`,
       followUps: ["WhatsApp limits", "Pricing", "How a project works"],
+    },
+    {
+      id: "service-crm-workflow",
+      title: s3.title,
+      keywords: [
+        "crm",
+        "sales automation",
+        "pipeline",
+        "lead follow up",
+        "lead management",
+        "lead tracking",
+        "nurturing",
+        "sales pipeline",
+        "leads",
+        "workflow automation",
+        "business workflow",
+        "n8n",
+        "make",
+        "zapier",
+        "google sheets",
+        "webhook",
+        "api integration",
+        "data entry",
+        "system integration",
+      ],
+      answer:
+        `${s3.title}: ${s3.summary} It solves: ${s3.solves} We connect your existing CRM or recommend one that fits your workflow.`,
+      followUps: ["Our services", "Pricing", "How a project works"],
+    },
+    {
+      id: "service-restaurant-cafe",
+      title: s4.title,
+      keywords: [
+        "table ordering",
+        "restaurant & cafe table ordering",
+        "restaurant",
+        "cafe",
+        "table booking",
+        "qr code ordering",
+        "nfc ordering",
+        "google review",
+        "digital menu",
+        "kitchen display",
+        "table reservation",
+        "restaurant automation",
+        "cafe automation",
+      ],
+      answer:
+        `${s4.title}: ${s4.summary} It solves: ${s4.solves} Diners can order and review directly without downloading an extra app.`,
+      followUps: ["Live demo", "Our services", "Contact us"],
     },
 
     // 4. Custom Solutions

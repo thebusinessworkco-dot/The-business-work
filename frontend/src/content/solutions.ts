@@ -124,8 +124,8 @@ export const solutions: Solution[] = [
           "Official WhatsApp Business tools for replies, lead intake, and customer updates.",
       },
       {
-        title: "Business Workflow Automation",
-        href: "/services/business-workflow-automation",
+        title: "CRM & Workflow Automation",
+        href: "/services/crm-workflow-automation",
         description:
           "Connect calendars, spreadsheets, and business software using n8n and APIs.",
       },
@@ -215,16 +215,16 @@ export const solutions: Solution[] = [
     ],
     relatedServices: [
       {
-        title: "Business Workflow Automation",
-        href: "/services/business-workflow-automation",
+        title: "CRM & Workflow Automation",
+        href: "/services/crm-workflow-automation",
         description:
-          "Connect apps and move data automatically between tools.",
+          "Organise sales stages, connect apps, log new leads, and move data automatically between tools.",
       },
       {
-        title: "CRM & Sales Automation",
-        href: "/services/crm-sales-automation",
+        title: "WhatsApp & Social Automation",
+        href: "/services/whatsapp-social-automation",
         description:
-          "Organise sales stages, log new leads, and send follow-ups.",
+          "Automate WhatsApp customer messages, lead capture, and appointment alerts.",
       },
     ],
     ctaTitle: "Ready to automate repeat business tasks?",

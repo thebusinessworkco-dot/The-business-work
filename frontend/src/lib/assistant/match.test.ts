@@ -18,10 +18,10 @@ describe("Assistant Matcher", () => {
     { query: "whatsapp limits", expectedId: "whatsapp-limits" },
     { query: "bulk message", expectedId: "whatsapp-limits" },
 
-    // 12-14. CRM & Sales
-    { query: "crm", expectedId: "service-crm-sales" },
-    { query: "sales automation", expectedId: "service-crm-sales" },
-    { query: "leads", expectedId: "service-crm-sales" },
+    // 12-14. CRM & Workflow
+    { query: "crm", expectedId: "service-crm-workflow" },
+    { query: "sales automation", expectedId: "service-crm-workflow" },
+    { query: "leads", expectedId: "service-crm-workflow" },
 
     // 15-18. Healthcare & Clinic Boundaries
     { query: "clinic", expectedId: "industry-healthcare" },
@@ -33,9 +33,9 @@ describe("Assistant Matcher", () => {
     // 20-22. AI Agents & Workflow
     { query: "ai agent", expectedId: "service-ai-agents" },
     { query: "chatbot", expectedId: "service-ai-agents" },
-    { query: "workflow automation", expectedId: "service-workflow" },
-    { query: "n8n", expectedId: "service-workflow" },
-    { query: "zapier", expectedId: "service-workflow" },
+    { query: "workflow automation", expectedId: "service-crm-workflow" },
+    { query: "n8n", expectedId: "service-crm-workflow" },
+    { query: "zapier", expectedId: "service-crm-workflow" },
 
     // 25-28. Process & Timeline
     { query: "how it works", expectedId: "process-steps" },

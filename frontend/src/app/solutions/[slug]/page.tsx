@@ -73,7 +73,7 @@ export default function SolutionPage({ params }: { params: { slug: string } }) {
           <nav aria-label="Breadcrumb" className="mb-8 border-b border-border-sand pb-4">
             <ol className="flex flex-wrap items-center gap-2 font-headline text-xs uppercase tracking-wider text-ink-muted">
               <li>
-                <Link href="/" className="transition-colors hover:text-ink">
+                <Link href="/#services" className="transition-colors hover:text-ink">
                   Home
                 </Link>
               </li>

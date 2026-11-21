@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowRight, ChevronRight, AlertCircle } from "lucide-react";
+import { ArrowRight, ChevronRight, AlertCircle, ArrowLeft } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import JsonLd from "@/components/JsonLd";
@@ -70,12 +70,12 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
       <Header />
 
       <main id="main" className="w-full pt-28 md:pt-32 bg-[#FAF7E8]">
-        {/* Breadcrumb Navigation */}
+        {/* Breadcrumb Navigation with Back link */}
         <div className="mx-auto max-w-7xl px-6 lg:px-12">
-          <nav aria-label="Breadcrumb" className="mb-8 border-b border-[#E8E2D5] pb-4">
+          <nav aria-label="Breadcrumb" className="mb-8 border-b border-[#E8E2D5] pb-4 flex flex-wrap items-center justify-between gap-3">
             <ol className="flex flex-wrap items-center gap-2 font-headline text-xs uppercase tracking-wider text-[#7A756D]">
               <li>
-                <Link href="/" className="transition-colors hover:text-[#141413]">
+                <Link href="/#services" className="transition-colors hover:text-[#141413]">
                   Home
                 </Link>
               </li>
@@ -94,6 +94,14 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
                 {service.title}
               </li>
             </ol>
+
+            <Link
+              href="/#services"
+              className="inline-flex items-center gap-1.5 font-headline text-xs font-semibold uppercase tracking-wider text-[#141413] transition-colors hover:text-[#6D32A8]"
+            >
+              <ArrowLeft size={13} />
+              <span>Back to services</span>
+            </Link>
           </nav>
         </div>
 

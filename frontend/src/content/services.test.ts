@@ -6,9 +6,9 @@ describe("Services Content Data Model", () => {
     expect(services).toHaveLength(4);
     const expectedIds = [
       "ai-agents-chatbots",
-      "crm-sales-automation",
-      "business-workflow-automation",
       "whatsapp-social-automation",
+      "crm-workflow-automation",
+      "restaurant-cafe-table-ordering",
     ];
     expect(services.map((s) => s.id)).toEqual(expectedIds);
   });

@@ -11,18 +11,18 @@ export const serviceList: ServiceListItem[] = [
     title: "AI Agents & Chatbots",
   },
   {
-    id: "crm-sales-automation",
-    slug: "crm-sales-automation",
-    title: "CRM & Sales Automation",
-  },
-  {
-    id: "business-workflow-automation",
-    slug: "business-workflow-automation",
-    title: "Business Workflow Automation",
-  },
-  {
     id: "whatsapp-social-automation",
     slug: "whatsapp-social-automation",
     title: "WhatsApp & Social Automation",
+  },
+  {
+    id: "crm-workflow-automation",
+    slug: "crm-workflow-automation",
+    title: "CRM & Workflow Automation",
+  },
+  {
+    id: "restaurant-cafe-table-ordering",
+    slug: "restaurant-cafe-table-ordering",
+    title: "Restaurant & Cafe Table Ordering",
   },
 ];

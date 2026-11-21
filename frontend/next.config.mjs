@@ -39,6 +39,25 @@ const nextConfig = {
     }
     return config;
   },
+  async redirects() {
+    return [
+      {
+        source: "/services/crm-sales-automation",
+        destination: "/services/crm-workflow-automation",
+        permanent: true,
+      },
+      {
+        source: "/services/business-workflow-automation",
+        destination: "/services/crm-workflow-automation",
+        permanent: true,
+      },
+      {
+        source: "/services/restaurant-cafe-automation",
+        destination: "/services/restaurant-cafe-table-ordering",
+        permanent: true,
+      },
+    ];
+  },
   async rewrites() {
     const rawCafeOrigin =
       process.env.CAFE_DEMO_ORIGIN || "https://cafe-demo-lovat-sigma.vercel.app";
