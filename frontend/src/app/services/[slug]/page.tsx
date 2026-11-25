@@ -29,6 +29,13 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   return {
     title,
     description,
+    keywords: [
+      service.title,
+      service.tag,
+      ...service.capabilities.map((c) => c.name),
+      "The Business Work",
+      "Business Automation India",
+    ],
     alternates: {
       canonical: `/services/${service.id}`,
     },

@@ -21,14 +21,14 @@ export const metadata: Metadata = {
     absolute: "The Business Work | We Make Business Simpler",
   },
   description:
-    "The Business Work builds custom WhatsApp automation, AI agents, and CRM workflows for Indian SMBs to capture leads and simplify daily operations.",
+    "The Business Work builds AI Agents & Chatbots, WhatsApp & Social Automation, CRM & Workflow Automation, and Restaurant & Cafe Table Ordering for Indian businesses.",
   alternates: {
     canonical: "/",
   },
   openGraph: {
     title: "The Business Work | We Make Business Simpler",
     description:
-      "Custom WhatsApp automation, AI agents, and CRM workflows for Indian businesses to capture leads and simplify daily operations.",
+      "AI Agents & Chatbots, WhatsApp & Social Automation, CRM & Workflow Automation, and Restaurant & Cafe Table Ordering for Indian businesses.",
     url: "https://www.thebusinesswork.com",
     siteName: site.name,
     locale: "en_IN",
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "The Business Work | We Make Business Simpler",
     description:
-      "Custom WhatsApp automation, AI agents, and CRM workflows for Indian businesses to capture leads and simplify daily operations.",
+      "AI Agents & Chatbots, WhatsApp & Social Automation, CRM & Workflow Automation, and Restaurant & Cafe Table Ordering for Indian businesses.",
     images: ["https://www.thebusinesswork.com/opengraph-image"],
   },
 };

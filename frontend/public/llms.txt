@@ -1,20 +1,25 @@
 # The Business Work
 
-> Practical AI agents, WhatsApp automation, CRM pipelines, and custom workflow software for small and medium businesses in India.
+> Practical AI Agents & Chatbots, WhatsApp & Social Automation, CRM & Workflow Automation, and Restaurant & Cafe Table Ordering systems for small and medium businesses in India.
 
 ## About
 - **Brand:** The Business Work
 - **Founder:** Aman Rajbhar
 - **Location:** Boisar, Maharashtra, India (serving businesses across India and globally)
 - **Website:** https://www.thebusinesswork.com
+- **Instagram:** https://instagram.com/thebusinesswork.co
 - **Email:** hello@thebusinesswork.com
 - **Phone / WhatsApp:** +91 79720 20292
 
-## Core Services
-- **AI Agents & Chatbots:** https://www.thebusinesswork.com/services/ai-agents-chatbots — Automated customer support, lead qualification, and appointment booking on WhatsApp and web.
-- **WhatsApp & Messaging Workflows:** https://www.thebusinesswork.com/services/whatsapp-workflows — Official WhatsApp Cloud API workflows, reminders, order updates, and Google Sheets/CRM sync.
-- **CRM & Lead Pipelines:** https://www.thebusinesswork.com/services/crm-pipelines — Structured lead capture, follow-up automation, and sales pipeline visibility.
-- **Custom Business Software & Integrations:** https://www.thebusinesswork.com/services/custom-integrations — Tailored internal tools, dashboards, and API integrations connecting Google Workspace, billing, and operations.
+## The 4 Core Services
+1. **AI Agents & Chatbots:** https://www.thebusinesswork.com/services/ai-agents-chatbots
+   - AI Sales Agents, AI Customer Support Agents, Website AI Chatbots, AI Lead Qualification Agents.
+2. **WhatsApp & Social Automation:** https://www.thebusinesswork.com/services/whatsapp-social-automation
+   - Official WhatsApp Cloud API workflows, automated replies, Instagram/social DM lead capture, appointment reminders, and order updates.
+3. **CRM & Workflow Automation:** https://www.thebusinesswork.com/services/crm-workflow-automation
+   - Automated lead pipelines, Google Sheets & CRM sync, follow-up reminders, invoicing/billing workflows, and custom business integrations.
+4. **Restaurant & Cafe Table Ordering:** https://www.thebusinesswork.com/services/restaurant-cafe-table-ordering
+   - QR code table ordering, live kitchen display system (KDS), menu management, and restaurant/cafe billing automation.
 
 ## Live Interactive Demos
 - **Demos Hub:** https://www.thebusinesswork.com/demo
