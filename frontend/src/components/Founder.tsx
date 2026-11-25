@@ -1,7 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { site, whatsappLink } from "@/lib/site";
-import { MessageCircle, Mail } from "lucide-react";
+import { MessageCircle, Mail, ArrowUpRight } from "lucide-react";
 
 export default function Founder() {
   return (
@@ -86,7 +87,26 @@ export default function Founder() {
                 {site.founder}
               </h2>
               <p className="font-body text-[11px] sm:text-xs text-[#7A756D] mt-0.5">
-                Founder &bull; The <span className="text-[#E4572E]">Business</span> Work
+                Founder &amp; Systems Architect &bull; The <span className="text-[#E4572E]">Business</span> Work &bull; {site.location}
+              </p>
+              <p className="font-body text-xs sm:text-sm text-[#555047] mt-2.5 leading-relaxed">
+                Aman Rajbhar founded The Business Work in India. He builds custom{" "}
+                <Link href="/services/ai-agents-chatbots" className="underline decoration-[#D6D0C4] underline-offset-2 hover:text-[#141413]">
+                  AI Agents &amp; Chatbots
+                </Link>{" "}
+                and{" "}
+                <Link href="/services/whatsapp-social-automation" className="underline decoration-[#D6D0C4] underline-offset-2 hover:text-[#141413]">
+                  WhatsApp &amp; Social Automation
+                </Link>{" "}
+                for growing businesses. His systems also cover{" "}
+                <Link href="/services/crm-workflow-automation" className="underline decoration-[#D6D0C4] underline-offset-2 hover:text-[#141413]">
+                  CRM &amp; Workflow Automation
+                </Link>{" "}
+                and{" "}
+                <Link href="/services/restaurant-cafe-table-ordering" className="underline decoration-[#D6D0C4] underline-offset-2 hover:text-[#141413]">
+                  Restaurant &amp; Cafe Table Ordering
+                </Link>
+                .
               </p>
 
               {/* Contact actions */}
@@ -108,6 +128,14 @@ export default function Founder() {
                   <Mail size={13} className="text-[#6D32A8]" />
                   <span>{site.emails.aman}</span>
                 </a>
+                <span className="text-[#D6D0C4]">•</span>
+                <Link
+                  href="/demo"
+                  className="inline-flex items-center gap-1 font-headline text-xs font-semibold text-[#141413] transition-colors hover:text-[#E4572E]"
+                >
+                  <span>Explore Live Demos</span>
+                  <ArrowUpRight size={13} />
+                </Link>
               </div>
             </div>
           </div>

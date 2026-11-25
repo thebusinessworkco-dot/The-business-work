@@ -28,6 +28,23 @@ export type HomeJsonLd = [
       "@type": "Country";
       name: string;
     };
+    founder?: {
+      "@type": "Person";
+      name: string;
+      jobTitle: string;
+      url: string;
+      email?: string;
+      homeLocation?: {
+        "@type": "Place";
+        name: string;
+      };
+      knowsAbout: string[];
+    };
+    foundingLocation?: {
+      "@type": "Place";
+      name: string;
+    };
+    knowsLanguage?: string[];
     email?: string;
     telephone?: string;
     address?: {
@@ -48,7 +65,24 @@ export type HomeJsonLd = [
       "@type": "Country";
       name: string;
     };
+    founder?: {
+      "@type": "Person";
+      name: string;
+      url: string;
+    };
     serviceType: string[];
+    hasOfferCatalog?: {
+      "@type": "OfferCatalog";
+      name: string;
+      itemListElement: Array<{
+        "@type": "Offer";
+        itemOffered: {
+          "@type": "Service";
+          name: string;
+          url: string;
+        };
+      }>;
+    };
     address?: {
       "@type": "PostalAddress";
       addressCountry: string;
@@ -124,6 +158,21 @@ export function getHomeJsonLd(): HomeJsonLd {
       "@type": "Country",
       name: "India",
     },
+    founder: {
+      "@type": "Person",
+      name: site.founder,
+      jobTitle: "Founder & Systems Architect",
+      url: `${siteUrl}/#founder`,
+      ...(!isPlaceholder("email", site.emails.aman) ? { email: site.emails.aman } : {}),
+      ...(!isPlaceholder("location", site.location)
+        ? { homeLocation: { "@type": "Place", name: site.location } }
+        : {}),
+      knowsAbout: services.map((s) => s.title),
+    },
+    ...(!isPlaceholder("location", site.location)
+      ? { foundingLocation: { "@type": "Place", name: site.location } }
+      : {}),
+    knowsLanguage: ["English", "Hindi"],
   };
 
   const postalAddress = !isPlaceholder("location", site.location)
@@ -167,7 +216,24 @@ export function getHomeJsonLd(): HomeJsonLd {
       "@type": "Country",
       name: "India",
     },
+    founder: {
+      "@type": "Person",
+      name: site.founder,
+      url: `${siteUrl}/#founder`,
+    },
     serviceType: services.map((s) => s.title),
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "Business Automation Services in India",
+      itemListElement: services.map((s) => ({
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: s.title,
+          url: `${siteUrl}/services/${s.id}`,
+        },
+      })),
+    },
   };
 
   if (!isPlaceholder("email", site.email)) {

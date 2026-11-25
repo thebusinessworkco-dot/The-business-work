@@ -18,17 +18,17 @@ import { services } from "@/content/services";
 
 export const metadata: Metadata = {
   title: {
-    absolute: "The Business Work | We Make Business Simpler",
+    absolute: "The Business Work | Business Automation in India by Aman Rajbhar",
   },
   description:
-    "The Business Work builds AI Agents & Chatbots, WhatsApp & Social Automation, CRM & Workflow Automation, and Restaurant & Cafe Table Ordering for Indian businesses.",
+    "Founded by Aman Rajbhar in India, The Business Work builds AI Agents & Chatbots, WhatsApp & Social Automation, CRM & Workflow Automation, and Restaurant & Cafe Table Ordering.",
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "The Business Work | We Make Business Simpler",
+    title: "The Business Work | Business Automation in India by Aman Rajbhar",
     description:
-      "AI Agents & Chatbots, WhatsApp & Social Automation, CRM & Workflow Automation, and Restaurant & Cafe Table Ordering for Indian businesses.",
+      "Founded by Aman Rajbhar in Boisar, Maharashtra, India. AI Agents & Chatbots, WhatsApp & Social Automation, CRM & Workflow Automation, and Restaurant & Cafe Table Ordering.",
     url: "https://www.thebusinesswork.com",
     siteName: site.name,
     locale: "en_IN",
@@ -44,9 +44,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "The Business Work | We Make Business Simpler",
+    title: "The Business Work | Business Automation in India by Aman Rajbhar",
     description:
-      "AI Agents & Chatbots, WhatsApp & Social Automation, CRM & Workflow Automation, and Restaurant & Cafe Table Ordering for Indian businesses.",
+      "Founded by Aman Rajbhar in India. AI Agents & Chatbots, WhatsApp & Social Automation, CRM & Workflow Automation, and Restaurant & Cafe Table Ordering.",
     images: ["https://www.thebusinesswork.com/opengraph-image"],
   },
 };

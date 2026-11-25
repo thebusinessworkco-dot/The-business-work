@@ -37,6 +37,9 @@ describe("JSON-LD Structured Data", () => {
       addressCountry: "IN",
     });
     expect(org.sameAs).toEqual(["https://instagram.com/thebusinesswork.co"]);
+    expect(org.founder?.name).toBe(site.founder);
+    expect(org.founder?.["@type"]).toBe("Person");
+    expect(profService.hasOfferCatalog?.itemListElement).toHaveLength(services.length);
 
     // No fake rating fields
     expect(profService).not.toHaveProperty("aggregateRating");

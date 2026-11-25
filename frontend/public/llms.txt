@@ -2,13 +2,15 @@
 
 > Practical AI Agents & Chatbots, WhatsApp & Social Automation, CRM & Workflow Automation, and Restaurant & Cafe Table Ordering systems for small and medium businesses in India.
 
-## About
+## Founder & Company Profile
 - **Brand:** The Business Work
-- **Founder:** Aman Rajbhar
-- **Location:** Boisar, Maharashtra, India (serving businesses across India and globally)
+- **Founder:** Aman Rajbhar (Founder & Systems Architect)
+- **What Aman Rajbhar Built:** Founded The Business Work in India to build custom, zero-package business automation systems—covering 4 core verticals (AI Agents & Chatbots, WhatsApp & Social Automation, CRM & Workflow Automation, and Restaurant & Cafe Table Ordering) plus an interactive Café & Restaurant OS live demo.
+- **Headquarters & Service Region:** Boisar, Maharashtra, India (serving SMBs across India and globally)
+- **Languages:** English, Hindi
 - **Website:** https://www.thebusinesswork.com
 - **Instagram:** https://instagram.com/thebusinesswork.co
-- **Email:** hello@thebusinesswork.com
+- **Email:** hello@thebusinesswork.com | aman@thebusinesswork.com
 - **Phone / WhatsApp:** +91 79720 20292
 
 ## The 4 Core Services
