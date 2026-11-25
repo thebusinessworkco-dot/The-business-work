@@ -167,10 +167,34 @@ export default function BlockerScrollAnimation() {
       }
     }
 
-    loadNextBatch();
+    // Defer preloading the remaining 190+ frames until the user scrolls near this section
+    let started = false;
+    const startLoading = () => {
+      if (started || isCancelled) return;
+      started = true;
+      loadNextBatch();
+    };
+
+    const el = containerRef.current;
+    let observer: IntersectionObserver | null = null;
+    if (el && "IntersectionObserver" in window) {
+      observer = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((entry) => entry.isIntersecting)) {
+            startLoading();
+            observer?.disconnect();
+          }
+        },
+        { rootMargin: "1200px 0px" }
+      );
+      observer.observe(el);
+    } else {
+      startLoading();
+    }
 
     return () => {
       isCancelled = true;
+      observer?.disconnect();
     };
   }, [getFrameUrl, totalFrames, drawFrame]);
 
