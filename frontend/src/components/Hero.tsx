@@ -27,20 +27,20 @@ export default function Hero() {
           <span className="block italic mt-1 font-normal">just automate.</span>
         </h1>
 
-        {/* CTA Buttons: Discuss Your Project + Try Demo on WhatsApp */}
+        {/* CTA Buttons: Start Your Free Trial Project + Explore Live Demos */}
         <div className="mt-8 sm:mt-10 flex flex-col items-center justify-center gap-3">
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto">
             <button
               onClick={() => openModal(undefined, "hero")}
               className="group inline-flex w-full sm:w-auto items-center justify-center gap-2.5 rounded-xl sm:rounded-lg border-2 border-[#141413] bg-[#EBDDFE] px-7 sm:px-9 py-3 sm:py-3.5 font-headline text-xs sm:text-sm font-bold tracking-wide text-[#141413] shadow-[0_1px_3px_rgba(0,0,0,0.08)] transition-all hover:bg-[#E2CEFF] active:scale-[0.97] cursor-pointer"
             >
-              <span className="grid grid-cols-2 gap-0.5 w-3 sm:w-3.5 h-3 sm:h-3.5">
+              <span className="grid grid-cols-2 gap-0.5 w-3 sm:w-3.5 h-3 sm:h-3.5" aria-hidden="true">
                 <span className="bg-[#141413] rounded-[0.5px]"></span>
                 <span className="bg-[#141413] rounded-[0.5px]"></span>
                 <span className="bg-[#141413] rounded-[0.5px]"></span>
                 <span className="bg-[#141413] rounded-[0.5px]"></span>
               </span>
-              <span>Discuss Your Project</span>
+              <span>Start Your Free Trial Project</span>
             </button>
 
             <Link
@@ -55,7 +55,12 @@ export default function Hero() {
             </Link>
           </div>
 
-          <p className="font-body text-xs sm:text-sm text-[#4A4742] font-semibold mt-1">
+          <p className="inline-flex items-center gap-2 rounded-full border border-[#E2D9C5] bg-white/80 px-4 py-1.5 font-body text-xs sm:text-sm font-semibold text-[#141413] mt-1">
+            <span className="h-2 w-2 rounded-full bg-[#E4572E] shrink-0" aria-hidden="true" />
+            <span>Try your workflow free first. Zero upfront cost — pay only if you love it.</span>
+          </p>
+
+          <p className="font-body text-xs sm:text-sm text-[#4A4742] font-semibold">
             Available on WhatsApp, Google Sheets, CRM, and Custom Apps
           </p>
         </div>

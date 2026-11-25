@@ -302,7 +302,7 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
                   Tell us what takes too much of your time.
                 </h3>
                 <p className="font-body text-xs sm:text-[13px] text-[#555047] mt-1">
-                  We will study your workflow and suggest a simple fix.
+                  Test a working free demo setup first. Pay only if you want it.
                 </p>
               </div>
               <button
