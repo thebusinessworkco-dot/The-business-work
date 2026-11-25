@@ -53,6 +53,17 @@ export const metadata: Metadata = {
 
 export default function Home() {
   const jsonLd = getHomeJsonLd();
+  const videoJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    name: "The Business Work — Business Automation Showcase",
+    description:
+      "Automated WhatsApp, AI agent, and CRM workflows running in the background for Indian businesses.",
+    thumbnailUrl: "https://www.thebusinesswork.com/hero-video-poster.jpg",
+    contentUrl: "https://www.thebusinesswork.com/thebusinesswork_hero_18s_2k.mp4",
+    uploadDate: "2026-10-13T00:00:00.000Z",
+    duration: "PT18S",
+  };
 
   const homeServices = services.map((s) => ({
     id: s.id,
@@ -68,6 +79,7 @@ export default function Home() {
   return (
     <>
       <JsonLd data={jsonLd} />
+      <JsonLd data={videoJsonLd} />
       <Header />
       <main id="main" className="w-full pt-20 sm:pt-24">
         <Hero />

@@ -13,6 +13,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified,
     changeFrequency: "monthly",
     priority: 1.0,
+    videos: [
+      {
+        title: "The Business Work — Business Automation Showcase",
+        thumbnail_loc: `${siteUrl}/hero-video-poster.jpg`,
+        description:
+          "Automated WhatsApp, AI agent, and CRM workflows running in the background for Indian businesses.",
+        content_loc: `${siteUrl}/thebusinesswork_hero_18s_2k.mp4`,
+      },
+    ],
   };
 
   const demoEntry: MetadataRoute.Sitemap[number] = {
