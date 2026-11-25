@@ -74,9 +74,11 @@ export const metadata: Metadata = {
     url: siteUrl,
     images: [
       {
-        url: `${siteUrl}/opengraph-image`,
+        url: `${siteUrl}/og-preview.png`,
+        secureUrl: `${siteUrl}/og-preview.png`,
         width: 1200,
         height: 630,
+        type: "image/png",
         alt: "The Business Work | We Make Business Simpler",
       },
     ],
@@ -85,7 +87,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "The Business Work | We Make Business Simpler",
     description: site.description,
-    images: [`${siteUrl}/opengraph-image`],
+    images: [`${siteUrl}/og-preview.png`],
   },
   icons: {
     icon: [

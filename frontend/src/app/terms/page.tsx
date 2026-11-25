@@ -25,9 +25,10 @@ export function generateMetadata(): Metadata {
       type: "website",
       images: [
         {
-          url: `${siteUrl}/opengraph-image`,
+          url: `${siteUrl}/og-preview.png`,
           width: 1200,
           height: 630,
+          type: "image/png",
           alt: "Terms of Service — The Business Work",
         },
       ],
@@ -37,7 +38,7 @@ export function generateMetadata(): Metadata {
       title: "Terms of Service | The Business Work",
       description:
         "Review the terms governing access to The Business Work website and digital service enquiries.",
-      images: [`${siteUrl}/opengraph-image`],
+      images: [`${siteUrl}/og-preview.png`],
     },
     robots,
   };

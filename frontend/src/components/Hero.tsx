@@ -3,11 +3,8 @@
 import Link from "next/link";
 import { MessageCircle } from "lucide-react";
 import { whatsappLink } from "@/lib/site";
-import { useContactModal } from "./ContactModal";
 
 export default function Hero() {
-  const { openModal } = useContactModal();
-
   return (
     <section aria-labelledby="hero-title" className="relative w-full overflow-hidden bg-[#FAF7E8] pt-12 pb-16 sm:pt-20 sm:pb-24">
       {/* Hero Content Container */}
@@ -27,21 +24,22 @@ export default function Hero() {
           <span className="block italic mt-1 font-normal">just automate.</span>
         </h1>
 
-        {/* CTA Buttons: Start Your Free Trial Project + Explore Live Demos */}
+        {/* CTA Buttons: Start for Free Demo (WhatsApp) + Explore Live Demos */}
         <div className="mt-8 sm:mt-10 flex flex-col items-center justify-center gap-3">
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto">
-            <button
-              onClick={() => openModal(undefined, "hero")}
+            <a
+              href={whatsappLink(
+                "Hi! I'd like to start a free demo project for my business."
+              )}
+              target="_blank"
+              rel="noopener noreferrer"
               className="group inline-flex w-full sm:w-auto items-center justify-center gap-2.5 rounded-xl sm:rounded-lg border-2 border-[#141413] bg-[#EBDDFE] px-7 sm:px-9 py-3 sm:py-3.5 font-headline text-xs sm:text-sm font-bold tracking-wide text-[#141413] shadow-[0_1px_3px_rgba(0,0,0,0.08)] transition-all hover:bg-[#E2CEFF] active:scale-[0.97] cursor-pointer"
             >
-              <span className="grid grid-cols-2 gap-0.5 w-3 sm:w-3.5 h-3 sm:h-3.5" aria-hidden="true">
-                <span className="bg-[#141413] rounded-[0.5px]"></span>
-                <span className="bg-[#141413] rounded-[0.5px]"></span>
-                <span className="bg-[#141413] rounded-[0.5px]"></span>
-                <span className="bg-[#141413] rounded-[0.5px]"></span>
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#25D366] text-white shrink-0" aria-hidden="true">
+                <MessageCircle size={12} />
               </span>
-              <span>Start Your Free Trial Project</span>
-            </button>
+              <span>Start for Free Demo</span>
+            </a>
 
             <Link
               href="/demo"

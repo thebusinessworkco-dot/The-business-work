@@ -18,36 +18,38 @@ import { services } from "@/content/services";
 
 export const metadata: Metadata = {
   title: {
-    absolute: "The Business Work | Business Automation in India by Aman Rajbhar",
+    absolute: "The Business Work | Business Automation in India",
   },
   description:
-    "Founded by Aman Rajbhar in India, The Business Work builds AI Agents & Chatbots, WhatsApp & Social Automation, CRM & Workflow Automation, and Restaurant & Cafe Table Ordering.",
+    "AI Agents & Chatbots, WhatsApp & Social Automation, CRM & Workflow Automation, and Restaurant & Cafe Table Ordering for businesses in India.",
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "The Business Work | Business Automation in India by Aman Rajbhar",
+    title: "The Business Work | Business Automation in India",
     description:
-      "Founded by Aman Rajbhar in Boisar, Maharashtra, India. AI Agents & Chatbots, WhatsApp & Social Automation, CRM & Workflow Automation, and Restaurant & Cafe Table Ordering.",
+      "AI Agents & Chatbots, WhatsApp & Social Automation, CRM & Workflow Automation, and Restaurant & Cafe Table Ordering for businesses in India.",
     url: "https://www.thebusinesswork.com",
     siteName: site.name,
     locale: "en_IN",
     type: "website",
     images: [
       {
-        url: "https://www.thebusinesswork.com/opengraph-image",
+        url: "https://www.thebusinesswork.com/og-preview.png",
+        secureUrl: "https://www.thebusinesswork.com/og-preview.png",
         width: 1200,
         height: 630,
+        type: "image/png",
         alt: "The Business Work | We Make Business Simpler",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "The Business Work | Business Automation in India by Aman Rajbhar",
+    title: "The Business Work | Business Automation in India",
     description:
-      "Founded by Aman Rajbhar in India. AI Agents & Chatbots, WhatsApp & Social Automation, CRM & Workflow Automation, and Restaurant & Cafe Table Ordering.",
-    images: ["https://www.thebusinesswork.com/opengraph-image"],
+      "AI Agents & Chatbots, WhatsApp & Social Automation, CRM & Workflow Automation, and Restaurant & Cafe Table Ordering for businesses in India.",
+    images: ["https://www.thebusinesswork.com/og-preview.png"],
   },
 };
 

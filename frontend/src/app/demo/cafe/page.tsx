@@ -17,12 +17,22 @@ export const metadata: Metadata = {
       "Interactive live demo of The Business Work Café & Restaurant Management System with QR table ordering, kitchen KDS, and billing.",
     url: "/demo/cafe",
     type: "website",
+    images: [
+      {
+        url: "/og-preview.png",
+        width: 1200,
+        height: 630,
+        type: "image/png",
+        alt: "The Business Work | We Make Business Simpler",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Café & Restaurant OS Live Demo | The Business Work",
     description:
       "Interactive live demo of The Business Work Café & Restaurant Management System with QR table ordering, kitchen KDS, and billing.",
+    images: ["/og-preview.png"],
   },
 };
 

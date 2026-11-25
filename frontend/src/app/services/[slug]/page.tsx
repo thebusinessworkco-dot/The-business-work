@@ -48,9 +48,10 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
       type: "website",
       images: [
         {
-          url: `${siteUrl}/opengraph-image`,
+          url: `${siteUrl}/og-preview.png`,
           width: 1200,
           height: 630,
+          type: "image/png",
           alt: `${service.title} — ${site.name}`,
         },
       ],
@@ -59,7 +60,7 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
       card: "summary_large_image",
       title: `${title} | ${site.name}`,
       description,
-      images: [`${siteUrl}/opengraph-image`],
+      images: [`${siteUrl}/og-preview.png`],
     },
   };
 }

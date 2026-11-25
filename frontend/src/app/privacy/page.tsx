@@ -25,9 +25,10 @@ export function generateMetadata(): Metadata {
       type: "website",
       images: [
         {
-          url: `${siteUrl}/opengraph-image`,
+          url: `${siteUrl}/og-preview.png`,
           width: 1200,
           height: 630,
+          type: "image/png",
           alt: "Privacy Policy — The Business Work",
         },
       ],
@@ -37,7 +38,7 @@ export function generateMetadata(): Metadata {
       title: "Privacy Policy | The Business Work",
       description:
         "Information on personal data collection, processing, and security practices at The Business Work.",
-      images: [`${siteUrl}/opengraph-image`],
+      images: [`${siteUrl}/og-preview.png`],
     },
     robots,
   };
