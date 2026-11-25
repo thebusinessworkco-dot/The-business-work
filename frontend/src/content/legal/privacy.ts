@@ -1,6 +1,6 @@
 import type { LegalSection } from "./types";
 
-export const lastUpdated = "2026-10-13";
+export const lastUpdated = "2026-11-25";
 
 export const privacySections: LegalSection[] = [
   {
@@ -28,7 +28,7 @@ export const privacySections: LegalSection[] = [
     list: [
       "Contact Form Information: When you submit an enquiry through our website modal, we collect your full name, business or company name, email address, phone or WhatsApp number, service of interest, and your description of the problem you want to automate.",
       "Enquiry Context & Campaign Metadata: When you submit an enquiry, our system also records the page path where you opened the form, the button or call-to-action clicked, and any campaign tags (utm_source, utm_medium, utm_campaign) present in the link; no cookies or persistent browser storage are used for this tracking.",
-      "Consent Record: When submitting the form, you must explicitly check an agreement box. We record your affirmative consent together with a server-generated UTC timestamp.",
+      "Granular Consent Records: When submitting the form, you must explicitly check separate, unchecked-by-default boxes for (1) this Privacy Policy, (2) our Terms of Service, and (3) optional Marketing Communications. Our backend logs each affirmative consent alongside a server-generated UTC timestamp and policy version.",
       "Technical & Security Data: To protect our service from automated spam and abuse, our servers temporarily inspect your IP address for rate limiting (limiting submissions to 5 per 10 minutes), evaluate submission timing, and discard honeypot submissions. Server access logs record standard technical metadata such as HTTP method, URL, and user agent.",
       "Analytics Data: If and only if analytics is enabled by the site operator, Google Analytics 4 collects pseudonymous pageview data. If analytics is not configured, no analytics scripts or trackers run.",
       "Direct Communications: If you reach out to us directly through WhatsApp or email, we receive the phone number, email address, message body, and attachments you choose to send.",
@@ -111,7 +111,7 @@ export const privacySections: LegalSection[] = [
       "Right to Correction: You may ask us to update, complete, or correct inaccurate personal information.",
       "Right to Erasure: You may request the deletion of your personal data, subject to any statutory retention requirements.",
       "Right to Withdraw Consent: You may withdraw your consent for future communication at any time by contacting us.",
-      "How to Request: To exercise any of these rights, email us at hello@thebusinesswork.com. We will review and respond within a reasonable timeframe.",
+      "How to Request & Grievance Officer: To exercise any of these rights or raise a privacy grievance, email our Grievance Officer (Aman Rajbhar) at hello@thebusinesswork.com. We will acknowledge and respond within a reasonable timeframe (typically within 7 business days). If your grievance is not resolved, you also have the right to file a complaint with the Data Protection Board of India (DPBI).",
     ],
   },
   {

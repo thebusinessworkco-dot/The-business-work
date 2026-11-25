@@ -37,7 +37,7 @@ export const site = {
 /**
  * Stable timestamp for sitemap and metadata to prevent churn on every rebuild.
  */
-export const LAST_MODIFIED = "2026-10-13T00:00:00.000Z";
+export const LAST_MODIFIED = "2026-11-25T00:00:00.000Z";
 
 /**
  * Placeholder guard functions.

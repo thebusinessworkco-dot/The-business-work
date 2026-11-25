@@ -1,5 +1,7 @@
 import { serviceList } from "@/content/service-list";
 
+export const POLICY_VERSION = "2026-11-25";
+
 export interface Lead {
   name: string;
   business: string;
@@ -8,6 +10,14 @@ export interface Lead {
   service: string;
   problem: string;
   consent: true;
+  privacyConsent: true;
+  termsConsent: true;
+  marketingConsent: boolean;
+  consentTimestamp: string;
+  privacyConsentAt: string;
+  termsConsentAt: string;
+  marketingConsentAt: string | null;
+  policyVersion: string;
   receivedAt: string;
   source: "website-contact-form";
   page?: string;
@@ -49,11 +59,37 @@ export function parseLead(body: unknown): ParseLeadResult {
 
   const raw = body as Record<string, unknown>;
 
-  // Consent is required
-  const consentGiven = raw.consent === true || raw.consent === "true";
-  if (!consentGiven) {
-    return { ok: false, error: "Please agree to be contacted to submit your enquiry." };
+  const isTrue = (v: unknown) => v === true || v === "true";
+
+  // Granular consent validation (supports legacy { consent: true } when granular flags are omitted)
+  const hasGranularFields =
+    raw.privacyConsent !== undefined ||
+    raw.termsConsent !== undefined ||
+    raw.marketingConsent !== undefined;
+
+  const privacyConsentGiven = hasGranularFields
+    ? isTrue(raw.privacyConsent)
+    : isTrue(raw.consent);
+  if (!privacyConsentGiven) {
+    return {
+      ok: false,
+      error: hasGranularFields
+        ? "Please read and agree to the Privacy Policy to submit your enquiry."
+        : "Please agree to be contacted to submit your enquiry.",
+    };
   }
+
+  const termsConsentGiven = hasGranularFields
+    ? isTrue(raw.termsConsent)
+    : isTrue(raw.consent);
+  if (!termsConsentGiven) {
+    return {
+      ok: false,
+      error: "Please agree to the Terms of Service to submit your enquiry.",
+    };
+  }
+
+  const marketingConsentGiven = isTrue(raw.marketingConsent);
 
   // Name is required
   const name = clean(raw.name, 100);
@@ -108,6 +144,8 @@ export function parseLead(body: unknown): ParseLeadResult {
   const utm_medium = clean(raw.utm_medium, 80);
   const utm_campaign = clean(raw.utm_campaign, 80);
 
+  const receivedAt = new Date().toISOString();
+
   const lead: Lead = {
     name,
     business,
@@ -116,7 +154,15 @@ export function parseLead(body: unknown): ParseLeadResult {
     service,
     problem,
     consent: true,
-    receivedAt: new Date().toISOString(),
+    privacyConsent: true,
+    termsConsent: true,
+    marketingConsent: marketingConsentGiven,
+    consentTimestamp: receivedAt,
+    privacyConsentAt: receivedAt,
+    termsConsentAt: receivedAt,
+    marketingConsentAt: marketingConsentGiven ? receivedAt : null,
+    policyVersion: POLICY_VERSION,
+    receivedAt,
     source: "website-contact-form",
   };
 

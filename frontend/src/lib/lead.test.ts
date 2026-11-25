@@ -87,6 +87,42 @@ describe("parseLead", () => {
     }
   });
 
+  it("validates granular itemized consents and records server UTC timestamps", () => {
+    const noPrivacy = parseLead({
+      ...baseValid,
+      privacyConsent: false,
+      termsConsent: true,
+      marketingConsent: false,
+    });
+    expect(noPrivacy.ok).toBe(false);
+
+    const noTerms = parseLead({
+      ...baseValid,
+      privacyConsent: true,
+      termsConsent: false,
+      marketingConsent: false,
+    });
+    expect(noTerms.ok).toBe(false);
+
+    const validGranular = parseLead({
+      ...baseValid,
+      privacyConsent: true,
+      termsConsent: true,
+      marketingConsent: true,
+    });
+    expect(validGranular.ok).toBe(true);
+    if (validGranular.ok) {
+      expect(validGranular.lead.privacyConsent).toBe(true);
+      expect(validGranular.lead.termsConsent).toBe(true);
+      expect(validGranular.lead.marketingConsent).toBe(true);
+      expect(validGranular.lead.consentTimestamp).toBe(validGranular.lead.receivedAt);
+      expect(validGranular.lead.privacyConsentAt).toBe(validGranular.lead.receivedAt);
+      expect(validGranular.lead.termsConsentAt).toBe(validGranular.lead.receivedAt);
+      expect(validGranular.lead.marketingConsentAt).toBe(validGranular.lead.receivedAt);
+      expect(validGranular.lead.policyVersion).toBe("2026-11-25");
+    }
+  });
+
   it("rejects problem field with 3 or more URLs but accepts 0 to 2 URLs", () => {
     // 2 URLs: allowed
     const res2 = parseLead({

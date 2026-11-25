@@ -36,12 +36,27 @@ const allowIndexing = isIndexingAllowed();
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
+  alternates: {
+    languages: {
+      "en-IN": siteUrl,
+      en: siteUrl,
+    },
+  },
   title: {
     default: "The Business Work | We Make Business Simpler",
     template: "%s | The Business Work",
   },
   description: site.description,
   applicationName: site.name,
+  keywords: [
+    "business automation India",
+    "WhatsApp automation",
+    "AI agents for business",
+    "CRM pipeline automation",
+    "custom workflow software",
+    "The Business Work",
+    "Boisar Maharashtra automation",
+  ],
   openGraph: {
     type: "website",
     siteName: site.name,

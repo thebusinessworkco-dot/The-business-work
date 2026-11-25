@@ -23,7 +23,9 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
   const [service, setService] = useState("Not sure yet / custom solution");
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState("");
-  const [consent, setConsent] = useState(false);
+  const [privacyConsent, setPrivacyConsent] = useState(false);
+  const [termsConsent, setTermsConsent] = useState(false);
+  const [marketingConsent, setMarketingConsent] = useState(false);
   const [startedAt, setStartedAt] = useState<number>(0);
   const [openCta, setOpenCta] = useState<string>("direct");
   const [openPage, setOpenPage] = useState<string>("/");
@@ -69,7 +71,9 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
     }
     setStatus("idle");
     setError("");
-    setConsent(false);
+    setPrivacyConsent(false);
+    setTermsConsent(false);
+    setMarketingConsent(false);
     setStartedAt(Date.now());
     setTurnstileToken("");
     setOpen(true);
@@ -212,8 +216,14 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
       }
     }
 
-    if (!consent) {
-      setError("Please agree to be contacted to submit your enquiry.");
+    if (!privacyConsent) {
+      setError("Please read and agree to the Privacy Policy to submit your enquiry.");
+      setStatus("error");
+      return;
+    }
+
+    if (!termsConsent) {
+      setError("Please agree to the Terms of Service to submit your enquiry.");
       setStatus("error");
       return;
     }
@@ -226,7 +236,10 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
 
     const payload: Record<string, unknown> = Object.fromEntries(fd.entries());
     payload.startedAt = startedAt;
-    payload.consent = consent;
+    payload.privacyConsent = privacyConsent;
+    payload.termsConsent = termsConsent;
+    payload.marketingConsent = marketingConsent;
+    payload.consent = privacyConsent && termsConsent;
     payload.page =
       openPage || (typeof window !== "undefined" ? window.location.pathname : "/");
     payload.cta = openCta;
@@ -440,31 +453,88 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
                   />
                 )}
 
-                <div className="flex items-start gap-2.5 pt-1">
-                  <input
-                    id="c-consent"
-                    name="consent"
-                    type="checkbox"
-                    required
-                    checked={consent}
-                    onChange={(e) => setConsent(e.target.checked)}
-                    className="mt-0.5 h-4 w-4 rounded border-[#DDD6C5] bg-white accent-[#141413] focus:outline-none focus:ring-1 focus:ring-[#141413]"
-                  />
-                  <label
-                    htmlFor="c-consent"
-                    className="font-body text-xs leading-relaxed text-[#555047]"
-                  >
-                    I agree to be contacted about my enquiry. See the{" "}
+                <div className="space-y-2.5 rounded-xl border border-[#E5DEC9] bg-[#FAF7E8]/60 p-3">
+                  <p className="font-body text-[11px] leading-relaxed text-[#555047]">
+                    <strong>Data Notice (DPDP Act):</strong> We collect your details solely to respond to your enquiry and log your consent timestamp. You may withdraw consent or request deletion anytime at{" "}
                     <a
-                      href="/privacy"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-[#141413] underline decoration-[#DDD6C5] underline-offset-2 hover:text-black font-semibold"
+                      href="mailto:hello@thebusinesswork.com"
+                      className="font-semibold text-[#141413] underline decoration-[#DDD6C5] underline-offset-2"
                     >
-                      Privacy Policy
+                      hello@thebusinesswork.com
                     </a>
-                    .
-                  </label>
+                    , or escalate to the Data Protection Board of India.
+                  </p>
+
+                  <div className="flex items-start gap-2.5">
+                    <input
+                      id="c-privacy-consent"
+                      name="privacyConsent"
+                      type="checkbox"
+                      required
+                      checked={privacyConsent}
+                      onChange={(e) => setPrivacyConsent(e.target.checked)}
+                      className="mt-0.5 h-4 w-4 rounded border-[#DDD6C5] bg-white accent-[#141413] focus:outline-none focus:ring-1 focus:ring-[#141413]"
+                    />
+                    <label
+                      htmlFor="c-privacy-consent"
+                      className="font-body text-xs leading-relaxed text-[#555047]"
+                    >
+                      I have read and agree to the{" "}
+                      <a
+                        href="/privacy"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-semibold text-[#141413] underline decoration-[#DDD6C5] underline-offset-2 hover:text-black"
+                      >
+                        Privacy Policy
+                      </a>{" "}
+                      for processing my enquiry details. <span className="text-[#B42318]">*</span>
+                    </label>
+                  </div>
+
+                  <div className="flex items-start gap-2.5">
+                    <input
+                      id="c-terms-consent"
+                      name="termsConsent"
+                      type="checkbox"
+                      required
+                      checked={termsConsent}
+                      onChange={(e) => setTermsConsent(e.target.checked)}
+                      className="mt-0.5 h-4 w-4 rounded border-[#DDD6C5] bg-white accent-[#141413] focus:outline-none focus:ring-1 focus:ring-[#141413]"
+                    />
+                    <label
+                      htmlFor="c-terms-consent"
+                      className="font-body text-xs leading-relaxed text-[#555047]"
+                    >
+                      I agree to the{" "}
+                      <a
+                        href="/terms"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-semibold text-[#141413] underline decoration-[#DDD6C5] underline-offset-2 hover:text-black"
+                      >
+                        Terms of Service
+                      </a>{" "}
+                      governing website enquiries. <span className="text-[#B42318]">*</span>
+                    </label>
+                  </div>
+
+                  <div className="flex items-start gap-2.5">
+                    <input
+                      id="c-marketing-consent"
+                      name="marketingConsent"
+                      type="checkbox"
+                      checked={marketingConsent}
+                      onChange={(e) => setMarketingConsent(e.target.checked)}
+                      className="mt-0.5 h-4 w-4 rounded border-[#DDD6C5] bg-white accent-[#141413] focus:outline-none focus:ring-1 focus:ring-[#141413]"
+                    />
+                    <label
+                      htmlFor="c-marketing-consent"
+                      className="font-body text-xs leading-relaxed text-[#555047]"
+                    >
+                      I agree to receive occasional updates, automation tips, and marketing communications (optional).
+                    </label>
+                  </div>
                 </div>
 
                 {status === "error" && (

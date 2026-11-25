@@ -184,6 +184,21 @@ export async function POST(req: Request) {
 
   const { lead } = parseResult;
 
+  // 8a. Backend DPDP consent audit log (server-side UTC timestamps for every itemized consent)
+  const consentLog = {
+    consentTimestamp: lead.consentTimestamp,
+    privacyConsent: lead.privacyConsent,
+    privacyConsentAt: lead.privacyConsentAt,
+    termsConsent: lead.termsConsent,
+    termsConsentAt: lead.termsConsentAt,
+    marketingConsent: lead.marketingConsent,
+    marketingConsentAt: lead.marketingConsentAt,
+    policyVersion: lead.policyVersion,
+    source: lead.source,
+    page: lead.page || "/",
+  };
+  console.info("[dpdp-consent-log]", JSON.stringify(consentLog));
+
   // 8b. Optional Cloudflare Turnstile CAPTCHA verification (when configured)
   const turnstileSecret = process.env.TURNSTILE_SECRET_KEY;
   const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
@@ -296,6 +311,7 @@ export async function POST(req: Request) {
   const headers: Record<string, string> = { "Content-Type": "application/json" };
   const payload: Record<string, unknown> = {
     ...lead,
+    consentLog,
     notificationRecipient: getFormRecipient(lead.service, lead.cta),
   };
 

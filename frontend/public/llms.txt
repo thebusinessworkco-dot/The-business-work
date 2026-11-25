@@ -1,0 +1,25 @@
+# The Business Work
+
+> Practical AI agents, WhatsApp automation, CRM pipelines, and custom workflow software for small and medium businesses in India.
+
+## About
+- **Brand:** The Business Work
+- **Founder:** Aman Rajbhar
+- **Location:** Boisar, Maharashtra, India (serving businesses across India and globally)
+- **Website:** https://www.thebusinesswork.com
+- **Email:** hello@thebusinesswork.com
+- **Phone / WhatsApp:** +91 79720 20292
+
+## Core Services
+- **AI Agents & Chatbots:** https://www.thebusinesswork.com/services/ai-agents-chatbots — Automated customer support, lead qualification, and appointment booking on WhatsApp and web.
+- **WhatsApp & Messaging Workflows:** https://www.thebusinesswork.com/services/whatsapp-workflows — Official WhatsApp Cloud API workflows, reminders, order updates, and Google Sheets/CRM sync.
+- **CRM & Lead Pipelines:** https://www.thebusinesswork.com/services/crm-pipelines — Structured lead capture, follow-up automation, and sales pipeline visibility.
+- **Custom Business Software & Integrations:** https://www.thebusinesswork.com/services/custom-integrations — Tailored internal tools, dashboards, and API integrations connecting Google Workspace, billing, and operations.
+
+## Live Interactive Demos
+- **Demos Hub:** https://www.thebusinesswork.com/demo
+- **Café & Restaurant OS Demo:** https://www.thebusinesswork.com/demo/cafe
+
+## Legal & Data Protection (DPDP Act Compliant)
+- **Privacy Policy:** https://www.thebusinesswork.com/privacy
+- **Terms of Service:** https://www.thebusinesswork.com/terms
