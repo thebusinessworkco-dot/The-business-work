@@ -24,7 +24,7 @@ const nextConfig = {
     minimumCacheTTL: 31536000,
   },
   compiler: {
-    removeConsole: process.env.NODE_ENV === "production" ? { exclude: ["error", "warn"] } : false,
+    removeConsole: process.env.NODE_ENV === "production" ? { exclude: ["error", "warn", "info"] } : false,
   },
   experimental: {
     optimizePackageImports: ["lucide-react"],
